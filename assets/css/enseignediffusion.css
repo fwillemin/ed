@@ -1,0 +1,144 @@
+body {
+-webkit-user-select: none; /* Chrome/Safari */        
+-moz-user-select: none; /* Firefox */
+-ms-user-select: none; /* IE10+ */
+background-image: url("../../assets/img/fond.png");
+background-size: cover;
+background-attachment: fixed;
+}
+.container {
+    background-color: #FFF;
+    position: relative;
+    top: -20px;
+    padding: 5px 20px 20px 20px;
+    min-height: 1000px;
+    border-left: 1px solid grey;
+    border-right: 1px solid grey;
+}
+.jour {
+    background-color: #f4f6f8;
+    cursor: pointer;
+}
+
+.jour:hover {
+    background-color: #f0f2f7;
+}
+.sorties {
+    background-color: #fd84e3;
+    cursor: pointer;
+}
+
+.progHebdo {
+    width:100%;
+    border: 1px solid grey;
+    border-radius: 5px;
+    /*padding : 6px;*/
+    font-size: 12px;
+    margin: 2px;
+}
+.intervenant {
+    width:100%;
+    background-color:#FFF;
+    color: #000;
+    padding: 0px 5px 0px 5px;
+    font-style: italic;
+    position:relative;
+    top:0px;
+    border-top:1px solid grey;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+.intervenantJournalier {
+    width:100%;
+    background-color:#FFF;
+    color: #000;
+    padding: 0px 5px 0px 5px;
+    font-style: italic;
+    position:relative;
+    top:0px;
+    border-bottom:1px solid grey;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+.progJour, .progJourClos, .progJourTermine, .progJourSortie, .progJourRecurrent {
+    width:200px;
+    border: 1px solid grey;
+    border-radius: 5px;
+    padding : 0px;
+    font-size: 12px;
+    margin: 2px;
+    min-height: 100px;
+    position:relative;
+    float:left;
+}
+.progJourClos, .progJourTermine {
+    width: 200px;
+}    
+.progJourClos {
+    width:100px;  
+    border-top : 15px solid orangered;
+    opacity : 0.4;
+}
+.hachures {
+    background-image: url("hachures.png");
+    background-repeat: repeat;
+}
+
+.modal-header {
+    background-color: #e4e9ef;
+    color: #002166;
+}
+
+
+/* Commercial */
+.ligneOption, .ligneComposant, .delComposition, .delArticle, .addComposant {
+    cursor: pointer;
+}
+
+.cadreInfo {
+    padding:10px;
+    border: 1px solid grey;
+    border-radius: 3px;    
+    font-size : 25px;
+    background-color: #f0f2f7;
+}
+
+.form-flat, .form-flat-center, .form-flat-right {
+    border: none;
+    background-color: inherit;
+    padding: 3px;
+}
+.form-flat-center {
+    text-align: center;
+}
+.form-flat-right {
+    text-align: right;
+}
+
+.avancement {
+    padding:0px;
+    font-size: 15px;
+    text-align: center;
+    position: relative;
+    font-weight: bold;
+    min-height: 15px;
+}
+.avancementValide {
+    color: lightgreen;
+}
+.avancementProchaineEtape {
+    color: lightskyblue;
+}
+.avancementDisabled {
+    color: lightgrey;
+}
+
+.blink {    
+    animation: blink 3s linear infinite;
+}
+@keyframes blink{
+    0%{opacity: 1;}
+    90%{opacity: 1;}
+    95%{opacity: 0.1;}
+    100%{opacity: 1;}
+}

@@ -1,0 +1,9 @@
+.ovhconfig
+Gruntfile.js
+/application/config/config
+/application/config/database
+/application/logs/*
+/nbproject
+/node_modules
+package.json
+/assets/img/logo.*
