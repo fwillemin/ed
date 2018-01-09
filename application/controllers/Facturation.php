@@ -287,13 +287,15 @@ class Facturation extends CI_Controller {
             if (!empty($this->input->post('addFactureLignes'))):
                 foreach ($this->input->post('addFactureLignes') as $ligne):
                     $item = $this->cart->get_item($ligne[0]);
-                    $ligne = $this->addLigne($facture, $item, $ligne[1], $facture->getFactureTauxTVA());
-                    if ($ligne):
+                    if ($item['qty'] > 0):
+                        $ligne = $this->addLigne($facture, $item, $ligne[1], $facture->getFactureTauxTVA());
+                        if ($ligne):
 
-                        $totalFactureHT += $ligne->getFactureLigneTotalHT();
-                        $totalFactureTVA += $ligne->getFactureLigneTotalTVA();
-                        $totalFactureTTC += $ligne->getFactureLigneTotalTTC();
+                            $totalFactureHT += $ligne->getFactureLigneTotalHT();
+                            $totalFactureTVA += $ligne->getFactureLigneTotalTVA();
+                            $totalFactureTTC += $ligne->getFactureLigneTotalTTC();
 
+                        endif;
                     endif;
                 endforeach;
 

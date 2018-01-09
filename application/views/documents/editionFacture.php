@@ -50,7 +50,7 @@
         <td style="width: 270px;">Description</td>
         <td style="text-align: center; width:30px;">Qte</td>
         <td style="text-align: right; width:60px;">PU HT</td>
-        <td style="text-align: center; width:40px;">Remise</td>
+        <td style="text-align: center; width:40px;"></td>
         <td style="text-align: right; width:60px;">PU Net</td>
         <td style="text-align: right; width:70px;">Total HT</td>
     </tr>
@@ -69,19 +69,23 @@
                 </span>
             </td>
             <td style="text-align: center; border-bottom: 1px solid grey;">
-                <?php echo number_format($a->getFactureLigneQte(), 0, ',', ' '); ?>
+                <?= number_format($a->getFactureLigneQte(), 0, ',', ' '); ?>
             </td>
             <td style="text-align: right; border-bottom: 1px solid grey;">
-                <?php echo number_format($a->getFactureLigneTarif(), 2, ',', ' '); ?>
+                <?= number_format($a->getFactureLigneTarif(), 2, ',', ' '); ?>
             </td>
             <td style="text-align: center; border-bottom: 1px solid grey;">
-                <?php echo number_format($a->getFactureLigneRemise(), 0, ',', ' ') . '%'; ?>
+                <?php
+                if ($a->getFactureLigneRemise() > 0):
+                    echo number_format($a->getFactureLigneRemise(), 0, ',', ' ') . '%';
+                endif;
+                ?>
             </td>
             <td style="text-align: right; border-bottom: 1px solid grey;">
-                <?php echo number_format(round($a->getFactureLigneTarif() * ( 100 + $a->getFactureLigneRemise() ) / 100, 2), 2, ',', ' '); ?>
+                <?= number_format(round($a->getFactureLigneTarif() * ( 100 + $a->getFactureLigneRemise() ) / 100, 2), 2, ',', ' '); ?>
             </td>
             <td style="text-align: right; border-bottom: 1px solid grey;">
-                <?php echo number_format($a->getFactureLigneTotalHT(), 2, ',', ' '); ?>
+                <?= number_format($a->getFactureLigneTotalHT(), 2, ',', ' '); ?>
             </td>
 
         </tr>
@@ -105,12 +109,12 @@
     </tr>
     <tr>
         <td style="text-align:right;">20.00</td>
-        <td style="text-align:right;"><?php echo number_format($facture->getFactureTotalHT(), 2, ',', ' ') . '€'; ?></td>
-        <td style="text-align:right;"><?php echo number_format($facture->getFactureTotalTVA(), 2, ',', ' ') . '€'; ?></td>
+        <td style="text-align:right;"><?= number_format($facture->getFactureTotalHT(), 2, ',', ' ') . '€'; ?></td>
+        <td style="text-align:right;"><?= number_format($facture->getFactureTotalTVA(), 2, ',', ' ') . '€'; ?></td>
         <td></td>
-        <td style="text-align:right;"><?php echo number_format($facture->getFactureTotalHT(), 2, ',', ' ') . '€'; ?></td>
-        <td style="text-align:right;"><?php echo number_format($facture->getFactureTotalTVA(), 2, ',', ' ') . '€'; ?></td>
-        <td style="text-align:right;"><?php echo number_format($facture->getFactureTotalTTC(), 2, ',', ' ') . '€'; ?></td>
+        <td style="text-align:right;"><?= number_format($facture->getFactureTotalHT(), 2, ',', ' ') . '€'; ?></td>
+        <td style="text-align:right;"><?= number_format($facture->getFactureTotalTVA(), 2, ',', ' ') . '€'; ?></td>
+        <td style="text-align:right;"><?= number_format($facture->getFactureTotalTTC(), 2, ',', ' ') . '€'; ?></td>
     </tr>
 </table>
 <br>

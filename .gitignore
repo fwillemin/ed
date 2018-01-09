@@ -7,3 +7,7 @@ Gruntfile.js
 /node_modules
 package.json
 /assets/img/logo.*
+/assets/*.pdf
+*.xls
+/application/vendor
+.ovhconfig

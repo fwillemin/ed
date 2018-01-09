@@ -19,7 +19,6 @@
 
         <link rel="stylesheet" href="<?php echo base_url('assets/MegaNavbar/MegaNavbar.min.css'); ?>">
         <link rel="stylesheet" href="<?php echo base_url('assets/MegaNavbar/navbar-inverse-dark.css'); ?>">
-        <link href="<?php echo base_url('assets/MegaNavbar/assets/plugins/font-awesome-4.7.0/css/font-awesome.min.css'); ?>" rel="stylesheet">
 
         <link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/tables/datatables.min.css'); ?>" >
         <link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/jquery-ui/jquery-ui.min.css'); ?>" >
@@ -51,26 +50,28 @@
                                 <a href="<?php echo site_url('clients'); ?>" class=""><i class="fa fa-user-circle"></i> Clients</a>
                             </li>
                             <li class="dropdown-short">
-                                <a href="javascript:;" data-toggle="dropdown" href="javascript:;" class="dropdown-toggle"><i class="fa fa-times-rectangle"></i> Composants & Articles<span class="caret"></span></a>
+                                <a href="javascript:;" data-toggle="dropdown" href="javascript:;" class="dropdown-toggle">Composants & Articles <span class="fa fa-caret-down" style="margin-left: 5px;"></span></a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="<?php echo site_url('articles/composantsListe'); ?>"><i class="fa fa-times-rectangle-o"></i> Composants</a></li>
+                                    <li><a href="<?php echo site_url('articles/composantsListe'); ?>"><i class="fas fa-compress"></i> Composants</a></li>
                                     <li><a href="<?php echo site_url('articles/articlesListe'); ?>"><i class="fa fa-square"></i> Articles</a></li>
                                     <li class="divider"></li>
-                                    <li><a href="<?php echo site_url('articles/famillesListe'); ?>"><i class="fa fa-cog fa-spin"></i> Familles</a></li>
+                                    <li><a href="<?php echo site_url('articles/famillesListe'); ?>"><i class="fa fa-cog"></i> Familles</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="<?php echo site_url('articles/inventaire'); ?>"><i class="fas fa-th-list"></i> Inventaire</a></li>
                                 </ul>
                             </li>
                             <li class="dropdown-short">
-                                <a href="javascript:;" data-toggle="dropdown" href="javascript:;" class="dropdown-toggle"><i class="fa fa-file"></i> Ventes<span class="caret"></span></a>
+                                <a href="javascript:;" data-toggle="dropdown" href="javascript:;" class="dropdown-toggle"><i class="fa fa-file"></i> Ventes <span class="fa fa-caret-down" style="margin-left: 5px;"></span></a>
                                 <ul class="dropdown-menu">
                                     <li><a href="<?php echo site_url('ventes/resetConcepteur'); ?>"><i class="fa fa-asterisk"></i> Nouvelle</a></li>
-                                    <li><a href="<?php echo site_url('ventes/listeAffaires'); ?>"><i class="fa fa-list-ul"></i> Liste des Affaires</a></li>                                    
+                                    <li><a href="<?php echo site_url('ventes/listeAffaires'); ?>"><i class="fa fa-list-ul"></i> Liste des Affaires</a></li>
                                 </ul>
                             </li>
                             <li class="dropdown-short">
-                                <a href="javascript:;" data-toggle="dropdown" href="javascript:;" class="dropdown-toggle"><i class="fa fa-money"></i> Gestion<span class="caret"></span></a>
+                                <a href="javascript:;" data-toggle="dropdown" href="javascript:;" class="dropdown-toggle"><i class="fas fa-building"></i> Gestion <span class="fa fa-caret-down" style="margin-left: 5px;"></span></a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="<?php echo site_url('facturation/listeFactures'); ?>"><i class="fa fa-fire"></i> Liste factures</a></li>
-                                    <li><a href="<?php echo site_url('ventes/listeAffaires'); ?>"><i class="fa fa-bank"></i> Réglements</a></li>                                    
+                                    <li><a href="<?php echo site_url('facturation/listeFactures'); ?>"><i class="far fa-file"></i> Liste factures</a></li>
+                                    <li><a href="<?php echo site_url('ventes/listeAffaires'); ?>"><i class="far fa-credit-card"></i> Réglements</a></li>
                                 </ul>
                             </li>
                         </ul>
@@ -78,18 +79,18 @@
                         <ul class="nav navbar-nav navbar-right">
                             <li class="dropdown-grid">
                                 <?php if ($this->ion_auth->is_admin()): ?>
-                                <a href="<?php echo site_url('ed/dossiers'); ?>">Dossiers</a>
-                            <?php endif; ?>
-                            <a href="<?php echo site_url('ed/journalier'); ?>"><i class="glyphicon glyphicon-calendar"></i> Journalier</a>
-                            <?php if ($this->ion_auth->is_admin()): ?>
-                                <a href="<?php echo site_url('ed/hebdomadaire'); ?>"><i class="glyphicon glyphicon-calendar"></i> Hebdomadaire</a>
-                                <a href="<?php echo site_url('ed/recurrent'); ?>"><i class="glyphicon glyphicon-repeat"></i> Recurrent</a>
-                            <?php endif; ?>
+                                    <a href="<?php echo site_url('ed/dossiers'); ?>">Dossiers</a>
+                                <?php endif; ?>
+                                <a href="<?php echo site_url('ed/journalier'); ?>"><i class="glyphicon glyphicon-calendar"></i> Journalier</a>
+                                <?php if ($this->ion_auth->is_admin()): ?>
+                                    <a href="<?php echo site_url('ed/hebdomadaire'); ?>"><i class="glyphicon glyphicon-calendar"></i> Hebdomadaire</a>
+                                    <a href="<?php echo site_url('ed/recurrent'); ?>"><i class="glyphicon glyphicon-repeat"></i> Recurrent</a>
+                                <?php endif; ?>
 
-                            </li>                           
+                            </li>
                             <li class="dropdown-grid">
                                 <a href="<?php echo site_url('ed/logout'); ?>" style="color: orangered;">
-                                    <i class="fa fa-sign-out"></i> Déconnexion
+                                    <i class="fas fa-sign-out-alt"></i> Déconnexion
                                 </a>
                             </li>
                         </ul>

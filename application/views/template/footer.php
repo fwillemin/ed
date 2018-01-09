@@ -11,7 +11,7 @@
                     <?php
                     foreach ($this->session->userdata() as $key => $val):
                         if (is_array($val)):
-                            echo '<tr><td>' . $key . '</td><td>' . nl2br(print_r($val,1)) . '</td></tr>';
+                            echo '<tr><td>' . $key . '</td><td>' . nl2br(print_r($val, 1)) . '</td></tr>';
                         else:
                             echo '<tr><td>' . $key . '</td><td>' . $val . '</td></tr>';
                         endif;
@@ -32,18 +32,19 @@
 <script defer type="text/javascript" src="<?php echo base_url('assets/bootstrap3.3.7/js/bootstrap.min.js'); ?>"></script>
 <script defer type="text/javascript" src="<?php echo base_url('assets/bootstrap3.3.7/js/bootstrap-select.min.js'); ?>"></script>
 <script defer type="text/javascript" src="<?php echo base_url('assets/bootstrap3.3.7/js/toaster.js'); ?>"></script>
-<script defer type="text/javascript" src="<?php echo base_url('assets/bootstrap3.3.7/js/bootstrap-datepicker.min.js'); ?>"></script>    
-<script defer type="text/javascript" src="<?php echo base_url('assets/bootstrap3.3.7/js/bootstrap-datepicker.fr.min.js'); ?>"></script>    
+<script defer type="text/javascript" src="<?php echo base_url('assets/bootstrap3.3.7/js/bootstrap-datepicker.min.js'); ?>"></script>
+<script defer type="text/javascript" src="<?php echo base_url('assets/bootstrap3.3.7/js/bootstrap-datepicker.fr.min.js'); ?>"></script>
 <script defer type="text/javascript" src="<?php echo base_url('assets/tables/datatables.js'); ?>"></script>
 
 <script defer type="text/javascript" src="<?php echo base_url('assets/MegaNavbar/MegaNavbar.js'); ?>"></script>
+<script defer src="https://use.fontawesome.com/releases/v5.0.2/js/all.js"></script>
 <script defer type="text/javascript" src="<?php echo base_url('assets/bootstrap-table/bootstrap-table.min.js'); ?>"></script>
 <script defer type="text/javascript" src="<?php echo base_url('assets/bootstrap-table/bootstrap-table-contextmenu.min.js'); ?>"></script>
 <script defer type="text/javascript" src="<?php echo base_url('assets/bootstrap-table/bootstrap-table-fr-FR.min.js'); ?>"></script>
 <script defer type="text/javascript" src="<?php echo base_url('assets/bootstrap-toggle/bootstrap-toggle.min.js'); ?>"></script>
 
 <script defer type="text/javascript" src="<?php echo base_url('assets/js/enseignediffusion.js'); ?>"></script>
-<script defer type="text/javascript" src="<?php echo base_url('assets/js/' . $this->uri->segment(1) . '.js'); ?>"></script>   
+<script defer type="text/javascript" src="<?php echo base_url('assets/js/' . $this->uri->segment(1) . '.js'); ?>"></script>
 
 
 </body>

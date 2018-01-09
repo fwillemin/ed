@@ -4,6 +4,9 @@ if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xls;
+
 class Articles extends CI_Controller {
 
     const TVA = 0.2;
@@ -675,6 +678,64 @@ class Articles extends CI_Controller {
         endif;
 
         echo json_encode(array('type' => 'success'));
+        exit;
+    }
+
+    public function inventaire() {
+        $composants = $this->managerComposants->liste();
+        if ($composants):
+            foreach ($composants as $c):
+                $c->hydrateOptions();
+            endforeach;
+        endif;
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->getColumnDimension('A')->setWidth(5);
+        $sheet->getColumnDimension('B')->setWidth(40);
+        $sheet->getColumnDimension('C')->setWidth(15);
+        $sheet->getColumnDimension('D')->setWidth(15);
+        $sheet->getColumnDimension('E')->setWidth(15);
+
+        $sheet->setCellValue('B1', 'Option')
+                ->setCellValue('C1', 'Prix Achat net')
+                ->setCellValue('D1', 'Qte en stock')
+                ->setCellValue('E1', 'Valeur totale');
+
+        $row = 2;
+        foreach ($composants as $c):
+            $sheet->mergeCells('A' . $row . ':E' . $row);
+            $sheet->setCellValue('A' . $row, $c->getComposantDesignation());
+            $sheet->getStyle('A' . $row . ':E' . $row)->applyFromArray(
+                    array(
+                        'font' => array('bold' => true)
+                    )
+            );
+            $row++;
+            if ($c->getComposantOptions()):
+                foreach ($c->getComposantOptions() as $option):
+                    $sheet->setCellValue('A' . $row, '...');
+                    $sheet->setCellValue('B' . $row, $option->getOptionNom());
+                    $sheet->setCellValue('C' . $row, $option->getOptionPrixAchat());
+                    $sheet->setCellValue('D' . $row, 0);
+                    $sheet->setCellValue('E' . $row, '=C' . $row . '*D' . $row);
+                    $row++;
+                endforeach;
+            endif;
+
+        endforeach;
+        $sheet->setCellValue('E' . $row, '=SUM(E3:E' . ($row - 1) . ')');
+        $sheet->setCellValue('D' . $row, 'Total');
+        $sheet->getStyle('A' . $row . ':E' . $row)->applyFromArray(
+                array(
+                    'font' => array('bold' => true)
+                )
+        );
+
+        $writer = new Xls($spreadsheet);
+        $writer->save('inventaire.xls');
+        force_download('inventaire.xls', NULL);
+        redirect('articles/');
         exit;
     }
 

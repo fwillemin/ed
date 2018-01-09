@@ -19,7 +19,7 @@
                         endif;
                         echo '<br>' . $client->getClientCp() . ' ' . $client->getClientVille() . '<br>'
                         . '<i class="glyphicon glyphicon-phone-alt"></i> ' . $client->getClientTelephone();
-                        ?>                                         
+                        ?>
                     </address>
 
                     <strong>Gestion de la TVA</strong>
@@ -33,7 +33,7 @@
                     <br>
                     <button <?php if (!empty($bdcs) && count($bdcs) > 0) echo 'disabled'; ?>  class="btn btn-link btn-xs tooltipOk" data-placement="bottom" title="Double-click" id="btnDelClient" data-clientid="<?php echo $client->getClientId(); ?>">
                         <i class="glyphicon glyphicon-erase"></i> Supprimer
-                    </button>                    
+                    </button>
                 </div>
                 <div class="col-sm-6" style="border-left: 4px solid grey;">
                     <h4>Contacts <button type="button" class="btn btn-sm btn-link" id="btnAddContact" ><i class="fa fa-plus-circle"></i> Ajouter</button></h4>
@@ -41,30 +41,35 @@
                         <thead>
                             <tr>
                                 <th>Nom</th>
-                                <th>Téléphone</th>                                
+                                <th>Téléphone</th>
                                 <th>Email</th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach( (array) $client->getClientContacts() as $c ): ?>
-                                <tr data-contactid="<?= $c->getContactId(); ?>" >
-                                    <td>
-                                        <?= $c->getContactNom() . ' ' . $c->getContactPrenom() . '<br><em>' . $c->getContactFonction() . '</em>'; ?>
-                                    </td>
-                                    <td>
-                                        <?= $c->getContactTelephone() . '<br>' . $c->getContactPortable(); ?>
-                                    </td>
-                                    <td>
-                                        <?= '<a href="mailto:' . $c->getContactEmail() . '">' . $c->getContactEmail() . '</a>'; ?>
-                                    </td>
-                                    <td>
-                                        <i class="fa fa-pencil btnModContact" style="cursor: pointer; color: grey;"></i>
-                                        <br><i class="fa fa-trash btnDelContact" style="cursor: pointer; color: lightgrey;"></i>
-                                    </td>
-                                </tr>
-                            <?php        
-                            endforeach; ?>
+                            <?php
+                            if ($client->getClientContacts()):
+                                foreach ($client->getClientContacts() as $c):
+                                    ?>
+                                    <tr data-contactid="<?= $c->getContactId(); ?>" >
+                                        <td>
+                                            <?= $c->getContactNom() . ' ' . $c->getContactPrenom() . '<br><em>' . $c->getContactFonction() . '</em>'; ?>
+                                        </td>
+                                        <td>
+                                            <?= $c->getContactTelephone() . '<br>' . $c->getContactPortable(); ?>
+                                        </td>
+                                        <td>
+                                            <?= '<a href="mailto:' . $c->getContactEmail() . '">' . $c->getContactEmail() . '</a>'; ?>
+                                        </td>
+                                        <td>
+                                            <i class="fa fa-pencil btnModContact" style="cursor: pointer; color: grey;"></i>
+                                            <br><i class="fa fa-trash btnDelContact" style="cursor: pointer; color: lightgrey;"></i>
+                                        </td>
+                                    </tr>
+                                    <?php
+                                endforeach;
+                            endif;
+                            ?>
                         </tbody>
                     </table>
 
@@ -81,7 +86,7 @@
                                 <th>ID</th>
                                 <th>Date</th>
                                 <th>Total HT</th>
-                                <th>Avancement</th>     
+                                <th>Avancement</th>
                                 <th>Facture</th>
                                 <th>Visualisation</th>
                             </tr>
@@ -142,7 +147,7 @@
                             ?>
                         </tbody>
                     </table>
-                </div>            
+                </div>
             </div>
 
         </div>

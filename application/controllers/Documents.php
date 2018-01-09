@@ -66,7 +66,7 @@ class Documents extends CI_Controller {
 
         $pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
 
-        $pdf->Output('facture.pdf', 'FI');
+        $pdf->Output('Devis' . $affaire->getAffaireDevisId() . '.pdf', 'FI');
     }
 
     public function editionFacture($factureId = null) {
@@ -105,54 +105,7 @@ class Documents extends CI_Controller {
 
         $pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
 
-        $pdf->Output('Facture ' . $facture->getFactureId() . '.pdf', 'FI');
+        $pdf->Output('Facture' . $facture->getFactureId() . '.pdf', 'FI');
     }
 
-//    public function esquisseFacture($factureId = null) {
-//
-//        if (!$factureId):
-//            redirect('ventes/noway');
-//            exit;
-//        endif;
-//
-//        $facture = $this->managerFactures->getFactureById($factureId);
-//
-//        /* Si la facture est déjà générée, on redirige vers l'impression de la facture définitive */
-//        if ($facture->getFactureNum() || $facture->getFactureDate()):
-//            redirect('documents/editionFacture/' . $facture->getFactureId());
-//            exit;
-//        endif;
-//
-//        $facture->hydrateClient();
-//        $facture->hydrateLignes();
-//
-//        $data = array(
-//            'facture' => $facture,
-//            'title' => 'Esquisse de facture',
-//            'description' => '',
-//            'keywords' => '',
-//            'content' => $this->viewFolder . __FUNCTION__
-//        );
-//        $this->load->view('template/contentDocuments', $data);
-//
-//        // Extend the TCPDF class to create custom Header and Footer
-//        $html = $this->output->get_output();
-//
-//        // create new PDF document
-//        $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false, false, $this->piedPage1, $this->piedPage2);
-//        $pdf->SetCreator(PDF_CREATOR);
-//        $pdf->SetAuthor($this->parametres[0]->valeur);
-//        $pdf->SetTitle('Provisoire ');
-//        $pdf->SetSubject('Provisoire ');
-//        //$pdf->SetKeywords('Devis');
-//
-//        $pdf->SetMargins(5, 5, 5);
-//        // set auto page breaks
-//        $pdf->SetAutoPageBreak(true, PDF_MARGIN_BOTTOM);
-//        $pdf->AddPage();
-//
-//        $pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
-//
-//        $pdf->Output('Provisoire.pdf', 'FI');
-//    }
 }

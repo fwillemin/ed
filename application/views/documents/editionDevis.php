@@ -50,42 +50,48 @@
         <td style="width: 270px;">Description</td>
         <td style="text-align: center; width:30px;">Qte</td>
         <td style="text-align: right; width:60px;">PU HT</td>
-        <td style="text-align: center; width:40px;">Remise</td>
+        <td style="text-align: center; width:40px;"></td>
         <td style="text-align: right; width:60px;">PU Net</td>
         <td style="text-align: right; width:70px;">Total HT</td>
     </tr>
 
     <?php
     foreach ($articles as $a):
-        ?>
-        <tr>
-            <td style="border-bottom: 1px solid grey;">
-                <span style="font-weight: bold; font-size: 10px;">
-                    <?= $a->getAffaireArticleDesignation(); ?>
-                </span>
-                <br>
-                <span style="font-size: 9px;">
-                    <?= $a->getAffaireArticleDescription(); ?>
-                </span>
-            </td>
-            <td style="text-align: center; border-bottom: 1px solid grey;">
-                <?php echo number_format($a->getAffaireArticleQte(), 0, ',', ' '); ?>
-            </td>
-            <td style="text-align: right; border-bottom: 1px solid grey;">
-                <?php echo number_format($a->getAffaireArticleTarif(), 2, ',', ' '); ?>
-            </td>
-            <td style="text-align: center; border-bottom: 1px solid grey;">
-                <?php echo number_format($a->getAffaireArticleRemise(), 0, ',', ' ') . '%'; ?>
-            </td>
-            <td style="text-align: right; border-bottom: 1px solid grey;">
-                <?php echo number_format($a->getAffaireArticlePU(), 2, ',', ' '); ?>
-            </td>
-            <td style="text-align: right; border-bottom: 1px solid grey;">
-                <?php echo number_format($a->getAffaireArticleTotalHT(), 2, ',', ' '); ?>
-            </td>
+        if ($a->getAffaireArticleQte() > 0):
+            ?>
+            <tr>
+                <td style="border-bottom: 1px solid grey;">
+                    <span style="font-weight: bold; font-size: 10px;">
+                        <?= $a->getAffaireArticleDesignation(); ?>
+                    </span>
+                    <br>
+                    <span style="font-size: 9px;">
+                        <?= $a->getAffaireArticleDescription(); ?>
+                    </span>
+                </td>
+                <td style="text-align: center; border-bottom: 1px solid grey;">
+                    <?= number_format($a->getAffaireArticleQte(), 0, ',', ' '); ?>
+                </td>
+                <td style="text-align: right; border-bottom: 1px solid grey;">
+                    <?= number_format($a->getAffaireArticleTarif(), 2, ',', ' '); ?>
+                </td>
+                <td style="text-align: center; border-bottom: 1px solid grey;">
+                    <?php
+                    if ($a->getAffaireArticleRemise() > 0):
+                        echo number_format($a->getAffaireArticleRemise(), 0, ',', ' ') . '%';
+                    endif;
+                    ?>
+                </td>
+                <td style="text-align: right; border-bottom: 1px solid grey;">
+                    <?= number_format($a->getAffaireArticlePU(), 2, ',', ' '); ?>
+                </td>
+                <td style="text-align: right; border-bottom: 1px solid grey;">
+                    <?= number_format($a->getAffaireArticleTotalHT(), 2, ',', ' '); ?>
+                </td>
 
-        </tr>
-        <?php
+            </tr>
+            <?php
+        endif;
     endforeach;
     ?>
 
@@ -105,12 +111,12 @@
     </tr>
     <tr>
         <td style="text-align:right;">20.00</td>
-        <td style="text-align:right;"><?php echo number_format($affaire->getAffaireTotalHT(), 2, ',', ' ') . '€'; ?></td>
-        <td style="text-align:right;"><?php echo number_format($affaire->getAffaireTotalTVA(), 2, ',', ' ') . '€'; ?></td>
+        <td style="text-align:right;"><?= number_format($affaire->getAffaireTotalHT(), 2, ',', ' ') . '€'; ?></td>
+        <td style="text-align:right;"><?= number_format($affaire->getAffaireTotalTVA(), 2, ',', ' ') . '€'; ?></td>
         <td></td>
-        <td style="text-align:right;"><?php echo number_format($affaire->getAffaireTotalHT(), 2, ',', ' ') . '€'; ?></td>
-        <td style="text-align:right;"><?php echo number_format($affaire->getAffaireTotalTVA(), 2, ',', ' ') . '€'; ?></td>
-        <td style="text-align:right;"><?php echo number_format($affaire->getAffaireTotalTTC(), 2, ',', ' ') . '€'; ?></td>
+        <td style="text-align:right;"><?= number_format($affaire->getAffaireTotalHT(), 2, ',', ' ') . '€'; ?></td>
+        <td style="text-align:right;"><?= number_format($affaire->getAffaireTotalTVA(), 2, ',', ' ') . '€'; ?></td>
+        <td style="text-align:right;"><?= number_format($affaire->getAffaireTotalTTC(), 2, ',', ' ') . '€'; ?></td>
     </tr>
 </table>
 <br>

@@ -7,7 +7,7 @@ class Model_contacts extends MY_model {
 
     protected $table = 'contacts';
 
-    const clase = 'Contact';
+    const classe = 'Contact';
 
     /**
      * Ajout d'un objet de la classe Contact à la BDD
