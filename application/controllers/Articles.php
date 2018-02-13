@@ -7,7 +7,7 @@ if (!defined('BASEPATH')) {
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xls;
 
-class Articles extends CI_Controller {
+class Articles extends My_Controller {
 
     const TVA = 0.2;
 
@@ -17,51 +17,6 @@ class Articles extends CI_Controller {
 
         if (!$this->ion_auth->logged_in() || !$this->ion_auth->is_admin()) :
             redirect('secure/login');
-        endif;
-    }
-
-    /**
-     * Fonction pour from_validation qui vérifie l'existance du composant dans la bdd
-     *
-     * @param int $id ID du composant
-     * @return boolean TRUE si le composant exist
-     */
-    public function existComposant($composantId) {
-        $this->form_validation->set_message('existComposant', 'Ce composant est introuvable.');
-        if ($this->managerComposants->count(array('composantId' => $composantId)) == 1 || !$composantId) :
-            return true;
-        else :
-            return false;
-        endif;
-    }
-
-    /**
-     * Fonction pour from_validation qui vérifie l'existance de l'article dans la bdd
-     *
-     * @param int $id ID de l'article
-     * @return boolean
-     */
-    public function existArticle($articleId) {
-        $this->form_validation->set_message('existArticle', 'Cet article est introuvable.');
-        if ($this->managerArticles->count(array('articleId' => $articleId)) == 1 || !$articleId) :
-            return true;
-        else :
-            return false;
-        endif;
-    }
-
-    /**
-     * Fonction pour from_validation qui vérifie l'existance de l'option dans la bdd
-     *
-     * @param int $id ID de l'option
-     * @return boolean
-     */
-    public function existOption($optionId) {
-        $this->form_validation->set_message('existOption', 'Cette option est introuvable.');
-        if ($this->managerOptions->count(array('optionId' => $optionId)) == 1 || !$optionId) :
-            return true;
-        else :
-            return false;
         endif;
     }
 

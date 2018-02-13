@@ -8,40 +8,53 @@
  */
 class AffaireArticle {
 
-    protected $affaireArticleId;    
-    protected $affaireArticleAffaireId;    
-    protected $affaireArticleArticleId;    
-    protected $affaireArticleDesignation;    
-    protected $affaireArticleDescription;    
-    protected $affaireArticleQte;    
-    protected $affaireArticleTarif; /* tarif de vente force ou non */    
-    protected $affaireArticleRemise;    
+    protected $affaireArticleId;
+    protected $affaireArticleAffaireId;
+    protected $affaireArticleArticleId;
+    protected $affaireArticleDesignation;
+    protected $affaireArticleDescription;
+    protected $affaireArticleQte;
+    protected $affaireArticleTarif; /* tarif de vente force ou non */
+    protected $affaireArticleRemise;
     protected $affaireArticlePU; /* tarif remisé */
-    protected $affaireArticleTotalHT;    
-    protected $affaireArticlePrixForce; /* BOOL - Indique si le PU est forcé ou calculé à partir des options/composants */    
+    protected $affaireArticleTotalHT;
+    protected $affaireArticlePrixForce; /* BOOL - Indique si le PU est forcé ou calculé à partir des options/composants */
     protected $affaireArticleOptions;
-   
-    
+
+    //protected $affaireArticlePrixDeRevient;
+
     public function __construct(array $valeurs = []) {
         /* Si on passe des valeurs, on hydrate l'objet */
-        if(!empty($valeurs)) $this->hydrate ($valeurs);        
+        if (!empty($valeurs))
+            $this->hydrate($valeurs);
     }
-        
+
     public function hydrate(array $donnees) {
-       foreach ($donnees as $key => $value):
-            $method = 'set'.ucfirst($key);
-            if(method_exists($this, $method))
+        foreach ($donnees as $key => $value):
+            $method = 'set' . ucfirst($key);
+            if (method_exists($this, $method))
                 $this->$method($value);
-        endforeach;        
+        endforeach;
     }
-    
+
     function hydrateAffaireOptions() {
-        
-        $CI =& get_instance();
-        $this->affaireArticleOptions = $CI->managerAffaireOptions->liste( array('affaireOptionArticleId' => $this->affaireArticleId ), 'affaireOptionId ASC' );
-        
+
+        $CI = & get_instance();
+        $this->affaireArticleOptions = $CI->managerAffaireOptions->liste(array('affaireOptionArticleId' => $this->affaireArticleId), 'affaireOptionId ASC');
     }
-    
+
+//    function hydratePrixDeRevient() {
+//        $CI = & get_instance();
+//        if (!$this->affaireArticleOptions):
+//            $this->hydrateAffaireOptions();
+//        endif;
+//        $prixDeRevient = 0;
+//        foreach ($this->affaireArticleOptions as $affaireOption):
+//            $prixDeRevient += round($CI->managerOptions->getOptionById($affaireOption->getAffaireOptionOptionId())->getOptionPrixAchat() * $affaireOption->getAffaireOptionQte(), 2);
+//        endforeach;
+//        $this->affaireArticlePrixDeRevient = $prixDeRevient;
+//    }
+
     function getAffaireArticleId() {
         return $this->affaireArticleId;
     }
@@ -121,6 +134,7 @@ class AffaireArticle {
     function setAffaireArticlePrixForce($affaireArticlePrixForce) {
         $this->affaireArticlePrixForce = $affaireArticlePrixForce;
     }
+
     function getAffaireArticleAffaireId() {
         return $this->affaireArticleAffaireId;
     }
@@ -128,12 +142,21 @@ class AffaireArticle {
     function setAffaireArticleAffaireId($affaireArticleAffaireId) {
         $this->affaireArticleAffaireId = $affaireArticleAffaireId;
     }
+
     function getAffaireArticleOptions() {
         return $this->affaireArticleOptions;
     }
 
     function setAffaireArticleOptions($affaireArticleOptions) {
         $this->affaireArticleOptions = $affaireArticleOptions;
+    }
+
+    function getAffaireArticlePrixDeRevient() {
+        return $this->affaireArticlePrixDeRevient;
+    }
+
+    function setAffaireArticlePrixDeRevient($affaireArticlePrixDeRevient) {
+        $this->affaireArticlePrixDeRevient = $affaireArticlePrixDeRevient;
     }
 
 }

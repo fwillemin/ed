@@ -6,7 +6,10 @@ background-image: url("../../assets/img/fond.png");
 background-size: cover;
 background-attachment: fixed;
 }
-.container {
+a, button {
+    outline: none;
+}
+.fond {
     background-color: #FFF;
     position: relative;
     top: -20px;
@@ -14,6 +17,11 @@ background-attachment: fixed;
     min-height: 1000px;
     border-left: 1px solid grey;
     border-right: 1px solid grey;
+}
+.btnInvisible {
+    border: none;
+    background-color: inherit;
+    padding : 0px;
 }
 .jour {
     background-color: #f4f6f8;

@@ -113,7 +113,7 @@ class Model_clients extends MY_model {
     public function getClientById($clientId, $type = 'object') {
         $query = $this->db->select('c.*')
                 ->from($this->table . ' c')
-                ->where(array('clientId' => intval($clientId)))
+                ->where(array('clientId' => $clientId))
                 ->group_by('c.clientId')
                 ->get();
         return $this->retourne($query, $type, self::classe, true);

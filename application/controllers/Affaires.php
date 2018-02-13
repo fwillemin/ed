@@ -4,7 +4,7 @@ if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
-class Affaires extends CI_Controller {
+class Affaires extends My_Controller {
 
     const tauxTVA = 20;
 
@@ -17,21 +17,6 @@ class Affaires extends CI_Controller {
         endif;
 
         $this->affaireError = ''; /* Erreurs lors de l'enregistrement d'une affaire */
-    }
-
-    /**
-     * Fonction pour from_validation qui vérifie l'existance d'une affaire dans la bdd
-     *
-     * @param int $affaireId ID de l'affaire
-     * @return boolean TRUE si l'affaire existe
-     */
-    public function existAffaire($affaireId) {
-        $this->form_validation->set_message('existAffaire', 'Cette affaire est introuvable.');
-        if ($this->managerAffaires->count(array('affaireId' => $affaireId)) == 1 || !$affaireId) :
-            return true;
-        else :
-            return false;
-        endif;
     }
 
     /**
@@ -79,8 +64,21 @@ class Affaires extends CI_Controller {
      * Retourne la liste de toutes les affaires
      */
     public function getAllAffaires() {
-
-        $affaires = $this->managerAffaires->listeAll(array('affaireCloture' => 0), 'affairedate ASC', 'array');
+        $affaires = $this->managerAffaires->listeAll(array('affaireCloture' => 0), 'affairedate DESC', 'array');
+        if (!empty($affaires)):
+            foreach ($affaires as $a):
+                if ($a->affaireCloture == 1):
+                    $a->avancement = 'Clôturée';
+                elseif ($a->affaireCommandeId > 0):
+                    $a->avancement = '<span style="color: green;">En cours</span>';
+                elseif ($a->affaireDevisId > 0):
+                    $a->avancement = '<span style="color: orange;">Devis envoyé le ' . date('d/m/y', $a->affaireDevisDate) . '</span>';
+                else:
+                    $a->avancement = '<span style="color: steelblue;">Conception</span>';
+                endif;
+                $a->totalEnFacture = $this->managerFactures->getSommeFacturesByAffaireId($a->affaireId);
+            endforeach;
+        endif;
         echo json_encode($affaires);
     }
 
@@ -408,6 +406,67 @@ class Affaires extends CI_Controller {
         endswitch;
         $this->managerAffaires->editer($affaire);
         redirect('ventes/concepteur');
+        exit;
+    }
+
+    public function dupliquerAffaire($affaireId = null) {
+        if (!$affaireId || !$this->existAffaire($affaireId)):
+            redirect('ventes/listeAffaires');
+            exit;
+        endif;
+        $affaire = $this->managerAffaires->getAffaireById($affaireId);
+
+        $affaireClone = clone $affaire;
+        $affaireClone->setAffaireDate(time());
+        $affaireClone->setAffaireDevisId(NULL);
+        $affaireClone->setAffaireCommandeId(NULL);
+        $affaireClone->setAffaireCloture(0);
+
+        $this->db->trans_start();
+
+        $this->managerAffaires->ajouter($affaireClone);
+        foreach ($this->managerAffaireClients->getClientsByAffaireId($affaire->getAffaireId()) as $client):
+            $dataAffaireClient = array(
+                'affaireClientAffaireId' => $affaireClone->getAffaireId(),
+                'affaireClientClientId' => $client->getClientId(),
+                'affaireClientPrincipal' => $client->getClientPrincipal()
+            );
+            $this->managerAffaireClients->ajouter(new AffaireClient($dataAffaireClient));
+        endforeach;
+
+        /* Clone des lignes */
+        $affaireArticles = $this->managerAffaireArticles->getAffaireArticlesByAffaireId($affaire->getAffaireId());
+        if ($affaireArticles):
+            foreach ($affaireArticles as $a):
+                $articleClone = clone $a;
+                $articleClone->setAffaireArticleAffaireId($affaireClone->getAffaireId());
+                $this->managerAffaireArticles->ajouter($articleClone);
+
+                $a->hydrateAffaireOptions();
+                foreach ($a->getAffaireArticleOptions() as $option):
+                    $optionClone = clone $option;
+                    $optionClone->setAffaireOptionAffaireId($affaireClone->getAffaireId());
+                    $optionClone->setAffaireOptionArticleId($articleClone->getAffaireArticleId());
+                    $this->managerAffaireOptions->ajouter($optionClone);
+                    unset($optionClone);
+                endforeach;
+                unset($articleClone);
+            endforeach;
+        endif;
+
+        $this->db->trans_complete();
+
+        redirect('ventes/reloadAffaire/' . $affaireClone->getAffaireId());
+        exit;
+    }
+
+    public function cloturerAffaire($affaireId = null) {
+        if ($affaireId && $this->existAffaire($affaireId)) {
+            $affaire = $this->managerAffaires->getAffaireById($affaireId);
+            $affaire->setAffaireCloture(abs($affaire->getAffaireCloture() - 1));
+            $this->managerAffaires->editer($affaire);
+        }
+        redirect('ventes/listeAffaires');
         exit;
     }
 

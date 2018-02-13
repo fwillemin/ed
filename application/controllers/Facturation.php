@@ -4,7 +4,7 @@ if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
-class Facturation extends CI_Controller {
+class Facturation extends My_Controller {
 
     const tauxTVA = 20;
 
@@ -17,105 +17,47 @@ class Facturation extends CI_Controller {
         endif;
     }
 
-    /**
-     * Fonction pour from_validation qui vérifie l'existance d'une affaire dans la bdd
-     *
-     * @param int $affaireId ID de l'affaire
-     * @return boolean TRUE si l'affaire existe
-     */
-    public function existAffaire($affaireId) {
-        $this->form_validation->set_message('existAffaire', 'Cette affaire est introuvable.');
-        if ($this->managerAffaires->count(array('affaireId' => $affaireId)) == 1 || !$affaireId) :
-            return true;
-        else :
-            return false;
-        endif;
-    }
-
-    /**
-     * Fonction pour from_validation qui vérifie l'existance du client dans la bdd
-     *
-     * @param int $clientId ID du client
-     * @return boolean TRUE si le client existe
-     */
-    public function existClient($clientId) {
-        $this->form_validation->set_message('existClient', 'Ce client est introuvable.');
-        if ($this->managerClients->count(array('clientId' => $clientId)) == 1 || !$clientId) :
-            return true;
-        else :
-            return false;
-        endif;
-    }
-
-    /**
-     * Fonction pour from_validation qui vérifie l'existance du client dans la bdd
-     *
-     * @param int $factureId ID de la facture
-     * @return boolean TRUE si la facture existe
-     */
-    public function existFacture($factureId) {
-        $this->form_validation->set_message('existFacture', 'Cette facture est introuvable.');
-        if ($this->managerFactures->count(array('factureId' => $factureId)) == 1 || !$factureId) :
-            return true;
-        else :
-            return false;
-        endif;
-    }
-
-    /**
-     * Fonction pour from_validation qui vérifie l'existance du reglement dans la bdd
-     *
-     * @param int $reglementId ID du réglement
-     * @return boolean TRUE si le réglement existe
-     */
-    public function existReglement($reglementId) {
-        $this->form_validation->set_message('existReglement', 'Ce réglement est introuvable.');
-        if ($this->managerReglements->count(array('reglementId' => $reglementId)) == 1 || !$reglementId) :
-            return true;
-        else :
-            return false;
-        endif;
-    }
-
     private function ajouterReglement($affaireId, $clientId, $factureId = null, $date, $montant, $mode, $type, $reglementId = null) {
 
-        $reglementFacture = $factureId ? $factureId : null;
-
-        $security = new Token();
-        $chaine = $affaireId . $clientId . number_format($montant, 2, '.', '') . $date;
-        $token = $security->getToken($chaine);
-        if (!$token):
-            log_message('error', __CLASS__ . '/' . __FUNCTION__ . ' ' . 'Erreur dans la création du token');
-            return false;
-        endif;
+        $reglementSource = $this->managerReglements->getReglementById($reglementId);
 
         $dataReglement = array(
             'reglementDate' => $date,
             'reglementMontant' => $montant,
-            'reglementToken' => $token,
+            'reglementToken' => null,
             'reglementAffaireId' => $affaireId,
             'reglementClientId' => $clientId,
             'reglementFactureId' => $factureId,
             'reglementMode' => $mode,
             'reglementType' => $type,
-            'reglementSourceId' => $reglementId ? $reglementId : 0,
+            'reglementSourceId' => $reglementSource ? $reglementSource->getReglementId() : null,
+            'reglementGroupeId' => $reglementSource ? $reglementSource->getReglementGroupeId() : null,
             'reglementUtile' => 1
         );
 
         $this->db->trans_start();
 
-
         $reglement = new Reglement($dataReglement);
         $this->managerReglements->ajouter($reglement);
 
-        /* Si il y a un/des réglements d'origine, on le(s) desactive */
-        if ($reglementId):
-            $this->majReglementsPrecedents($reglement, $reglementId);
-            $reglement->setReglementSourceId($reglementId);
+        /* Si il y a un réglement d'origine, on le desactive */
+        if ($reglementSource):
+            $reglementSource->setReglementUtile(0);
+            $this->managerReglements->editer($reglementSource);
         else:
             $reglement->setReglementSourceId($reglement->getReglementId());
+            $reglement->setReglementGroupeId($reglement->getReglementId());
         endif;
 
+        /* Génération du TOKEN */
+        $security = new Token();
+        $chaine = $affaireId . $clientId . number_format($montant, 2, '.', '') . $date . $reglement->getReglementSourceId() . $reglement->getReglementGroupeId();
+        $token = $security->getToken($chaine);
+        if (!$token):
+            log_message('error', __CLASS__ . '/' . __FUNCTION__ . ' ' . 'Erreur dans la création du token');
+            return false;
+        endif;
+        $reglement->setReglementToken($token);
         $this->managerReglements->editer($reglement);
 
         $this->db->trans_complete();
@@ -127,25 +69,6 @@ class Facturation extends CI_Controller {
         return $reglement;
     }
 
-    /**
-     * Pass tous les réglements ayant comme source le $reglementSourceId en Inactif sauf le réglement Utile
-     * @param Reglement $reglementUtile Reglement Utile
-     * @param type $reglementSourceId ID du réglement source
-     */
-    private function majReglementsPrecedents(Reglement $reglementUtile, $reglementSourceId) {
-
-        $reglements = $this->managerReglements->liste(array('reglementSourceId' => $reglementSourceId, 'reglementId <>' => $reglementUtile->getReglementId()));
-        if (!empty($reglements)):
-            foreach ($reglements as $r):
-                $r->setReglementUtile(0);
-                $this->managerReglements->editer($r);
-            endforeach;
-        endif;
-    }
-
-    /**
-     * Gestion de la demande d'ajout d'un réglement
-     */
     public function addReglement() {
 
         if (!$this->form_validation->run('addReglement')):
@@ -153,11 +76,11 @@ class Facturation extends CI_Controller {
             exit;
         endif;
 
-        $reglement = $this->ajouterReglement($this->input->post('addReglementAffaireId'), $this->input->post('addReglementClientId'), $this->input->post('addReglementFactureId'), $this->xth->mktimeFromInputDate($this->input->post('addReglementDate')), floatval($this->input->post('addReglementMontant')), $this->input->post('addReglementMode'), $this->input->post('addReglementType'), $this->input->post('addReglementSourceId'));
+        $reglement = $this->ajouterReglement($this->input->post('addReglementAffaireId'), $this->input->post('addReglementClientId'), $this->input->post('addReglementFactureId'), $this->xth->mktimeFromInputDate($this->input->post('addReglementDate')), floatval($this->input->post('addReglementMontant')), $this->input->post('addReglementMode'), $this->input->post('addReglementType'), $this->input->post('addReglementId'));
 
         if ($reglement):
             if ($this->input->post('addReglementFactureId')):
-                $this->recalculeSolde($this->managerFactures->getFactureById($this->input->post('addReglementFactureId')));
+                $this->setFactureSolde($this->managerFactures->getFactureById($this->input->post('addReglementFactureId')));
             endif;
             echo json_encode(array('type' => 'success'));
         else:
@@ -166,18 +89,15 @@ class Facturation extends CI_Controller {
         exit;
     }
 
-    private function recalculeSolde(Facture $facture) {
-
-        $facture->hydrateReglements();
-        $totalReglements = 0;
-        if ($facture->getFactureReglements()):
-            foreach ($facture->getFactureReglements() as $r):
-                $totalReglements += $r->getReglementMontant();
-            endforeach;
+    public function recalculeSolde($factureId) {
+        if (!$this->existFacture($factureId)):
+            redirect('ventes/bdcListe');
+            exit;
         endif;
-
-        $facture->setFactureSolde($facture->getFactureTotalTTC() - $totalReglements);
-        $this->managerFactures->editer($facture);
+        $facture = $this->managerFactures->getFactureById($factureId);
+        $this->setFactureSolde($facture);
+        redirect('facturation/ficheFacture/' . $facture->getFactureId());
+        exit;
     }
 
     public function getReglement() {
@@ -238,18 +158,12 @@ class Facturation extends CI_Controller {
         return $facture;
     }
 
-    private function getSolde(Facture $facture) {
+    private function addLigne(Facture $facture, $item, $quota, $tauxTVA = self::tauxTVA) {
 
-    }
+        if ($quota > 0):
 
-    private function addLigne(Facture $facture, $item, $qteQuota, $tauxTVA = self::tauxTVA) {
-
-        if ($qteQuota > 0):
-
-            $qte = round($qteQuota * $item['qty'] / 100, 2);
-            $totalHT = round($item['price'] * $qte, 2);
+            $totalHT = round($item['price'] * $item['qty'] * ($quota / 100), 2);
             $totalTVA = round($totalHT * $tauxTVA / 100, 2);
-
 
             $dataLigne = array(
                 'factureLigneFactureId' => $facture->getFactureId(),
@@ -257,13 +171,13 @@ class Facturation extends CI_Controller {
                 'factureLigneAffaireArticleId' => $item['affaireArticleId'],
                 'factureLigneDesignation' => $item['name'],
                 'factureLigneDescription' => $item['description'],
-                'factureLigneQte' => $qte,
+                'factureLigneQte' => $item['qty'],
                 'factureLigneTarif' => $item['price'],
                 'factureLigneRemise' => $item['remise'],
                 'factureLigneTotalHT' => $totalHT,
                 'factureLigneTotalTVA' => $totalTVA,
                 'factureLigneTotalTTC' => $totalHT + $totalTVA,
-                'factureLigneQuota' => $qteQuota
+                'factureLigneQuota' => $quota
             );
             $ligne = new FactureLigne($dataLigne);
             $this->managerFactureLignes->ajouter($ligne);
@@ -276,6 +190,8 @@ class Facturation extends CI_Controller {
     public function addFacture() {
 
         if ($this->form_validation->run('addFacture')):
+
+            $this->db->trans_start();
 
             $client = $this->managerClients->getClientById($this->input->post('addFactureClientId'));
             $facture = $this->ajouterFacture($this->input->post('addFactureAffaireId'), $client, $this->input->post('addFactureMode'), $this->input->post('addFactureObjet'));
@@ -307,6 +223,8 @@ class Facturation extends CI_Controller {
 
             endif;
 
+            $this->db->trans_complete();
+
             echo json_encode(array('type' => 'success'));
             exit;
 
@@ -316,28 +234,62 @@ class Facturation extends CI_Controller {
         exit;
     }
 
-    public function listeFactures($etat = 'ALL', $start = null, $end = null) {
-
-        if (!$start):
-            $start = mktime(0, 0, 0, date('m'), 1, date('Y'));
+    public function criteresListeFactures($etat = 'ALL', $start = null, $end = null, $factureId = null) {
+        if ($factureId && $this->existFacture($factureId)):
+            $this->session->set_flashdata('rechFactureId', $factureId);
         endif;
-        if (!$end):
-            $end = mktime(23, 59, 59, date('m'), date('t'), date('Y'));
+        if ($start):
+            $this->session->set_userdata('rechFactureStart', $this->xth->mktimeFromInputDate($start));
+        else:
+            $this->session->set_userdata('rechFactureStart', mktime(0, 0, 0, date('m'), 1, date('Y')));
         endif;
-        $where = array('factureNum > ' => 0, 'factureDate >=' => $start, 'factureDate <=' => $end);
+        if ($end):
+            $this->session->set_userdata('rechFactureEnd', $this->xth->mktimeFromInputDate($end));
+        else:
+            $this->session->set_userdata('rechFactureEnd', mktime(23, 59, 59, date('m'), date('t'), date('Y')));
+        endif;
+        $this->session->set_userdata('rechFactureEtat', $etat);
+        redirect('facturation/listeFactures');
+    }
 
-        switch ($etat):
-            case 'NS':
-                $where['factureSolde >'] = 0;
-                break;
-            case 'S':
-                $where['factureSolde'] = 0;
-                break;
-        endswitch;
+    public function listeFactures() {
 
-        $factures = $this->managerFactures->listeAll($where);
+        if ($this->session->flashdata('rechFactureId')):
+            $whereFactures = array('factureId' => $this->session->flashdata('rechFactureId'));
+            $whereAvoirs = array('avoirId' => $this->session->flashdata('rechFactureId'));
+        else:
+            if (!$this->session->userdata('rechFactureStart')):
+                $this->criteresListeFactures();
+            endif;
+            $whereFactures = array('factureDate >=' => $this->session->userdata('rechFactureStart'), 'factureDate <=' => $this->session->userdata('rechFactureEnd'));
+            $whereAvoirs = array('avoirDate >=' => $this->session->userdata('rechFactureStart'), 'avoirDate <=' => $this->session->userdata('rechFactureEnd'));
+
+            switch ($this->session->userdata('rechFactureEtat')):
+                case 'NS':
+                    $whereFactures['factureSolde >'] = 0;
+                    break;
+                case 'P':
+                    $whereFactures['factureSolde'] = 0;
+                    break;
+            endswitch;
+        endif;
+
+        $factures = $this->managerFactures->liste($whereFactures);
+        $avoirs = $this->managerAvoirs->liste($whereAvoirs);
+
+        if ($factures):
+            foreach ($factures as $f):
+                $f->hydrateClient();
+            endforeach;
+        endif;
+        if ($avoirs):
+            foreach ($avoirs as $a):
+                $a->hydrateClient();
+            endforeach;
+        endif;
 
         $data = array(
+            'avoirs' => $avoirs,
             'factures' => $factures,
             'title' => 'Factures',
             'description' => 'Liste des factures',
@@ -345,6 +297,57 @@ class Facturation extends CI_Controller {
             'content' => $this->view_folder . __FUNCTION__
         );
         $this->load->view('template/content', $data);
+    }
+
+    public function criteresListeReglements($start = null, $end = null) {
+        if ($start):
+            $this->session->set_userdata('rechReglementStart', $this->xth->mktimeFromInputDate($start));
+        else:
+            $this->session->set_userdata('rechReglementStart', mktime(0, 0, 0, date('m'), 1, date('Y')));
+        endif;
+        if ($end):
+            $this->session->set_userdata('rechReglementEnd', $this->xth->mktimeFromInputDate($end));
+        else:
+            $this->session->set_userdata('rechReglementEnd', mktime(23, 59, 59, date('m'), date('t'), date('Y')));
+        endif;
+        redirect('facturation/listeReglements');
+    }
+
+    public function listeReglements() {
+
+        if ($this->session->userdata('rechReglementStart')):
+            $whereReglements = array('reglementUtile' => 1, 'reglementDate >=' => $this->session->userdata('rechReglementStart'), 'reglementDate <=' => $this->session->userdata('rechReglementEnd'));
+        else:
+            $whereReglements = array('reglementUtile' => 1);
+        endif;
+
+        $reglements = $this->managerReglements->liste($whereReglements);
+        if ($reglements):
+            foreach ($reglements as $r):
+                $r->hydrateClient();
+            endforeach;
+        endif;
+
+        $data = array(
+            'reglements' => $reglements,
+            'title' => 'Réglements',
+            'description' => 'Liste des réglements',
+            'keywords' => '',
+            'content' => $this->view_folder . __FUNCTION__
+        );
+        $this->load->view('template/content', $data);
+    }
+
+    public function forceSolde($factureId, $solde) {
+        if (!$this->existFacture($factureId)):
+            redirect('ventes/bdcListe');
+            exit;
+        endif;
+        $facture = $this->managerFactures->getFactureById($factureId);
+        $facture->setFactureSolde($solde);
+        $this->managerFactures->editer($facture);
+        redirect('facturation/ficheFacture/' . $facture->getFactureId());
+        exit;
     }
 
     public function ficheFacture($factureId) {
@@ -355,22 +358,57 @@ class Facturation extends CI_Controller {
         endif;
 
         $facture = $this->managerFactures->getFactureById($factureId);
-        if (!$facture->getFactureNum()):
-            redirect('facturation/listeFactures');
-            exit;
-        endif;
-
         $facture->hydrateClient();
         $facture->hydrateReglements();
+        if ($facture->getFactureReglements()):
+            foreach ($facture->getFactureReglements() as $r):
+                $r->hydrateHistorique();
+            endforeach;
+        endif;
+        $facture->hydrateAvoirs();
+
+        $this->session->set_userdata(array('venteFactureId' => $facture->getFactureId(), 'venteClientId' => $facture->getFactureClientId(), 'venteId' => null));
 
         $data = array(
             'facture' => $facture,
-            'title' => 'Facture FA' . $facture->getFactureNum(),
-            'description' => 'Fiche détaillée de la facture',
+            'title' => 'Détail facture ' . $facture->getFactureId(),
+            'description' => '',
             'keywords' => '',
             'content' => $this->view_folder . __FUNCTION__
         );
         $this->load->view('template/content', $data);
+    }
+
+    /**
+     * NON FONCTIONNEL - MANQUE LA SELECTION DU CONTACT
+     * Envoi la facture sur le mail d'un contact du client
+     * @param type $contactId
+     */
+    public function sendFactureByEmail($contactId) {
+
+        if (!$this->existContact($contactId)):
+            echo json_encode(array('type' => 'error', 'message' => validation_errors()));
+            exit;
+        endif;
+
+        if (!$this->existFacture($this->input->post('factureId'))):
+            echo json_encode(array('type' => 'error', 'message' => validation_errors()));
+            exit;
+        endif;
+
+        $facture = $this->managerFactures->getFactureById($this->input->post('factureId'));
+        $facture->hydrateClient();
+        if (!$facture->getFactureClient()->getClientEmail() || !valid_email($facture->getFactureClient()->getClientEmail())):
+            echo json_encode(array('type' => 'error', 'message' => 'Le client n\'a pas d\'email renseigné ou cet email est invalide.'));
+            exit;
+        endif;
+
+        if ($this->xth->emailFacture($facture)):
+            echo json_encode(array('type' => 'success'));
+        else:
+            echo json_encode(array('type' => 'error', 'message' => 'Erreur lors de l\'envoi de l\'email'));
+        endif;
+        exit;
     }
 
 }

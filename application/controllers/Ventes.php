@@ -4,7 +4,7 @@ if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
-class Ventes extends CI_Controller {
+class Ventes extends My_Controller {
 
     const tauxTVA = 20;
 
@@ -17,66 +17,6 @@ class Ventes extends CI_Controller {
         endif;
 
         //$this->affaireError = ''; /* Erreurs lors de l'enregistrement d'une affaire */
-    }
-
-    /**
-     * Fonction pour from_validation qui vérifie l'existance de l'article dans la bdd
-     *
-     * @param int $id ID de l'article
-     * @return boolean
-     */
-    public function existArticle($articleId) {
-        $this->form_validation->set_message('existArticle', 'Cet article est introuvable.');
-        if ($this->managerArticles->count(array('articleId' => $articleId)) == 1 || !$articleId) :
-            return true;
-        else :
-            return false;
-        endif;
-    }
-
-    /**
-     * Fonction pour from_validation qui vérifie l'existance d'une option dans la bdd
-     *
-     * @param int $id ID de l'option
-     * @return boolean
-     */
-    public function existOption($optionId) {
-        $this->form_validation->set_message('existOption', 'Cette option est introuvable.');
-        if ($this->managerOptions->count(array('optionId' => $optionId)) == 1 || !$optionId) :
-            return true;
-        else :
-            return false;
-        endif;
-    }
-
-    /**
-     * Fonction pour from_validation qui vérifie l'existance du client dans la bdd
-     *
-     * @param int $clientId ID du client
-     * @return boolean TRUE si le client existe
-     */
-    public function existClient($clientId) {
-        $this->form_validation->set_message('existClient', 'Ce client est introuvable.');
-        if ($this->managerClients->count(array('clientId' => $clientId)) == 1 || !$clientId) :
-            return true;
-        else :
-            return false;
-        endif;
-    }
-
-    /**
-     * Fonction pour from_validation qui vérifie l'existance d'une affaire dans la bdd
-     *
-     * @param int $affaireId ID de l'affaire
-     * @return boolean TRUE si l'affaire existe
-     */
-    public function existAffaire($affaireId) {
-        $this->form_validation->set_message('existAffaire', 'Cette affaire est introuvable.');
-        if ($this->managerAffaires->count(array('affaireId' => $affaireId)) == 1 || !$affaireId) :
-            return true;
-        else :
-            return false;
-        endif;
     }
 
     /**
@@ -120,6 +60,7 @@ class Ventes extends CI_Controller {
             endif;
 
         endif;
+        $this->majMargeAffaire();
         $this->session->set_userdata('pleaseSave', 0);
         redirect('ventes/concepteur');
         exit;
@@ -127,21 +68,8 @@ class Ventes extends CI_Controller {
 
     public function resetConcepteur() {
 
-        $dataSession = array('affaireId', 'affaireClientId', 'affaireExonerationTVA', 'affaireDate');
-        $this->session->unset_userdata($dataSession);
-        $this->cart->destroy();
+        $this->venteInit();
 
-        $this->session->set_userdata(
-                array(
-                    'pleaseSave' => 0,
-                    'affaireType' => 1,
-                    'affaireClients' => array(),
-                    'affaireObjet' => '',
-                    'affairePAO' => 0,
-                    'affaireFabrication' => 0,
-                    'affairePose' => 0
-                )
-        );
         redirect('ventes/concepteur');
         exit;
     }
@@ -219,10 +147,12 @@ class Ventes extends CI_Controller {
             /* Recherche du meme article déjà présent dans le panier */
             $compteur = $this->getNbOccurence($article->getArticleId()) + 1;
 
+            $prixAchatArticle = 0;
             /* On créé un array avec les composants de l'article */
             foreach ((array) $article->getArticleCompositions() as $c):
                 $c->hydrateOption();
                 $c->hydrateComposant();
+                $prixAchatArticle += round($c->getCompositionOption()->getOptionPrixAchat() * $c->getCompositionQte(), 2);
                 $compositions[] = array(
                     'affaireOptionId' => null,
                     'optionId' => $c->getCompositionOption()->getOptionId(),
@@ -245,6 +175,7 @@ class Ventes extends CI_Controller {
                 'articleHT' => $article->getArticleHT(), /* Prix public HT de l'article, somme des options */
                 'remise' => 0,
                 'affaireArticleId' => null,
+                'marge' => $article->getArticleHT() - $prixAchatArticle,
                 'composants' => $compositions
             );
 
@@ -266,6 +197,7 @@ class Ventes extends CI_Controller {
         /* Recherche du meme article déjà présent dans le panier */
         $compteur = $this->getNbOccurence($article->getArticleId()) + 1;
         $sommeOptions = 0; /* On recalcule la somme des options qui contituent le prix de vente NON FORCE */
+        $prixAchatArticle = 0; /* Somme des prix d'achat de toutes les options */
 
         /* On créé un array avec les composants/options de l'article */
         $options = array();
@@ -273,8 +205,6 @@ class Ventes extends CI_Controller {
 
             $composant = $this->managerComposants->getComposantById($affaireOption->getAffaireOptionComposantId());
             $option = $this->managerOptions->getOptionById($affaireOption->getAffaireOptionOptionId());
-            //$c->hydrateOption();
-            //$c->hydrateComposant();
             $options[] = array(
                 'affaireOptionId' => $affaireOption->getAffaireOptionId(),
                 'optionId' => $option->getOptionId(),
@@ -282,9 +212,11 @@ class Ventes extends CI_Controller {
                 'name' => $composant->getComposantDesignation() . ' ' . $option->getOptionNom(),
                 'qte' => $affaireOption->getAffaireOptionQte(),
                 'prix' => $affaireOption->getAffaireOptionPU(),
+                'prixAchat' => $option->getOptionPrixAchat(),
                 'originel' => $affaireOption->getAffaireOptionOriginel() /* Composant issu de l'article orignial dans la bdd */
             );
             $sommeOptions += round($affaireOption->getAffaireOptionQte() * $affaireOption->getAffaireOptionPU(), 2);
+            $prixAchatArticle += round($affaireOption->getAffaireOptionQte() * $option->getOptionPrixAchat(), 2);
         endforeach;
 
 
@@ -298,6 +230,8 @@ class Ventes extends CI_Controller {
             'articleHT' => $sommeOptions, /* Prix public HT de l'article, somme des options */
             'remise' => $affaireArticle->getAffaireArticleRemise(),
             'affaireArticleId' => $affaireArticle->getAffaireArticleId(),
+            'marge' => $affaireArticle->getAffaireArticlePU() - $prixAchatArticle,
+            'resteAFacturer' => $affaireArticle->getAffaireArticleTotalHT() - floatval($this->managerAffaireArticles->getTotalFacture($affaireArticle)),
             'composants' => $options
         );
 
@@ -327,6 +261,7 @@ class Ventes extends CI_Controller {
                 'name' => $option->getOptionComposant()->getComposantDesignation() . ' ' . $option->getOptionNom(),
                 'qte' => $this->input->post('addComposantQte'),
                 'prix' => $option->getOptionHT(),
+                'prixAchat' => $option->getOptionPrixAchat(),
                 'originel' => 0
             );
 
@@ -378,9 +313,10 @@ class Ventes extends CI_Controller {
      */
     public function calculNouveauxPrixItem($item) {
 
-        $nouveauPrixArticleHT = 0;
+        $nouveauPrixArticleHT = $nouveauPrixAchat = 0;
         foreach ($item['composants'] as $option):
             $nouveauPrixArticleHT += round($option['prix'] * $option['qte'], 2);
+            $nouveauPrixAchat += round($option['prixAchat'] * $option['qte'], 2);
         endforeach;
 
         if ($item['articleHT'] == $item['prixVendu']):
@@ -389,14 +325,14 @@ class Ventes extends CI_Controller {
             $nouveauPrixVendu = $item['prixVendu'];
         endif;
 
-        log_message('error', __CLASS__ . '/' . __FUNCTION__ . ' ' . $nouveauPrixVendu);
         $nouveauPrixFinal = $this->calculPrixItem($nouveauPrixVendu, $item['remise']);
 
         $data = array(
             'rowid' => $item['rowid'],
             'articleHT' => $nouveauPrixArticleHT,
             'prixVendu' => $nouveauPrixVendu,
-            'price' => $nouveauPrixFinal
+            'price' => $nouveauPrixFinal,
+            'marge' => $nouveauPrixFinal - $nouveauPrixAchat
         );
 
         $this->cart->update($data);
@@ -429,15 +365,44 @@ class Ventes extends CI_Controller {
 
             /* Mise à jour des données de l'item */
             $item = $this->cart->get_item($this->input->post('rowId'));
-
             $this->cart->update(array('rowid' => $item['rowid'], 'price' => $this->calculPrixItem($item['prixVendu'], $item['remise'])));
+
+            $margeItem = $this->majMargeArticle($this->cart->get_item($this->input->post('rowId')));
+            $margeAffaire = $this->majMargeAffaire();
+
             $this->session->set_userdata('pleaseSave', 1);
-            echo json_encode(array('type' => 'success', 'newPrice' => number_format($this->cart->get_item($item['rowid'])['subtotal'], 2, ',', ''), 'totaux' => $this->getAffaireTotaux()));
+            echo json_encode(array('type' => 'success', 'newPrice' => number_format($this->cart->get_item($item['rowid'])['subtotal'], 2, ',', ''), 'totaux' => $this->getAffaireTotaux(), 'margeArticle' => $margeItem, 'margeAffaire' => $margeAffaire));
             exit;
         else:
             echo json_encode(array('type' => 'error', 'message' => validation_errors()));
             exit;
         endif;
+    }
+
+    private function majMargeArticle($item) {
+
+        $totalAchats = 0;
+        foreach ($item['composants'] as $o):
+            if ($o['qte'] > 0):
+                $totalAchats += round($o['qte'] * $o['prixAchat'], 2);
+            endif;
+        endforeach;
+
+        $margeItem = $item['price'] - $totalAchats;
+        $arrayMaj = array('rowid' => $item['rowid'], 'marge' => $margeItem);
+        $this->cart->update($arrayMaj);
+
+        return round($margeItem);
+    }
+
+    private function majMargeAffaire() {
+
+        $totalMarges = 0;
+        foreach ($this->cart->contents() as $item)
+            $totalMarges += $item['marge'] * $item['qty'];
+
+        $this->session->set_userdata('margeAffaire', $totalMarges);
+        return round($totalMarges);
     }
 
     /**
@@ -468,15 +433,20 @@ class Ventes extends CI_Controller {
             $data['prixVendu'] = $item['prixVendu'];
             $data['price'] = $item['price'];
         endif;
-        //log_message('error', __CLASS__.'/'.__FUNCTION__.print_r($data, 1));
+
         $this->cart->update($data);
+        $margeItem = $this->majMargeArticle($this->cart->get_item($this->input->post('rowid')));
+        $margeAffaire = $this->majMargeAffaire();
 
         $this->session->set_userdata('pleaseSave', 1);
+
         echo json_encode(array('type' => 'success',
             'prixBase' => number_format($nouveauPrixArticleHT, 2, ',', ' '),
-            'prixVendu' => number_format($data['prixVendu'], 2, ',', ' '),
+            'prixVendu' => number_format(floatval($data['prixVendu']), 2, ',', ' '),
             'prixTotal' => number_format($data['price'] * $item['qty'], 2, ',', ' '),
-            'totaux' => $this->getAffaireTotaux()
+            'totaux' => $this->getAffaireTotaux(),
+            'margeArticle' => $margeItem,
+            'margeAffaire' => $margeAffaire
                 )
         );
         $this->session->set_userdata('pleaseSave', 1);

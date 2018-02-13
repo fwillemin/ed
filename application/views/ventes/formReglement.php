@@ -11,7 +11,7 @@
                     <strong>Attention !!</strong><br>Modifier un réglement enregistre un historique.<br> Veillez à utiliser le bouton "Annuler" si vous ne modifiez rien.
                 </div>
                 <?php echo form_open('facturation/addReglement/', array('class' => 'form-horizontal', 'id' => 'formAddReglement')); ?>
-                <input type="hidden" name="addReglementSourceId" id="addReglementSourceId" value="" >
+                <input type="hidden" name="addReglementId" id="addReglementId" value="" >
                 <input type="hidden" name="addReglementAffaireId" id="addReglementAffaireId" value="<?= $affaire->getAffaireId(); ?>" >
                 <div class="form-group">
                     <label for="addReglementDate" class="col-sm-4 control-label">Date</label>
@@ -40,11 +40,9 @@
                             <?php
                             if ($affaire && !empty($affaire->getAffaireFactures())):
                                 foreach ($affaire->getAffaireFactures() as $f):
-                                    if ($f->getFactureSolde() > 0):
-                                        echo '<option value="' . $f->getFactureId() . '" data-factureclientid="' . $f->getFactureClientId() . '" class="reglementChoixFacture">'
-                                        . 'FA' . $f->getFactureId() . '| Solde : ' . number_format($f->getFactureSolde(), 2, ',', ' ') . '€'
-                                        . '</option>';
-                                    endif;
+                                    echo '<option value="' . $f->getFactureId() . '" data-factureclientid="' . $f->getFactureClientId() . '" class="reglementChoixFacture">'
+                                    . 'FA' . $f->getFactureId() . '| Solde : ' . number_format($f->getFactureSolde(), 2, ',', ' ') . '€'
+                                    . '</option>';
                                 endforeach;
                             endif;
                             ?>
@@ -85,7 +83,7 @@
 
             <div class="modal-footer">
                 <button class="btn btn-primary pull-right" type="submit" id="btnAddReglementSubmit">
-                    <i class="fa fa-money"></i> Enregistrer le reglement
+                    <i class="fa fa-save"></i> Enregistrer le reglement
                 </button>
                 <?php echo form_close(); ?>
             </div>

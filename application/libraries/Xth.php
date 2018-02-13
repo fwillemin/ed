@@ -8,7 +8,7 @@
  */
 class Xth {
 
-    public function getUrlArticle( Article $article) {
+    public function getUrlArticle(Article $article) {
         $forbidden_caract = array(
             ' ' => '-',
             '!' => '-',
@@ -49,9 +49,9 @@ class Xth {
             '----' => '-',
             '-----' => '-',
         );
-        $articleUrl = strtr( (strtoupper($article->getArticleMarque()) . '-' . $article->getArticleDesignation() . '-' . $article->getArticleContenance() . '-' . $article->getArticleId() ), $forbidden_caract);
-        $articleUrl = strtr( $articleUrl, $cleanning);
-        return site_url( $articleUrl );
+        $articleUrl = strtr((strtoupper($article->getArticleMarque()) . '-' . $article->getArticleDesignation() . '-' . $article->getArticleContenance() . '-' . $article->getArticleId()), $forbidden_caract);
+        $articleUrl = strtr($articleUrl, $cleanning);
+        return site_url($articleUrl);
     }
 
     /**
@@ -94,9 +94,9 @@ class Xth {
 
         return $mot_de_passe;
     }
-    
-    function affModeReglement( $modeReglement ){
-        switch( $modeReglement ):
+
+    function affModeReglement($modeReglement) {
+        switch ($modeReglement):
             case 1:
                 return 'Chèque';
                 break;
@@ -113,6 +113,103 @@ class Xth {
                 return 'Traite';
                 break;
         endswitch;
+    }
+
+    private function _enteteEmail() {
+
+        $code = '<!DOCTYPE HTML>'
+                . '<html xmlns="http://www.w3.org/1999/xhtml">'
+                . '<head>'
+                . '<title>Document envoyé par Enseigne Diffusion</title>'
+                . '<meta http-equiv="Content-Type" content="text/html; charset=utf-8">'
+                . '<meta name="viewport" content="width=device-width, initial-scale=1.0">'
+                . '</head>'
+                . '<body style="margin: 0px 0px 0px 0px; padding: 0px 0px 0px 0px; background-color: #FFF;">'
+                . '<table width="100%" height="100%" cellpadding="0" style="padding: 20px 0px 20px 0px">'
+                . '<tr><td style="width:15px;"></td><td>';
+        return $code;
+    }
+
+    private function _footerEmail() {
+
+        $code = '</td><td style="width:15px;"></td></tr>'
+                . '</table>'
+                . '</body>'
+                . '</html>';
+
+        return $code;
+    }
+
+    public function emailDevis(Devis $devis) {
+
+        $CI = &get_instance();
+        $CI->email->from('contact@enseignediffusion.com');
+        $CI->email->to($devis->getDevisClient()->getClientEmail());
+        $CI->email->subject('Votre devis  Enseigne Diffusion');
+
+        /* Création du message */
+        $message = $this->_enteteEmail();
+
+        $message .= 'Madame, Monsieur,'
+                . '<p>Veuillez trouver ci-joint votre devis.'
+                . '<br>Nous sommes à votre disposition pour de plus amples informations</p>'
+                . 'Merci et à bientôt'
+                . '<br><br>Julien Deplano';
+        ;
+
+        $message .= $this->_footerEmail();
+
+        $CI->email->message($message);
+        $CI->email->attach('assets/Devis' . $devis->getDevisId() . '.pdf');
+        return $CI->email->send();
+    }
+
+    public function emailFacture(Facture $facture) {
+
+        $CI = &get_instance();
+        $CI->email->from('contact@enseignediffusion.com');
+        $CI->email->to($facture->getFactureClient()->getClientEmail());
+        $CI->email->subject('Votre Facture  Enseigne Diffusion');
+
+        /* Création du message */
+        $message = $this->_enteteEmail();
+
+        $message .= 'Madame, Monsieur,'
+                . '<p>Veuillez trouver ci-joint votre facture N°' . $facture->getFactureId()
+                . '<br>Nous sommes à votre disposition pour de plus amples informations</p>'
+                . 'Merci et à bientôt'
+                . '<br><br>Julien Deplano';
+        ;
+
+        $message .= $this->_footerEmail();
+
+        $CI->email->message($message);
+        $CI->email->attach('assets/Facture' . $facture->getFactureId() . '.pdf');
+        return $CI->email->send();
+    }
+
+    public function emailAvoir(Avoir $avoir) {
+
+        $CI = &get_instance();
+        $CI->email->from('contact@enseignediffusion.com');
+        $CI->email->to($avoir->getAvoirClient()->getClientEmail());
+        $CI->email->subject('Votre avoir Enseigne Diffusion');
+
+        /* Création du message */
+        $message = $this->_enteteEmail();
+
+        $message .= 'Madame, Monsieur,'
+                . '<p>Veuillez trouver ci-joint votre avoir N°' . $avoir->getAvoirId()
+                . '<br>Nous sommes à votre disposition pour de plus amples informations</p>'
+                . 'Merci et à bientôt'
+                . '<br><br>Julien Deplano';
+        ;
+
+        $message .= $this->_footerEmail();
+
+        $CI->email->message($message);
+        $CI->email->attach('assets/Avoir' . $avoir->getAvoirId() . '.pdf');
+        return $CI->email->send();
     }
 
 }

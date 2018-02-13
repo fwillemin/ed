@@ -20,7 +20,7 @@ class FactureLigne {
     protected $factureLigneTotalHT;
     protected $factureLigneTotalTTC;
     protected $factureLigneTotalTVA;
-    protected $factureLigneQuota; /* INFO : Quota qui a été appliqué sur la ligne d'origine de l'affaire. */
+    protected $factureLigneQuota; /* INFO : Quota en % du client qui a été appliqué sur la ligne d'origine de l'affaire. */
 
     public function __construct(array $valeurs = []) {
         /* Si on passe des valeurs, on hydrate l'objet */
@@ -115,6 +115,7 @@ class FactureLigne {
     function setFactureLigneTotalTVA($factureLigneTotalTVA) {
         $this->factureLigneTotalTVA = $factureLigneTotalTVA;
     }
+
     function getFactureLigneDesignation() {
         return $this->factureLigneDesignation;
     }
@@ -130,6 +131,7 @@ class FactureLigne {
     function setFactureLigneDescription($factureLigneDescription) {
         $this->factureLigneDescription = $factureLigneDescription;
     }
+
     function getFactureLigneQuota() {
         return $this->factureQuota;
     }

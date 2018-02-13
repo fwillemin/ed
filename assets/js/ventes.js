@@ -36,8 +36,18 @@ $(document).ready(function () {
                     sortable: false,
                     width: 350
                 }, {
+                    field: 'avancement',
+                    title: 'Avancement',
+                    sortable: true,
+                    width: 150
+                }, {
                     field: 'affaireTotalHT',
                     title: 'TotalHT',
+                    align: 'right',
+                    width: 80
+                }, {
+                    field: 'totalEnFacture',
+                    title: 'Facturé',
                     align: 'right',
                     width: 80
                 }
@@ -61,7 +71,7 @@ $(document).ready(function () {
     });
 
     /* Sélection du client */
-    $('#btnClientSearch').on('click', function () {
+    $('#btnClientSearch').on('click', function () {        
         $('#modalClientSearch').modal('show');
     });
 
@@ -149,6 +159,8 @@ $(document).ready(function () {
                     $.toaster({priority: 'danger', title: '<strong><i class="glyphicon glyphicon-alert"></i> Oups</strong>', message: '<br>' + retour.message});
                     break;
                 default:
+                    ligneArticle.children('td').eq(0).find('.margeArticle').text('Ref Fst: ' + retour.margeArticle);
+                    $('#margeAffaire').html('<i class="fas fa-trophy"></i> ' + retour.margeAffaire);
                     ligneArticle.children('td').eq(4).text(retour.newPrice);
                     if (showReset) {
                         ligneArticle.children('td').eq(2).find('.resetPrixDeVente').show();
@@ -311,10 +323,11 @@ $(document).ready(function () {
                     ligneArticle = $('tr[data-rowid="' + ligneOption.attr('data-rowid') + '"]');
                     ligneArticle.children('td').eq(2).find('input').val(retour.prixVendu);
                     console.log(retour.prixBase);
+                    ligneArticle.children('td').eq(0).find('.margeArticle').text('Ref Fst: ' + retour.margeArticle);
                     ligneArticle.children('td').eq(2).find('.resetPrixDeVente').text(retour.prixBase + '€');
                     ligneArticle.children('td').eq(2).find('.resetPrixDeVente').attr('data-valeur', retour.prixBase);
-                    ligneArticle.children('td').eq(4).text(retour.prixTotal);
-
+                    ligneArticle.children('td').eq(4).text(retour.prixTotal);                    
+                    $('#margeAffaire').html('<i class="fas fa-trophy"></i> ' + retour.margeAffaire);
                     majTotauxAffaire(retour.totaux);
                     pleaseSave();
                     break;
@@ -385,7 +398,7 @@ $(document).ready(function () {
         });
     });
     
-    $('#formAddReglement').on('submit', function (e) {
+    $('#formAddReglement').on('submit', function (e) {        
         e.preventDefault();
         var donnees = $(this).serialize();
         $.post(chemin + 'facturation/addReglement', donnees, function (retour) {
@@ -409,7 +422,7 @@ $(document).ready(function () {
                 default:
                     $('#modalAddReglement .modal-title').text('Modifier le réglement');
                     $('#avertissementModReglement').show();
-                    $('#addReglementSourceId').val(retour.reglement.reglementSourceId);
+                    $('#addReglementId').val(retour.reglement.reglementId);
                     $('#addReglementDate').val(dateFromUnix(retour.reglement.reglementDate, 'input'));
                     $('#addReglementMontant').val(retour.reglement.reglementMontant);
                     $('#addReglementClientId option[value="' + retour.reglement.reglementClientId + '"]').prop('selected', true);
@@ -437,7 +450,7 @@ $(document).ready(function () {
                 Math.round($(this).attr('data-subtotal') * $(this).val()) / 100
                 );
     });
-
+    
     $('#formAddFacture').on('submit', function (e) {
         e.preventDefault();
 
@@ -446,8 +459,7 @@ $(document).ready(function () {
             lignes.push([$(this).closest('tr').attr('data-rowid'), $(this).val()]);
         }
         ).promise().done(
-                function () {
-                    console.log(lignes);
+                function () {                    
                     $.post(chemin + 'facturation/addFacture', {addFactureAffaireId: $('#addFactureAffaireId').val(), addFactureClientId: $('#addFactureClientId').val(), addFactureMode: $('#addFactureMode').val(), addFactureObjet: $('#addFactureObjet').val(), addFactureLignes: lignes}, function (data) {
                         switch (data.type) {
                             case 'success':
@@ -460,20 +472,6 @@ $(document).ready(function () {
                     }, 'json');
                 }
         )
-    });
-
-    $('.deleteEsquisse').on('dblclick', function () {
-        var ligne = $(this).closest('tr');
-        $.post(chemin + 'facturation/deleteFacture', {factureId: ligne.attr('data-factureid')}, function (retour) {
-            switch (retour.type) {
-                case 'success':
-                    ligne.fadeOut();
-                    break;
-                case 'error':
-                    $.toaster({priority: 'danger', title: '<strong><i class="glyphicon glyphicon-alert"></i> Oups</strong>', message: '<br>' + retour.message});
-                    break;
-            }
-        }, 'json');
     });
 
     $('.btnGenereFacture').on('click', function () {
@@ -512,5 +510,66 @@ $(document).ready(function () {
                     break;
             }
         }, 'json' );
+    });
+
+    $('#btnDupliquerAffaire').confirm({
+        title: 'Etes-vous sûr(e) ?',
+        content: 'Vous êtes sur le point de dupliquer une affaire.',
+        type: 'blue',
+        theme: 'material',
+        buttons: {            
+            confirm: {
+                btnClass: 'btn-green',
+                text: 'Dupliquer',
+                action : function () {
+                    window.location.assign(chemin + 'affaires/dupliquerAffaire/' + $('#btnDupliquerAffaire').attr('data-affaireid'));
+                }
+                
+            },
+            cancel: {
+                btnClass: 'btn-red',
+                text: 'Annuler'                
+            }
+        }
+    });
+    $('#btnCloturerAffaire').confirm({
+        title: 'Clôturer ?',
+        content: 'Voulez-vous clôturer cette affaire ?<br>Elle sera comptée comme :<br><strong>Terminée</strong> si une commande a été générée<br><strong>Perdue</strong> si seul un devis a été crée.',
+        type: 'blue',
+        theme: 'material',
+        buttons: {            
+            confirm: {
+                btnClass: 'btn-green',
+                text: 'Clôturer',
+                action : function () {
+                    window.location.assign(chemin + 'affaires/cloturerAffaire/' + $('#btnDupliquerAffaire').attr('data-affaireid'));
+                }
+                
+            },
+            cancel: {
+                btnClass: 'btn-red',
+                text: 'Annuler'                
+            }
+        }
+    });
+    $('#btnReouvrirAffaire').confirm({
+        title: 'Reprendre cette affaire ?',
+        content: 'Voulez-vous reprendre cette affaire comme "NON CLOTUREE" ?',
+        type: 'blue',
+        theme: 'material',
+        buttons: {            
+            confirm: {
+                btnClass: 'btn-green',
+                text: 'Reprendre',
+                action : function () {
+                    window.location.assign(chemin + 'affaires/cloturerAffaire/' + $('#btnDupliquerAffaire').attr('data-affaireid'));
+                }
+                
+            },
+            cancel: {
+                btnClass: 'btn-red',
+                text: 'Annuler'                
+            }
+        }
     });
 });

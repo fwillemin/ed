@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container fond">
 
     <div class="row" style="margin-top : 0px;">
         <div class="col-xs-12" style="text-align: center;">
@@ -14,27 +14,29 @@
 
             <table class="table table-bordered" id="tableRecurrents" style="width:100%; font-size:12px;">
                 <thead>
-                    <th>Critère</th>
-                    <th>Equipe</th>
-                    <th>Commentaire</th>
-                    <th style="width:40px;"></th>
+                <th>Critère</th>
+                <th>Equipe</th>
+                <th>Commentaire</th>
+                <th style="width:40px;"></th>
                 </thead>
                 <tbody>
 
                     <?php
-                    if( !empty($recurrents) ):
-                    foreach ($recurrents as $r): ?>
-                        <tr style="position:relative;" data-recurrentid="<?php echo $r->getRecurrentId(); ?>" >
-                            <td><?php echo $r->getRecurrentCritere(); ?></td>
-                            <td><?php echo $r->getRecurrentEquipe(); ?></td>
-                            <td><?php echo $r->getRecurrentCommentaire(); ?></td>
-                            <td class="recurrentActions" style="text-align: center; font-size:13px;">
-                                <i class="glyphicon glyphicon-pencil btnModRecurrent" style="padding-right: 10px; cursor: pointer"></i>
-                            </td>
-                        </tr>
-                    <?php
-                    endforeach;
-                    endif; ?>
+                    if (!empty($recurrents)):
+                        foreach ($recurrents as $r):
+                            ?>
+                            <tr style="position:relative;" data-recurrentid="<?php echo $r->getRecurrentId(); ?>" >
+                                <td><?php echo $r->getRecurrentCritere(); ?></td>
+                                <td><?php echo $r->getRecurrentEquipe(); ?></td>
+                                <td><?php echo $r->getRecurrentCommentaire(); ?></td>
+                                <td class="recurrentActions" style="text-align: center; font-size:13px;">
+                                    <i class="glyphicon glyphicon-pencil btnModRecurrent" style="padding-right: 10px; cursor: pointer"></i>
+                                </td>
+                            </tr>
+                            <?php
+                        endforeach;
+                    endif;
+                    ?>
 
                 </tbody>
             </table>

@@ -66,7 +66,7 @@ $autoload['libraries'] = array('session', 'database', 'form_validation', 'email'
     'equipe', 'dossier', 'affectation', 'recurrent', 'ion_auth',
     'client', 'contact', 'famille', 'composant', 'option', 'article', 'unite', 'composition',
     'affaire', 'affaireArticle', 'affaireOption', 'token', 'affaireClient',
-    'reglement', 'facture', 'factureLigne'
+    'reglement', 'facture', 'factureLigne', 'avoir', 'avoirLigne'
 );
 
 
@@ -164,5 +164,7 @@ $autoload['model'] = array(
     'Model_affaireClients' => 'managerAffaireClients',
     'Model_reglements' => 'managerReglements',
     'Model_factures' => 'managerFactures',
-    'Model_factureLignes' => 'managerFactureLignes'
+    'Model_factureLignes' => 'managerFactureLignes',
+    'model_avoirs' => 'managerAvoirs',
+    'model_avoirlignes' => 'managerAvoirlignes'
 );

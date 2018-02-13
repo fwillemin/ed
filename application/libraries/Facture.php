@@ -24,6 +24,8 @@ class Facture {
     protected $factureModeReglement;
     protected $factureModeReglementText;
     protected $factureReglements;
+    protected $factureAvoirs;
+    protected $factureTotalAvoirs;
 
     public function __construct(array $valeurs = []) {
         /* Si on passe des valeurs, on hydrate l'objet */
@@ -60,6 +62,42 @@ class Facture {
     public function hydrateReglements() {
         $CI = & get_instance();
         $this->factureReglements = $CI->managerReglements->liste(array('reglementFactureId' => $this->factureId, 'reglementUtile' => 1));
+    }
+
+    public function hydrateAvoirs() {
+        $CI = & get_instance();
+        $this->factureAvoirs = $CI->managerAvoirs->liste(array('avoirFactureId' => $this->factureId));
+        if ($this->factureAvoirs):
+            foreach ($this->factureAvoirs as $a):
+                $this->factureTotalAvoirs += $a->getAvoirTotalHT();
+            endforeach;
+        endif;
+    }
+
+    function solde() {
+        $totalPaye = 0;
+        $this->hydrateReglements();
+        if (!empty($this->factureReglements)):
+            foreach ($this->factureReglements as $r):
+                $totalPaye += $r->getReglementMontant();
+            endforeach;
+        endif;
+
+        $this->hydrateAvoirs();
+        if (!empty($this->factureAvoirs)):
+            foreach ($this->factureAvoirs as $a):
+                $totalPaye += $a->getAvoirTotalTTC();
+            endforeach;
+        endif;
+        $this->setFactureSolde(round($this->getFactureTotalTTC() - $totalPaye, 2));
+    }
+
+    function getFactureTotalAvoirs() {
+        return $this->factureTotalAvoirs;
+    }
+
+    function setFactureTotalAvoirs($factureTotalAvoirs) {
+        $this->factureTotalAvoirs = $factureTotalAvoirs;
     }
 
     function getFactureId() {
@@ -188,6 +226,14 @@ class Facture {
 
     function setFactureReglements($factureReglements) {
         $this->factureReglements = $factureReglements;
+    }
+
+    function getFactureAvoirs() {
+        return $this->factureAvoirs;
+    }
+
+    function setFactureAvoirs($factureAvoirs) {
+        $this->factureAvoirs = $factureAvoirs;
     }
 
 }

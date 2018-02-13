@@ -104,4 +104,13 @@ class Model_affaireArticles extends MY_model {
         return $this->retourne($query, $type, self::classe, true);
     }
 
+    public function getTotalFacture(AffaireArticle $affaireArticle) {
+        $query = $this->db->select('SUM(factureLigneTotalHT) AS totalFacture')
+                ->from('facturelignes')
+                ->where('factureLigneAffaireArticleId', $affaireArticle->getAffaireArticleId())
+                ->get()
+                ->result();
+        return $query[0]->totalFacture;
+    }
+
 }

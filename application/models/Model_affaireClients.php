@@ -84,8 +84,26 @@ class Model_affaireClients extends MY_model {
     }
 
     public function resetAffaire(Affaire $affaire) {
-
         $this->db->where('affaireClientAffaireId', $affaire->getAffaireId())->delete('affaireClients');
+    }
+
+    public function getAffairesByClientId($clientId, $type = 'object') {
+        $query = $this->db->select('*')
+                ->from($this->table)
+                ->where('affaireClientClientId', $clientId)
+                ->get();
+        if ($query->num_rows() > 0):
+
+            foreach ($query->result() AS $row):
+
+                $affaire = $this->managerAffaires->getAffaireById($row->affaireClientAffaireId, $type);
+                $clientAffaires[] = $affaire;
+            endforeach;
+
+            return $clientAffaires;
+        else:
+            return FALSE;
+        endif;
     }
 
 }

@@ -23,6 +23,7 @@ class Model_reglements extends MY_model {
                 ->set('reglementType', $reglement->getReglementType())
                 ->set('reglementFactureId', $reglement->getReglementFactureId())
                 ->set('reglementMode', $reglement->getReglementMode())
+                ->set('reglementGroupeId', $reglement->getReglementGroupeId())
                 ->set('reglementSourceId', $reglement->getReglementSourceId())
                 ->set('reglementUtile', $reglement->getReglementUtile())
                 ->insert($this->table);
@@ -44,6 +45,7 @@ class Model_reglements extends MY_model {
                 ->set('reglementType', $reglement->getReglementType())
                 ->set('reglementFactureId', $reglement->getReglementFactureId())
                 ->set('reglementMode', $reglement->getReglementMode())
+                ->set('reglementGroupeId', $reglement->getReglementGroupeId())
                 ->set('reglementSourceId', $reglement->getReglementSourceId())
                 ->set('reglementUtile', $reglement->getReglementUtile())
                 ->where('reglementId', $reglement->getReglementId())
@@ -69,7 +71,7 @@ class Model_reglements extends MY_model {
      * @param array $tri Critères de tri des reglements
      * @return array Liste d'objets de la classe Reglement
      */
-    public function liste($where = array(), $tri = 'reglementDate DESC', $type = 'object') {
+    public function liste($where = array(), $tri = 'reglementDate ASC', $type = 'object') {
         $query = $this->db->select('r.*')
                 ->from('reglements r')
                 ->where($where)

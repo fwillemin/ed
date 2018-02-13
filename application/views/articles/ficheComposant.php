@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container fond">
     <div class="row">
         <div class="col-sm-12">
             <h1>
@@ -6,24 +6,25 @@
                     <i class="fa fa-backward"></i>
                 </a>
                 <?= $composant->getComposantDesignation(); ?>
-            </h1>            
+            </h1>
             <div style="position: absolute; top:5px; right: 5px;">
-            <button class="btn btn-default"  data-toggle="modal" data-target="#modalAddComposant">
-                <i class="fa fa-pencil"></i> Modifier le composant
-            </button>
-            <?php
-            $etat = '';
-            if( !empty($composant->getComposantCompositions()) ){
-                $etat = 'disabled';
-            } ?>    
-            <br>
-            <button class="btn btn-xs btn-link tooltipped pull-left" title="Double-click" data-placement="left" id="btnCopyComposant">
-                <i class="fa fa-copy"></i> Dupliquer
-            </button>
-            <button class="btn btn-xs btn-link tooltipped pull-right" <?= $etat; ?> title="Double-click" data-placement="left" id="btnDelComposant">
-                Supprimer
-            </button>
-            
+                <button class="btn btn-default"  data-toggle="modal" data-target="#modalAddComposant">
+                    <i class="fa fa-pencil"></i> Modifier le composant
+                </button>
+                <?php
+                $etat = '';
+                if (!empty($composant->getComposantCompositions())) {
+                    $etat = 'disabled';
+                }
+                ?>
+                <br>
+                <button class="btn btn-xs btn-link tooltipped pull-left" title="Double-click" data-placement="left" id="btnCopyComposant">
+                    <i class="fa fa-copy"></i> Dupliquer
+                </button>
+                <button class="btn btn-xs btn-link tooltipped pull-right" <?= $etat; ?> title="Double-click" data-placement="left" id="btnDelComposant">
+                    Supprimer
+                </button>
+
             </div>
         </div>
     </div>
@@ -38,7 +39,7 @@
                 <thead>
                     <tr style="background-color: #d7dce2;">
                         <th colspan="2" style="width: 60px;">Réf</th>
-                        <th>Option</th>                        
+                        <th>Option</th>
                         <th style="width: 100px; text-align: right;">Catalogue</th>
                         <th style="width: 100px; text-align: right;">Remise</th>
                         <th style="width: 100px; text-align: right;">Achat Net</th>
@@ -57,31 +58,31 @@
                                 $pic = '<i class="fa fa-check-circle" style="color: green;"></i>';
                             endif;
 
-                            if ( $o->getOptionNbUse() == 0 ):
-                                $trash = '<i class="fa fa-trash delOption tooltipped" style="color: grey;" data-placement="left" data-title="Double-click"></i>';
+                            if ($o->getOptionNbUse() == 0):
+                                $trash = '<button class="btnInvisible delOption tooltipped" data-placement="left" data-title="Double-click"><i class="fa fa-trash" style="color: grey;"></i></button>';
                             endif;
 
                             echo '<tr class="ligneOption" data-optionid="' . $o->getOptionId() . '">'
-                                    . '<td colspan="2">' . $o->getOptionReference() . '</td>'                                    
-                                    . '<td>' . $o->getOptionNom() . '</td>'                                    
-                                    . '<td style="text-align: right;">' . number_format($o->getOptionPrixCatalogue(), 2, '.', ' ') . '</td>'
-                                    . '<td style="text-align: right; border-right: 2px solid grey; position:relative;">'
-                                    . $o->getOptionRemise() . '%<i class="fa fa-caret-right" style="position: absolute; top:6px; right: -9px; font-size:20px; color: grey;"></i>'
-                                    . '</td>'
-                                    . '<td style="text-align: right;">' . number_format( $o->getOptionPrixAchat(), 2, '.', ' ') . '</td>'
-                                    . '<td style="text-align: right;">' . $o->getOptionCoefficient() . '</td>'                                    
-                                    . '<td style="text-align: right;">' . number_format( $o->getOptionHT(), 2, '.', ' ' ) . '</td>'
-                                    . '<td style="text-align: center;" data-optionactive="' . $o->getOptionActive() . '">' . $pic . '</td>'
-                                    . '<td style="text-align: center;">' . $trash . '</td>'
-                                    . '</tr>';
+                            . '<td colspan="2">' . $o->getOptionReference() . '</td>'
+                            . '<td>' . $o->getOptionNom() . '</td>'
+                            . '<td style="text-align: right;">' . number_format($o->getOptionPrixCatalogue(), 2, '.', ' ') . '</td>'
+                            . '<td style="text-align: right; border-right: 2px solid grey; position:relative;">'
+                            . $o->getOptionRemise() . '%<i class="fa fa-caret-right" style="position: absolute; top:6px; right: -9px; font-size:20px; color: grey;"></i>'
+                            . '</td>'
+                            . '<td style="text-align: right;">' . number_format($o->getOptionPrixAchat(), 2, '.', ' ') . '</td>'
+                            . '<td style="text-align: right;">' . $o->getOptionCoefficient() . '</td>'
+                            . '<td style="text-align: right;">' . number_format($o->getOptionHT(), 2, '.', ' ') . '</td>'
+                            . '<td style="text-align: center;" data-optionactive="' . $o->getOptionActive() . '">' . $pic . '</td>'
+                            . '<td style="text-align: center;">' . $trash . '</td>'
+                            . '</tr>';
                         endforeach;
                     endif;
                     ?>
 
                     <!-- Nouvelle option -->
                     <?php echo form_open('articles/manageOptions', array('class' => 'form-inline', 'id' => 'formAddOption')); ?>
-                <input type="hidden" name="addOptionId" id="addOptionId" value=""> 
-                <input type="hidden" name="addOptionComposantId" id="addOptionComposantId" value="<?= $composant->getComposantId(); ?>"> 
+                <input type="hidden" name="addOptionId" id="addOptionId" value="">
+                <input type="hidden" name="addOptionComposantId" id="addOptionComposantId" value="<?= $composant->getComposantId(); ?>">
                 <tr style="background-color: #f5f5f5;">
                     <td style="width : 30px; vertical-align: middle;">
                         <button type="button" class="btn btn-link btn-xs" id="btnEraseFormOption">
@@ -136,7 +137,7 @@
                         <th style="width: 70px; text-align: right;">Achat</th>
                         <th style="width: 70px; text-align: right;">Vente</th>
                         <th style="width: 70px; text-align: right;">Marge</th>
-                        <th style="width: 70px; text-align: right;">Taux</th>                    
+                        <th style="width: 70px; text-align: right;">Taux</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -146,13 +147,13 @@
                             ?>
                             <tr>
                                 <td style="text-align: center;">
-                                    <a href="<?= site_url('articles/ficheArticle/' . $a->getArticleId() ); ?>">
+                                    <a href="<?= site_url('articles/ficheArticle/' . $a->getArticleId()); ?>">
                                         <?= $a->getArticleId(); ?>
                                     </a>
                                 </td>
                                 <td><?= $a->getArticleDesignation(); ?></td>
-                                <td style="text-align: right;"><?= number_format($a->getArticleAchatHT(),2,',',' ') . '€'; ?></td>
-                                <td style="text-align: right;"><?= number_format($a->getArticleHT(),2,',',' ') . '€'; ?></td>
+                                <td style="text-align: right;"><?= number_format($a->getArticleAchatHT(), 2, ',', ' ') . '€'; ?></td>
+                                <td style="text-align: right;"><?= number_format($a->getArticleHT(), 2, ',', ' ') . '€'; ?></td>
                                 <td style="text-align: right;">
                                     <?= number_format($a->getArticleHT() - $a->getArticleAchatHT(), 2, ',', ' ') . '€'; ?>
                                 </td>

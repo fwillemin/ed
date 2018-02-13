@@ -1,7 +1,10 @@
-<div class="container" style="">
+<div class="container fond" style="">
 
     <div class="row">
-        <div class="col-sm-4">
+        <div style="position: absolute; top:5px; right:5px; color: steelblue; font-weight: bold;" id="margeAffaire">
+            <i class="fas fa-trophy"></i> <?= $this->session->userdata('margeAffaire'); ?>
+        </div>
+        <div class = "col-sm-4">
             <?php
             if ($this->session->userdata('pleaseSave') == '1'):
                 $classSave = 'btn btn-danger blink';
@@ -11,7 +14,7 @@
             ?>
             <h2>
                 <button class="<?= $classSave; ?>" id="btnSaveAffaire" data-affaireid="<?= $this->session->userdata('affaireId'); ?>" style="width: 10%;">
-                    <i class="fa fa-save" style="font-size:17px;"></i>
+                    <i class="fas fa-save" style="font-size:17px;"></i>
                 </button>
 
                 <?php
@@ -49,20 +52,20 @@
 
                 <div class="col-sm-2">
                     <label class="label" style="font-size: 15px;">PAO</label>
-                    <input class="modOptionPlanif" data-option="affairePAO" type="checkbox" <?= $this->session->userdata('affairePAO') ? "checked" : ''; ?> data-toggle="toggle" data-size="mini" data-onstyle="success" data-on="<i class='fa fa-thumbs-up'></i>" data-off="-" value="1">
+                    <input class="modOptionPlanif" data-option="affairePAO" type="checkbox" <?= $this->session->userdata('affairePAO') ? "checked" : ''; ?> data-toggle="toggle" data-size="mini" data-onstyle="success" data-on="<i class='fas fa-thumbs-up'></i>" data-off="-" value="1">
                 </div>
                 <div class="col-sm-2">
                     <label class="label" style="font-size: 15px;">Fab</label>
-                    <input class="modOptionPlanif" data-option="affaireFabrication" type="checkbox" <?= $this->session->userdata('affaireFabrication') ? "checked" : ''; ?> data-toggle="toggle" data-size="mini" data-onstyle="success" data-on="<i class='fa fa-thumbs-up'></i>" data-off="-" value="1">
+                    <input class="modOptionPlanif" data-option="affaireFabrication" type="checkbox" <?= $this->session->userdata('affaireFabrication') ? "checked" : ''; ?> data-toggle="toggle" data-size="mini" data-onstyle="success" data-on="<i class='fas fa-thumbs-up'></i>" data-off="-" value="1">
                 </div>
                 <div class="col-sm-2">
                     <label class="label" style="font-size: 15px;">Pose</label>
-                    <input class="modOptionPlanif" data-option="affairePose" type="checkbox" <?= $this->session->userdata('affairePose') ? "checked" : ''; ?> data-toggle="toggle" data-size="mini" data-onstyle="success" data-on="<i class='fa fa-thumbs-up'></i>" data-off="-" value="1">
+                    <input class="modOptionPlanif" data-option="affairePose" type="checkbox" <?= $this->session->userdata('affairePose') ? "checked" : ''; ?> data-toggle="toggle" data-size="mini" data-onstyle="success" data-on="<i class='fas fa-thumbs-up'></i>" data-off="-" value="1">
                 </div>
                 <div class="col-sm-3 avancement <?= $devisEtat; ?>" >
                     <?php if ($affaire && $affaire->getAffaireDevisId()): ?>
                         <a href="<?= site_url('documents/editionDevis/' . $affaire->getAffaireId()); ?>" target="_blank" style="color: inherit; cursor: pointer">
-                            <i class="fa fa-file-pdf-o"></i> Devis N°<?= $affaire->getAffaireDevisId(); ?>
+                            <i class="fas fa-file-pdf"></i> Devis N°<?= $affaire->getAffaireDevisId(); ?>
                         </a>
                         <?php
                     elseif ($affaire):
@@ -73,22 +76,24 @@
 
                     if ($affaire && $affaire->getAffaireDevisDate()):
                         ?>
-                        <i class="fa fa-cog" style="position: absolute; top:3px; left: 25px; color: #FFF;"
-                           data-toggle="popover" data-trigger="click"
-                           title="<span style='color: black; font-weight: bold;'>Modifier la date du devis</span>" data-html="true" data-placement="bottom"
-                           data-content='<form id="formModDevisDate" method="POST" action="<?= site_url('affaires/modifierDate'); ?>">
-                           <input type="hidden" name="affaireId" value="<?= $affaire->getAffaireId(); ?>">
-                           <input type="hidden" name="quelleDate" value="devis">
-                           <input class="form-control" type="date" name="modDate" value="<?= date('Y-m-d', $affaire->getAffaireDevisDate()); ?>" >
-                           <button class="btn btn-xs btn-primary" style="width: 100%;">Modifier</button>
-                           </form>' ></i>
+                        <button class="btnInvisible" style="position: absolute; top:0px; left: 25px; color: #FFF;"
+                                data-toggle="popover" data-trigger="click"
+                                title="<span style='color: black; font-weight: bold;'>Modifier la date du devis</span>" data-html="true" data-placement="bottom"
+                                data-content='<form id="formModDevisDate" method="POST" action="<?= site_url('affaires/modifierDate'); ?>">
+                                <input type="hidden" name="affaireId" value="<?= $affaire->getAffaireId(); ?>">
+                                <input type="hidden" name="quelleDate" value="devis">
+                                <input class="form-control" type="date" name="modDate" value="<?= date('Y-m-d', $affaire->getAffaireDevisDate()); ?>" >
+                                <button class="btn btn-xs btn-primary" style="width: 100%;">Modifier</button>
+                                </form>' ><i class="fas fa-cog"></i></button>
 
                     <?php endif; ?>
                 </div>
                 <div class="col-sm-3 avancement <?= $commandeEtat; ?>" >
                     <?php if ($affaire && $affaire->getAffaireCommandeId()): ?>
 
-                        <i class="fa fa-file-pdf-o"></i> Fiche Atelier
+                        <a href="<?= site_url('documents/ficheAtelier/' . $affaire->getAffaireId()); ?>" target="_blank" style="color: inherit; cursor: pointer">
+                            <i class="fas fa-file-pdf"></i> Fiche Atelier
+                        </a>
 
                         <?php
                     elseif ($affaire && $affaire->getAffaireDevisId()):
@@ -99,16 +104,16 @@
 
                     if ($affaire && $affaire->getAffaireCommandeDate()):
                         ?>
-                        <i class="fa fa-cog" style="position: absolute; top:3px; left: 25px; color: #FFF;"
-                           data-toggle="popover" data-trigger="click"
-                           title="<span style='color: black; font-weight: bold;'>Modifier date commande</span>" data-html="true" data-placement="bottom"
-                           data-content='<form id="formModCommandeDate" method="POST" action="<?= site_url('affaires/modifierDate'); ?>">
-                           <input type="hidden" name="affaireId" value="<?= $affaire->getAffaireId(); ?>">
-                           <input type="hidden" name="quelleDate" value="commande">
-                           <input class="form-control" type="date" name="modDate" value="<?= date('Y-m-d', $affaire->getAffaireCommandeDate()); ?>" >
-                           <button class="btn btn-xs btn-primary" style="width: 100%;">Modifier</button>
-                           </form>' ></i>
-                       <?php endif; ?>
+                        <button class="btnInvisible" style="position: absolute; top:0px; left: 25px; color: #FFF;"
+                                data-toggle="popover" data-trigger="click"
+                                title="<span style='color: black; font-weight: bold;'>Modifier date commande</span>" data-html="true" data-placement="bottom"
+                                data-content='<form id="formModCommandeDate" method="POST" action="<?= site_url('affaires/modifierDate'); ?>">
+                                <input type="hidden" name="affaireId" value="<?= $affaire->getAffaireId(); ?>">
+                                <input type="hidden" name="quelleDate" value="commande">
+                                <input class="form-control" type="date" name="modDate" value="<?= date('Y-m-d', $affaire->getAffaireCommandeDate()); ?>" >
+                                <button class="btn btn-xs btn-primary" style="width: 100%;">Modifier</button>
+                                </form>' ><i class="fas fa-cog"></i></button>
+                            <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -118,7 +123,9 @@
 
     <div class="row" style="background-color: #e1e9f8; border: 1px solid darkblue; border-radius: 3px; position: relative; top: -35px;" id="details">
 
-        <i class="fa fa-close" id="closeDetails" style="color: darkblue; font-size: 18px; position: absolute; top:5px; right: 5px; cursor: pointer; z-index: 20;"></i>
+        <button class="btnInvisible" id="closeDetails" style="color: darkblue; font-size: 18px; position: absolute; top:5px; right: 5px; cursor: pointer; z-index: 20;">
+            <i class="fas fa-times"></i>
+        </button>
 
         <div class="col-sm-8" style="border-bottom: 1px dashed darkblue; padding: 1px 10px 1px 1px;">
             <input type="text" id="affaireObjet" placeholder="Description de l'affaire" class="form-control" value="<?= $this->session->userdata('affaireObjet'); ?>" >
@@ -139,7 +146,7 @@
 
         <div class="col-sm-3" style="border-right: 1px solid black;  padding: 0px 8px 0px 8px;">
 
-            <h4><i class="fa fa-plus-square" id="btnClientSearch" style="color: #007fff; font-size: 14px;"></i> Clients associés</h4>
+            <h4><button id="btnClientSearch" class="btnInvisible"><i class="fas fa-plus-square" style="color: #007fff; font-size: 14px; cursor: pointer;"></i></button> Clients associés</h4>
             <table id="tableAffaireClients" class="table table-bordered table-condensed" style="font-size: 11px; background-color: #FFF;">
                 <thead>
                     <tr style="background-color: lightgoldenrodyellow;">
@@ -156,9 +163,9 @@
                             <td style="text-align: center;">
                                 <?php
                                 if ($c->principal == 1):
-                                    echo '<i class="fa fa-shield devenirPrincipal" style="color: orangered;"></i>';
+                                    echo '<i class="fas fa-shield-alt" style="color: orangered;"></i>';
                                 else:
-                                    echo '<i class="fa fa-shield devenirPrincipal" style="color: lightgrey; cursor: pointer;" title="Devenir principal"></i>';
+                                    echo '<button class="btnInvisible devenirPrincipal"><i class="fas fa-shield-alt" style="color: lightgrey; cursor: pointer;" title="Devenir principal"></i></button>';
                                 endif;
                                 ?>
                             </td>
@@ -170,7 +177,7 @@
                                 else:
                                     $isDeletable = 'block';
                                 endif;
-                                echo '<i class="fa fa-trash btnDelAffaireClient" style="color: grey; cursor: pointer; display: ' . $isDeletable . ';"></i>';
+                                echo '<button class="btnInvisible btnDelAffaireClient" style="color: grey; cursor: pointer; display: ' . $isDeletable . ';"><i class="fas fa-trash"></i></button>';
                                 ?>
                             </td>
                         </tr>
@@ -182,16 +189,16 @@
         </div>
 
         <div class="col-sm-4" style="border-right: 1px solid black; padding: 0px 8px 0px 8px;">
-            <h4> <i class="fa fa-plus-square" style="color: #007fff; font-size: 14px;" data-toggle="modal" data-target="#modalFacturation"></i> Factures</h4>
+            <h4><button class="btnInvisible" data-toggle="modal" data-target="#modalFacturation"><i class="fas fa-plus-square" style="color: #007fff; font-size: 14px;"></i></button> Factures</h4>
             <table class="table table-condensed table-bordered" style="font-size:11px; background-color: #FFF;">
                 <thead style="background-color: #EFEFEF;">
                     <tr>
-                        <th>ID</th>
-                        <th>Date</th>
-                        <th style="width: 30px;">Client</th>
+                        <th style="width: 50px;">ID</th>
+                        <th style="width: 60px;">Date</th>
+                        <th style="width: 100px;">Client</th>
                         <th style="text-align: right;">Montant</th>
                         <th style="text-align: right;">Solde</th>
-                        <th>...</th>
+                        <th style="width: 20px;">...</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -200,23 +207,25 @@
                         foreach ($affaire->getAffaireFactures() as $f):
                             ?>
                             <tr data-factureid="<?= $f->getFactureId(); ?>">
-                                <td><?= 'FA' . $f->getFactureId(); ?></td>
-                                <td><?= $f->getFactureDate() ? date('d/m/Y', $f->getFactureDate()) : ''; ?></td>
+                                <td>
+                                    <a href="<?= site_url('facturation/ficheFacture/' . $f->getFactureId()); ?>"><?= 'FA' . $f->getFactureId(); ?></a>
+                                </td>
+                                <td><?= $f->getFactureDate() ? date('d/m/y', $f->getFactureDate()) : ''; ?></td>
                                 <td>
                                     <?php
                                     foreach ($affaire->getAffaireClients() as $c):
                                         if ($c->getClientId() == $f->getFactureClientId()):
-                                            echo substr($c->getClientRaisonSociale(), 0, 4) . '.';
+                                            echo substr($c->getClientRaisonSociale(), 0, 10) . '.';
                                         endif;
                                     endforeach;
                                     ?>
                                 </td>
                                 <td style="text-align: right;"><?= number_format($f->getFactureTotalTTC(), 2, ',', ' ') . '€'; ?></td>
                                 <td style="text-align: right;"><?= number_format($f->getFactureSolde(), 2, ',', ' ') . '€'; ?></td>
-                                <td style="color:grey; width: 40px;">
+                                <td style="color:grey;">
                                     <?=
                                     '<a href="' . site_url('documents/editionFacture/' . $f->getFactureId()) . '" target="_blank" >'
-                                    . '<i class="fa fa-print printFacture" style="cursor: pointer;"></i>'
+                                    . '<i class="fas fa-print printFacture" style="cursor: pointer;"></i>'
                                     . '</a>';
                                     ?>
                                 </td>
@@ -232,18 +241,23 @@
         </div>
 
         <div class="col-sm-5" style="padding: 0px 8px 0px 8px;">
-            <h4> <i class="fa fa-plus-square" id="btnAddReglement" style="color: #007fff; font-size: 14px;"></i> Réglements</h4>
+            <h4>
+                <button class="btnInvisible" id="btnAddReglement">
+                    <i class="fas fa-plus-square" style="color: #007fff; font-size: 14px;"></i>
+                </button>
+                Réglements
+            </h4>
             <table class="table table-condensed table-bordered" style="font-size: 11px; background-color: #FFF;">
                 <thead style="background-color: #EFEFEF;">
                     <tr>
                         <th></th>
-                        <th style="width: 80px;">Date</th>
-                        <th>RS</th>
+                        <th style="width: 60px;">Date</th>
+                        <th style="width: 100px;">RS</th>
                         <th style="width:20px;"></th>
                         <th style="width: 80px;">FACT N°</th>
                         <th style="width: 70px;">Mode</th>
                         <th style="width: 80px;">Montant</th>
-                        <th style="width: 40px;"></th>
+                        <th style="width: 50px;"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -253,10 +267,10 @@
                             ?>
                             <tr class="ligneReglement" data-reglementid="<?= $r->getReglementId(); ?>" >
                                 <td style="width: 25px;">
-                                    <?= $r->getReglementSecure() ? '<i class="fa fa-shield" style="color: green;"></i>' : '<i class="fa fa-warning" style="color: red;"></i>'; ?>
+                                    <?= $r->getReglementSecure() ? '<i class="fas fa-shield-alt" style="color: green;"></i>' : '<i class="fas fa-exclamation-triangle" style="color: red;"></i>'; ?>
                                 </td>
-                                <td><?= date('d/m/Y', $r->getReglementDate()); ?></td>
-                                <td><?= substr($r->getReglementClient()->getClientRaisonSociale(), 0, 4) . '.'; ?></td>
+                                <td><?= date('d/m/y', $r->getReglementDate()); ?></td>
+                                <td><?= substr($r->getReglementClient()->getClientRaisonSociale(), 0, 8) . '.'; ?></td>
                                 <td>
                                     <?php echo $r->getReglementType() == 1 ? 'A' : 'R'; ?>
                                 </td>
@@ -265,10 +279,10 @@
                                 </td>
                                 <td><?= $r->getReglementModeText(); ?></td>
                                 <td style="text-align: right;"><?= number_format($r->getReglementMontant(), 2, ',', ' ') . '€'; ?></td>
-                                <td style="color: grey;">
-                                    <i class="fa fa-pencil modReglement" style="margin-right: 4px; cursor: pointer;"></i>
+                                <td>
+                                    <button class="btnInvisible modReglement"><i class="fas fa-pencil-alt" style="margin-right: 4px; cursor: pointer; color: grey;"></i></button>
                                     <?php if ($r->getReglementHistorique()): ?>
-                                        <i class="fa fa-history"></i>
+                                        <i class="fas fa-history" style="color: purple;"></i>
                                     <?php endif;
                                     ?>
                                 </td>
@@ -307,6 +321,7 @@
                             <td colspan="2">
                                 <input type="text" class="form-flat autoSaveArticle" data-param="name" name="changeArticleDesignation" value="<?= $item['name']; ?>" style="font-size: 15px; width:100%;" ><br>
                                 <textarea style="font-size:12px; width: 100%; font-weight: normal;" data-param="description" rows="2" class="form-flat autoSaveArticle" name="changeArticleDescription"><?= $item['description']; ?></textarea>
+                                <span style="color: grey; font-size: 10px; font-weight: normal;" class="margeArticle" >Ref Fst: <?= round($item['marge']); ?></span>
                             </td>
                             <td style="width: 80px;">
                                 <input type="text" value="<?= $item['qty']; ?>" class="form-flat-center autoSaveArticle" data-param="qty" style="width: 100%;" >
@@ -331,9 +346,9 @@
                                 <?= number_format(round($item['price'] * $item['qty'], 2), 2, ',', ' '); ?>
                             </td>
                             <td style="text-align: right; position: relative;">
-                                <i class="fa fa-plus-square btnAddComposant" style="color: #007fff;"></i>
-                                <i class="fa fa-trash delArticle" style="color: grey;"></i>
-                                <i class="fa fa-eye-slash showOptions" style="color: orangered; position: absolute; bottom: 3px; right: 3px; font-size: 15px; cursor: pointer;"></i>
+                                <button class="btnInvisible btnAddComposant"><i class="fas fa-plus-square" style="color: #007fff;"></i></button>
+                                <button class="btnInvisible delArticle"><i class="fas fa-trash" style="color: grey;"></i></button>
+                                <button class="btnInvisible showOptions"><i class="fas fa-eye-slash" style="color: orangered; position: absolute; bottom: 3px; right: 3px; font-size: 15px; cursor: pointer;"></i></button>
                             </td>
                         </tr>
                         <?php
@@ -349,7 +364,7 @@
                             ?>
 
                             <tr class="ligneOption" data-rowid="<?= $item['rowid']; ?>" data-optionid="<?= $c['optionId']; ?>" style="display: none; background-color: <?= $bgcolor; ?>; font-size: 11px;">
-                                <td style="background-color: orange;"></td>
+                                <td style="background-color:<?= $c['qte'] > 0 ? 'lightgreen' : 'orange'; ?>;"></td>
                                 <td>
                                     <?= $c['name'] . ' <span style="font-style: italic; color: grey; font-size: 12px;">( ' . $c['optionUnite'] . ' )</span>'; ?>
                                 </td>
@@ -362,7 +377,7 @@
                                 <td colspan="3">
                                     <?php
                                     if ($c['originel'] == 0):
-                                        echo '<i class="fa fa-trash delComposant" style="color: grey;"></i>';
+                                        echo '<i class="fas fa-trash delComposant" style="color: grey;"></i>';
                                     endif;
                                     ?>
                                 </td>
@@ -375,7 +390,7 @@
 
                     <tr style="background-color: #a1aec7;">
                         <td style="text-align: center; color: #FFFFFF;">
-                            <i class="fa fa-plus"></i>
+                            <i class="fas fa-plus"></i>
                         </td>
                         <td colspan="6">
                             <select class="selectpicker" id="newArticle" data-width="500" data-live-search="true" data-header="Choix de l'article" title="Selectionnez un article">
@@ -398,7 +413,7 @@
                                 ?>
                             </select>
                             <button class="btn btn-primary" id="btnAddDossierArticle">
-                                <i class="fa fa-plus-circle"></i> Ajouter au dossier
+                                <i class="fas fa-plus-circle"></i> Ajouter au dossier
                             </button>
                         </td>
                     </tr>
@@ -413,12 +428,12 @@
     <div class="row">
         <div class="col-sm-4">
             <button class="btn btn-link" id="viderPanier">
-                <i class="fa fa-trash"></i> Tout supprimer
+                <i class="fas fa-trash"></i> Tout supprimer
             </button>
             <?php if ($affaire): ?>
                 <br>
                 <a class="btn btn-link" href="<?= site_url('ventes/reloadAffaire/' . $affaire->getAffaireId()); ?>" >
-                    <i class="fa fa-repeat"></i> Annuler toutes les modifications
+                    <i class="fas fa-redo-alt"></i> Annuler toutes les modifications
                 </a>
             <?php endif;
             ?>
@@ -454,6 +469,22 @@
                 </table>
             </div>
         </div>
+        <?php if ($affaire): ?>
+            <button class="btn btn-link" style="color: steelblue;" id="btnDupliquerAffaire" data-affaireid="<?= $affaire->getAffaireId(); ?>">
+                <i class="fas fa-copy"></i> Dupliquer cette affaire
+            </button>
+            <?php if ($affaire->getAffaireCloture()): ?>
+                <button class="btn btn-link" style="color: green;" id="btnReouvrirAffaire" data-affaireid="<?= $affaire->getAffaireId(); ?>">
+                    <i class="fas fa-unlock"></i> Ré-ouvrir cette affaire
+                </button>
+            <?php else: ?>
+                <button class="btn btn-link" style="color: red;" id="btnCloturerAffaire" data-affaireid="<?= $affaire->getAffaireId(); ?>">
+                    <i class="fas fa-lock"></i> Cloturer cette affaire
+                </button>
+            <?php
+            endif;
+        endif;
+        ?>
     </div>
 </div>
 
@@ -464,7 +495,7 @@
             <div class="modal-header">
                 <div class="btn-group btn-sm" style="position:absolute; top:3px; right:0px;">
                     <button type="button" class="btn btn-link btn-xs" data-dismiss="modal" aria-hidden="true">
-                        <i class="fa fa-close"></i>
+                        <i class="fas fa-close"></i>
                     </button>
                 </div>
                 <h4 class="modal-title">Confirmation ?</h4>
@@ -477,10 +508,10 @@
             <div class="modal-footer">
                 <div class="row">
                     <div class="col-sm-6" style="text-align: left;">
-                        <button class="btn btn-default" data-dismiss="modal"><i class="fa fa-close"></i> Annuler</button>
+                        <button class="btn btn-default" data-dismiss="modal"><i class="fas fa-close"></i> Annuler</button>
                     </div>
                     <div class="col-sm-6">
-                        <button class="btn btn-success" id="genereFacture"><i class="fa fa-check"></i> Générer</button>
+                        <button class="btn btn-success" id="genereFacture"><i class="fas fa-check"></i> Générer</button>
                     </div>
                 </div>
             </div>
@@ -544,7 +575,7 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-primary" type="submit">
-                    <i class="fa fa-plus-square"></i> Ajouter à l'article
+                    <i class="fas fa-plus-square"></i> Ajouter à l'article
                 </button>
             </div>
             <?= form_close(); ?>

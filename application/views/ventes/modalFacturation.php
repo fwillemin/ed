@@ -53,6 +53,7 @@
                             <th style="text-align: right;">Total</th>
                             <th style="width: 100px;"><i class="fa fa-calculator"></i></th>
                             <th style="width: 150px;">Quota</th>
+                            <th style="width: 100px;">Restant</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -79,6 +80,8 @@
                                             <option value="25">25%</option>
                                             <option value="33.33">33.33%</option>
                                             <option value="50">50%</option>
+                                            <option value="66.66">66.66%</option>
+                                            <option value="75">75%</option>
                                             <option value="0">0%</option>
                                         </select>
                                     </td>
@@ -89,6 +92,9 @@
                                                 €
                                             </span>
                                         </div>
+                                    </td>
+                                    <td style="text-align: right;">
+                                        <?= number_format($item['resteAFacturer'], 2, ',', ' '); ?>
                                     </td>
                                 </tr>
                                 <?php

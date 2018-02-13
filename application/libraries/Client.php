@@ -8,7 +8,7 @@
  */
 class Client {
 
-    protected $clientId;    
+    protected $clientId;
     protected $clientRaisonSociale;
     protected $clientNumTva;
     protected $clientExoneration;
@@ -19,32 +19,45 @@ class Client {
     protected $clientVille;
     protected $clientPays;
     protected $clientAffaires;
+    protected $clientFactures;
+    protected $clientAvoirs;
     protected $clientContacts;
     protected $clientPrincipal; /* 1 si client principal dans l'affaire chargée */
-    
+
     public function __construct(array $valeurs = []) {
         /* Si on passe des valeurs, on hydrate l'objet */
-        if(!empty($valeurs)) $this->hydrate ($valeurs);        
+        if (!empty($valeurs))
+            $this->hydrate($valeurs);
     }
-        
+
     public function hydrate(array $donnees) {
-       foreach ($donnees as $key => $value):
-            $method = 'set'.ucfirst($key);
-            if(method_exists($this, $method))
+        foreach ($donnees as $key => $value):
+            $method = 'set' . ucfirst($key);
+            if (method_exists($this, $method))
                 $this->$method($value);
-        endforeach;        
+        endforeach;
     }
-    
+
     function hydrateAffaires() {
-        $CI =& get_instance();
-        $this->clientAffaires = $CI->managerAffaires->listeByClientId( $this->clientId );
-    } 
-    
+        $CI = & get_instance();
+        $this->clientAffaires = $CI->managerAffaireClients->getAffairesByClientId($this->clientId);
+    }
+
     function hydrateContacts() {
-        $CI =& get_instance();
-        $this->clientContacts = $CI->managerContacts->liste( array('contactClientId' => $this->clientId ) );
-    } 
-    
+        $CI = & get_instance();
+        $this->clientContacts = $CI->managerContacts->liste(array('contactClientId' => $this->clientId));
+    }
+
+    function hydrateFactures() {
+        $CI = & get_instance();
+        $this->clientFactures = $CI->managerFactures->liste(array('factureClientId' => $this->clientId));
+    }
+
+    function hydrateAvoirs() {
+        $CI = & get_instance();
+        $this->clientAvoirs = $CI->managerAvoirs->liste(array('avoirClientId' => $this->clientId));
+    }
+
     function getClientId() {
         return $this->clientId;
     }
@@ -87,6 +100,22 @@ class Client {
 
     function getClientAffaires() {
         return $this->clientAffaires;
+    }
+
+    function getClientFactures() {
+        return $this->clientFactures;
+    }
+
+    function getClientAvoirs() {
+        return $this->clientAvoirs;
+    }
+
+    function getClientContacts() {
+        return $this->clientContacts;
+    }
+
+    function getClientPrincipal() {
+        return $this->clientPrincipal;
     }
 
     function setClientId($clientId) {
@@ -132,18 +161,21 @@ class Client {
     function setClientAffaires($clientAffaires) {
         $this->clientAffaires = $clientAffaires;
     }
-    function getClientContacts() {
-        return $this->clientContacts;
+
+    function setClientFactures($clientFactures) {
+        $this->clientFactures = $clientFactures;
+    }
+
+    function setClientAvoirs($clientAvoirs) {
+        $this->clientAvoirs = $clientAvoirs;
     }
 
     function setClientContacts($clientContacts) {
         $this->clientContacts = $clientContacts;
     }
-    function getClientPrincipal() {
-        return $this->clientPrincipal;
-    }
 
     function setClientPrincipal($clientPrincipal) {
         $this->clientPrincipal = $clientPrincipal;
     }
+
 }

@@ -374,7 +374,7 @@ $config = array(
             'label' => 'ID Affaire',
             'rules' => 'required|callback_existAffaire'
         ), array(
-            'field' => 'addReglementSourceId',
+            'field' => 'addReglementId',
             'label' => 'ID du réglement père',
             'rules' => 'callback_existReglement'
         ),
@@ -419,24 +419,23 @@ $config = array(
         )
     ),
     /* modReglement */
-    'modReglement' => array(
-        array(
-            'field' => 'modReglementId',
-            'label' => 'ID du réglement',
-            'rules' => 'required|callback_existReglement'
-        ),
-        array(
-            'field' => 'modReglementType',
-            'label' => 'Type de réglement',
-            'rules' => 'required|in_list[1,2]'
-        ),
-        array(
-            'field' => 'modReglementFactureId',
-            'label' => 'ID de la facture',
-            'rules' => 'callback_existFacture'
-        //'rules' => ''
-        )
-    ),
+//    'modReglement' => array(
+//        array(
+//            'field' => 'modReglementId',
+//            'label' => 'ID du réglement',
+//            'rules' => 'required|callback_existReglement'
+//        ),
+//        array(
+//            'field' => 'modReglementType',
+//            'label' => 'Type de réglement',
+//            'rules' => 'required|in_list[1,2]'
+//        ),
+//        array(
+//            'field' => 'modReglementFactureId',
+//            'label' => 'ID de la facture',
+//            'rules' => 'callback_existFacture'
+//        )
+//    ),
     /* addFacture */
     'addFacture' => array(
         array(
@@ -471,6 +470,42 @@ $config = array(
             'field' => 'factureId',
             'label' => 'ID de la facture',
             'rules' => 'required|callback_existFacture'
+        )
+    ),
+    'modAvoirQte' => array(
+        array(
+            'field' => 'rowId',
+            'label' => 'Row Id',
+            'rules' => 'trim|required'
+        ),
+        array(
+            'field' => 'qte',
+            'label' => 'Qte',
+            'rules' => 'required|numeric|greater_than_equal_to[0]'
+        )
+    ),
+    'modAvoirName' => array(
+        array(
+            'field' => 'rowId',
+            'label' => 'Row Id',
+            'rules' => 'trim|required'
+        ),
+        array(
+            'field' => 'name',
+            'label' => 'Description',
+            'rules' => 'required'
+        )
+    ),
+    'modAvoirPrix' => array(
+        array(
+            'field' => 'rowId',
+            'label' => 'Row Id',
+            'rules' => 'trim|required'
+        ),
+        array(
+            'field' => 'prix',
+            'label' => 'Prix',
+            'rules' => 'required|numeric|greater_than_equal_to[0]'
         )
     )
 );

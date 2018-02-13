@@ -4,7 +4,7 @@ if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
-class Clients extends CI_Controller {
+class Clients extends My_Controller {
 
     public function __construct() {
         parent::__construct();
@@ -12,36 +12,6 @@ class Clients extends CI_Controller {
 
         if (!$this->ion_auth->logged_in() || !$this->ion_auth->is_admin()) :
             redirect('secure/login');
-        endif;
-    }
-
-    /**
-     * Fonction pour from_validation qui vérifie l'existance du client dans la bdd
-     *
-     * @param int $clientId ID du client
-     * @return boolean TRUE si le client existe
-     */
-    public function existClient($clientId) {
-        $this->form_validation->set_message('existClient', 'Ce client est introuvable.');
-        if ($this->managerClients->count(array('clientId' => $clientId)) == 1 || !$clientId) :
-            return true;
-        else :
-            return false;
-        endif;
-    }
-    
-    /**
-     * Fonction pour from_validation qui vérifie l'existance du contact dans la bdd
-     *
-     * @param int $contactId ID du contact
-     * @return boolean TRUE si le contact existe
-     */
-    public function existContact($contactId) {
-        $this->form_validation->set_message('existContact', 'Ce contact est introuvable.');
-        if ($this->managerContacts->count(array('contactId' => $contactId)) == 1 || !$contactId) :
-            return true;
-        else :
-            return false;
         endif;
     }
 
@@ -61,23 +31,21 @@ class Clients extends CI_Controller {
     }
 
     public function getAllClients() {
-        $clients = $this->managerClients->liste( array(), 'clientRaisonSociale ASC', 'array' );
+        $clients = $this->managerClients->liste(array(), 'clientRaisonSociale ASC', 'array');
         echo json_encode($clients);
     }
 
     public function ficheClient($clientId = null) {
-        if (!$clientId) :
+        if (!$clientId || !$this->existClient($clientId)) :
             redirect('clients');
             exit;
         endif;
 
-        $client = $this->managerClients->getClientById(intval($clientId));
-        if (empty($client)) :
-            redirect('clients');
-            exit;
-        endif;
-        //$client->hydrateAffaires();
+        $client = $this->managerClients->getClientById($clientId);
+        $client->hydrateAffaires();
         $client->hydrateContacts();
+        $client->hydrateFactures();
+        $client->hydrateAvoirs();
 
         $data = array(
             'client' => $client,
@@ -93,14 +61,14 @@ class Clients extends CI_Controller {
 
         $client = $this->managerClients->getClientById($this->input->post('addClientId'));
 
-        $client->setClientRaisonSociale( strtoupper($this->input->post('addClientRaisonSociale')));
-        $client->setClientExoneration($this->input->post('addClientExoneration') == 1 ? 1 : 0);        
-        $client->setClientAdresse1( strtoupper($this->input->post('addClientAdresse1')) );
-        $client->setClientAdresse2( strtoupper($this->input->post('addClientAdresse2')) );
+        $client->setClientRaisonSociale(strtoupper($this->input->post('addClientRaisonSociale')));
+        $client->setClientExoneration($this->input->post('addClientExoneration') == 1 ? 1 : 0);
+        $client->setClientAdresse1(strtoupper($this->input->post('addClientAdresse1')));
+        $client->setClientAdresse2(strtoupper($this->input->post('addClientAdresse2')));
         $client->setClientCp($this->input->post('addClientCp'));
         $client->setClientVille(strtoupper($this->input->post('addClientVille')));
         $client->setClientPays($this->input->post('addClientPays'));
-        $client->setClientTelephone($this->input->post('addClientTelephone'));        
+        $client->setClientTelephone($this->input->post('addClientTelephone'));
         $client->setClientNumTva($this->input->post('addClientNumTva'));
 
         $this->managerClients->editer($client);
@@ -111,21 +79,21 @@ class Clients extends CI_Controller {
 
         $dataClient = array(
             'clientRaisonSociale' => strtoupper($this->input->post('addClientRaisonSociale')),
-            'clientExoneration' => $this->input->post('addClientExoneration') == 1 ? 1 : 0,            
+            'clientExoneration' => $this->input->post('addClientExoneration') == 1 ? 1 : 0,
             'clientAdresse1' => strtoupper($this->input->post('addClientAdresse1')),
             'clientAdresse2' => strtoupper($this->input->post('addClientAdresse2')),
             'clientCp' => $this->input->post('addClientCp'),
             'clientVille' => strtoupper($this->input->post('addClientVille')),
             'clientPays' => $this->input->post('addClientPays'),
-            'clientTelephone' => $this->input->post('addClientTelephone'),            
+            'clientTelephone' => $this->input->post('addClientTelephone'),
             'clientNumTva' => $this->input->post('addClientNumTva')
         );
         $client = new Client($dataClient);
         $this->managerClients->ajouter($client);
         return true;
     }
-    
-     public function manageContacts() {
+
+    public function manageContacts() {
 
         if ($this->form_validation->run('addContact')) :
 
@@ -154,7 +122,7 @@ class Clients extends CI_Controller {
             exit;
         endif;
     }
-    
+
     private function addContact() {
 
         $dataContact = array(
@@ -166,38 +134,37 @@ class Clients extends CI_Controller {
             'contactTelephone' => $this->input->post('addContactTelephone'),
             'contactPortable' => $this->input->post('addContactPortable'),
             'contactEmail' => strtolower($this->input->post('addContactEmail')),
-            
         );
         $contact = new Contact($dataContact);
         $this->managerContacts->ajouter($contact);
         return true;
     }
-    
+
     private function modContact() {
 
-        $contact = $this->managerContacts->getContactById( $this->input->post('addContactId') );
+        $contact = $this->managerContacts->getContactById($this->input->post('addContactId'));
 
-        $contact->setContactCivilite( $this->input->post('addContactCivilite') );
-        $contact->setContactNom( strtoupper($this->input->post('addContactNom')) );
-        $contact->setContactPrenom( strtoupper($this->input->post('addContactPrenom')) );
-        $contact->setContactFonction( $this->input->post('addContactFonction') );
-        $contact->setContactTelephone( $this->input->post('addContactTelephone') );
-        $contact->setContactPortable( $this->input->post('addContactPortable') );
-        $contact->setContactEmail( strtolower($this->input->post('addContactEmail')) );
+        $contact->setContactCivilite($this->input->post('addContactCivilite'));
+        $contact->setContactNom(strtoupper($this->input->post('addContactNom')));
+        $contact->setContactPrenom(strtoupper($this->input->post('addContactPrenom')));
+        $contact->setContactFonction($this->input->post('addContactFonction'));
+        $contact->setContactTelephone($this->input->post('addContactTelephone'));
+        $contact->setContactPortable($this->input->post('addContactPortable'));
+        $contact->setContactEmail(strtolower($this->input->post('addContactEmail')));
 
         $this->managerContacts->editer($contact);
         return true;
     }
-    
+
     public function getContact() {
-        if( $this->form_validation->run('getContact') ):
-            echo json_encode( array('contact' => $this->managerContacts->getContactById( $this->input->post('contactId'), 'array' ) ) );            
+        if ($this->form_validation->run('getContact')):
+            echo json_encode(array('contact' => $this->managerContacts->getContactById($this->input->post('contactId'), 'array')));
         else:
-            echo json_encode(array('type' => 'error', 'message' => validation_errors()));            
+            echo json_encode(array('type' => 'error', 'message' => validation_errors()));
         endif;
         exit;
-    }    
-    
+    }
+
     public function delContact() {
 
         if (!$this->form_validation->run('getContact')) :
@@ -205,11 +172,10 @@ class Clients extends CI_Controller {
             exit;
         endif;
 
-        $contact = $this->managerContacts->getContactById( $this->input->post('contactId') );
-        $this->managerContacts->delete( $contact );
+        $contact = $this->managerContacts->getContactById($this->input->post('contactId'));
+        $this->managerContacts->delete($contact);
         echo json_encode(array('type' => 'success'));
         exit;
-        
     }
 
     public function manageClients() {

@@ -65,8 +65,8 @@ class Model_factures extends MY_model {
      * @return array Liste d'objets de la classe Facture
      */
     public function liste($where = array(), $tri = 'factureDate ASC', $type = 'object') {
-        $query = $this->db->select('a.*')
-                ->from('factures a')
+        $query = $this->db->select('*')
+                ->from($this->table)
                 ->where($where)
                 ->order_by($tri)
                 ->get();
@@ -120,6 +120,15 @@ class Model_factures extends MY_model {
                 ->order_by('factureCommandeId DESC')
                 ->get();
         return $this->retourne($query, $type, self::classe);
+    }
+
+    public function getSommeFacturesByAffaireId($affaireId) {
+        $query = $this->db->select('SUM(factureTotalHT) AS totalEnFacture')
+                ->from('factures')
+                ->where('factureAffaireId', $affaireId)
+                ->get()
+                ->result();
+        return $query[0]->totalEnFacture;
     }
 
 }

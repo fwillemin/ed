@@ -1,7 +1,7 @@
-<div class="container">
+<div class="container fond">
     <div class="row" style="background-color: #FFF;">
         <div class="col-xs-12">
-            
+
             <button type="button" class="btn btn-primary" id="btnAddClient">
                 <i class="glyphicon glyphicon-plus"></i> Ajouter un client
             </button>

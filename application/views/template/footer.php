@@ -24,27 +24,31 @@
 </div>
 
 <!-- fichiers js -->
-<!--<script defer type="text/javascript" src="<?php echo base_url('assets/js/min.js'); ?>"></script>-->
+<!--<script defer type="text/javascript" src="<?= base_url('assets/js/min.js'); ?>"></script>-->
 
-<script defer type="text/javascript" src="<?php echo base_url('assets/js/jquery.min.js'); ?>"></script>
-<script defer type="text/javascript" src="<?php echo base_url('assets/js/date.format.js'); ?>"></script>
-<script defer type="text/javascript" src="<?php echo base_url('assets/jquery-ui/jquery-ui.min.js'); ?>"></script>
-<script defer type="text/javascript" src="<?php echo base_url('assets/bootstrap3.3.7/js/bootstrap.min.js'); ?>"></script>
-<script defer type="text/javascript" src="<?php echo base_url('assets/bootstrap3.3.7/js/bootstrap-select.min.js'); ?>"></script>
-<script defer type="text/javascript" src="<?php echo base_url('assets/bootstrap3.3.7/js/toaster.js'); ?>"></script>
-<script defer type="text/javascript" src="<?php echo base_url('assets/bootstrap3.3.7/js/bootstrap-datepicker.min.js'); ?>"></script>
-<script defer type="text/javascript" src="<?php echo base_url('assets/bootstrap3.3.7/js/bootstrap-datepicker.fr.min.js'); ?>"></script>
-<script defer type="text/javascript" src="<?php echo base_url('assets/tables/datatables.js'); ?>"></script>
+<script defer type="text/javascript" src="<?= base_url('assets/js/jquery.min.js'); ?>"></script>
+<script defer type="text/javascript" src="<?= base_url('assets/js/date.format.js'); ?>"></script>
+<script defer type="text/javascript" src="<?= base_url('assets/jquery-ui/jquery-ui.min.js'); ?>"></script>
+<script defer type="text/javascript" src="<?= base_url('assets/jqueryConfirm/jquery-confirm.min.js'); ?>"></script>
+<script defer type="text/javascript" src="<?= base_url('assets/bootstrap3.3.7/js/bootstrap.min.js'); ?>"></script>
+<script defer type="text/javascript" src="<?= base_url('assets/bootstrap3.3.7/js/bootstrap-select.min.js'); ?>"></script>
+<script defer type="text/javascript" src="<?= base_url('assets/bootstrap3.3.7/js/toaster.js'); ?>"></script>
+<script defer type="text/javascript" src="<?= base_url('assets/bootstrap3.3.7/js/bootstrap-datepicker.min.js'); ?>"></script>
+<script defer type="text/javascript" src="<?= base_url('assets/bootstrap3.3.7/js/bootstrap-datepicker.fr.min.js'); ?>"></script>
+<script defer type="text/javascript" src="<?= base_url('assets/tables/datatables.js'); ?>"></script>
 
-<script defer type="text/javascript" src="<?php echo base_url('assets/MegaNavbar/MegaNavbar.js'); ?>"></script>
+<script defer type="text/javascript" src="<?= base_url('assets/MegaNavbar/MegaNavbar.js'); ?>"></script>
 <script defer src="https://use.fontawesome.com/releases/v5.0.2/js/all.js"></script>
-<script defer type="text/javascript" src="<?php echo base_url('assets/bootstrap-table/bootstrap-table.min.js'); ?>"></script>
-<script defer type="text/javascript" src="<?php echo base_url('assets/bootstrap-table/bootstrap-table-contextmenu.min.js'); ?>"></script>
-<script defer type="text/javascript" src="<?php echo base_url('assets/bootstrap-table/bootstrap-table-fr-FR.min.js'); ?>"></script>
-<script defer type="text/javascript" src="<?php echo base_url('assets/bootstrap-toggle/bootstrap-toggle.min.js'); ?>"></script>
+<script defer type="text/javascript" src="<?= base_url('assets/bootstrap-table/bootstrap-table.min.js'); ?>"></script>
+<script defer type="text/javascript" src="<?= base_url('assets/bootstrap-table/bootstrap-table-contextmenu.min.js'); ?>"></script>
+<script defer type="text/javascript" src="<?= base_url('assets/bootstrap-table/bootstrap-table-fr-FR.min.js'); ?>"></script>
+<script defer type="text/javascript" src="<?= base_url('assets/bootstrap-table/extensions/export/bootstrap-table-export.js'); ?>"></script>
+<script defer type="text/javascript" src="<?= base_url('assets/bootstrap-table/extensions/export/tableExport.min.js'); ?>"></script>
 
-<script defer type="text/javascript" src="<?php echo base_url('assets/js/enseignediffusion.js'); ?>"></script>
-<script defer type="text/javascript" src="<?php echo base_url('assets/js/' . $this->uri->segment(1) . '.js'); ?>"></script>
+<script defer type="text/javascript" src="<?= base_url('assets/bootstrap-toggle/bootstrap-toggle.min.js'); ?>"></script>
+
+<script defer type="text/javascript" src="<?= base_url('assets/js/enseignediffusion.js'); ?>"></script>
+<script defer type="text/javascript" src="<?= base_url('assets/js/' . $this->uri->segment(1) . '.js'); ?>"></script>
 
 
 </body>

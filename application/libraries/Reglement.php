@@ -20,6 +20,7 @@ class Reglement {
     protected $reglementFactureNum;
     protected $reglementMode;
     protected $reglementModeText;
+    protected $reglementGroupeId;
     protected $reglementSourceId;
     protected $reglementUtile;
     protected $reglementSecure; /* Verifie la validité du token */
@@ -41,12 +42,7 @@ class Reglement {
         $CI = & get_instance();
         /* Vérification de l'intégrité du token */
         $security = new Token();
-        if ($this->reglementFactureId):
-            $reglementFacture = $this->reglementFactureId;
-        else:
-            $reglementFacture = 0;
-        endif;
-        $chaine = $this->reglementAffaireId . $this->reglementClientId . $this->reglementMontant . $this->reglementDate;
+        $chaine = $this->reglementAffaireId . $this->reglementClientId . $this->reglementMontant . $this->reglementDate . $this->reglementSourceId . $this->reglementGroupeId;
         $this->reglementSecure = $security->verifyToken($chaine, $this->reglementToken);
 
         $this->reglementModeText = $CI->xth->affModeReglement($this->reglementMode);
@@ -67,6 +63,14 @@ class Reglement {
     public function hydrateClient() {
         $CI = & get_instance();
         $this->reglementClient = $CI->managerClients->getClientById($this->reglementClientId);
+    }
+
+    function getReglementGroupeId() {
+        return $this->reglementGroupeId;
+    }
+
+    function setReglementGroupeId($reglementGroupeId) {
+        $this->reglementGroupeId = $reglementGroupeId;
     }
 
     function getReglementId() {

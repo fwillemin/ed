@@ -712,9 +712,9 @@ class Ed extends CI_Controller {
     }
 
     public function logout() {
-        $this->session->sess_destroy();
+//        $this->session->sess_destroy();
         $this->ion_auth->logout();
-        redirect('secure/tryLogin');
+        redirect('secure/login');
         exit;
     }
 

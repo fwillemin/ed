@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container fond">
     <div class="row base" style="margin-top:10px;">
         <div class="col-sm-12">
             <h3>
@@ -76,71 +76,105 @@
                 </div>
 
             </div>
-
+            <hr>
             <div class="row" style="margin-top:10px;">
-                <div class="col-xs-12">
-                    <h2>Historique des affaires</h2>
-                    <table class="table table-condensed table-bordered table-striped" style="font-size:11px;">
+                <div class="col-xs-12 col-sm-7">
+                    <h3>Historique des affaires</h3>
+                    <table class="table table-condensed table-bordered"style="font-size: 13px; background-color: #FFF;">
                         <thead>
-                            <tr>
+                            <tr style="background-color: #04335a; color: #FFF;">
                                 <th>ID</th>
                                 <th>Date</th>
-                                <th>Total HT</th>
+                                <th>Affaire</th>
+                                <th style="text-align: right;">Total HT</th>
                                 <th>Avancement</th>
-                                <th>Facture</th>
-                                <th>Visualisation</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php
-                            if (!empty($client->getClientAffaires())):
-                                foreach ($client->getClientAffaires() as $c):
+                            if ($client->getClientAffaires()):
+                                foreach ($client->getClientAffaires() as $affaire):
                                     ?>
                                     <tr>
-                                        <td><?= $c['affaireId']; ?></td>
-                                        <td><?= date('d/m/Y', $c['affaireCreation']); ?></td>
-                                        <td><?= number_format($c['affaireTotalHT'], 2, ',', ' ') . '€'; ?></td>
+                                        <td><?= $affaire->getAffaireId(); ?></td>
+                                        <td><?= date('d/m/Y', $affaire->getAffaireDate()); ?></td>
+                                        <td><?= $affaire->getAffaireObjet(); ?></td>
+                                        <td style="text-align: right;"><?= number_format($affaire->getAffaireTotalHT(), 2, ',', ' ') . '€'; ?></td>
                                         <td>
                                             <?php
-                                            switch ($c['affaireAvancement']):
-                                                case 0:
-                                                    echo '<span style="color: orangered;">Non payée</span>';
-                                                    break;
-                                                case 1:
-                                                    echo '<span style="color: #000;">En cours de préparation</span>';
-                                                    break;
-                                                case 2:
-                                                    if ($c['affaireLivraisonType'] == 3):
-                                                        echo '<span style="color: blue;">Attente de retrait client</span>';
-                                                    else:
-                                                        echo '<span style="color: blue;">Prête à expédier</span>';
-                                                    endif;
-                                                    break;
-                                                case 3:
-                                                    if ($c['affaireLivraisonType'] == 3):
-                                                        echo '<span style="color: grey;">Retirée';
-                                                    else:
-                                                        echo '<span style="color: grey;">Expédiée';
-                                                    endif;
-                                                    echo ' le ' . date('d/m/Y', $c['affaireExpeditionDate']) . '</span>';
-                                                    break;
-                                            endswitch;
-                                            ?>
-                                        </td>
-                                        <td>
-                                            <?php
-                                            if ($c['affaireFacture'] > 0):
-                                                echo '<a href="' . site_url('affaires/facture/' . $c['affaireId']) . '" target="_blank"><i class="fa fa-file-pdf-o" style="color: red;"></i></a>';
+                                            if ($affaire->getAffaireCloture()):
+                                                echo 'Clôturée';
+                                            elseif ($affaire->getAffaireCommandeId()):
+                                                echo '<span style="color: green;">En cours</span>';
+                                            elseif ($affaire->getAffaireDevisId()):
+                                                echo '<span style="color: orange;">Devis envoyé le ' . date('d/m/y', $affaire->getAffaireDevisDate()) . '</span>';
+                                            else:
+                                                echo '<span style="color: steelblue;">Conception</span>';
                                             endif;
                                             ?>
                                         </td>
-                                        <td>
-                                            <?php
-                                            echo '<a href="' . site_url('affaires/visualisation/' . $c['affaireId']) . '"><i class="fa fa-bullseye"></i></a>';
-                                            ?>
+                                        <td style="text-align: center;">
+                                            <a href="<?= site_url('ventes/reloadAffaire/' . $affaire->getAffaireId()); ?>">
+                                                <i class="fas fa-link"></i>
+                                            </a>
                                         </td>
                                     </tr>
 
+                                    <?php
+                                endforeach;
+                            endif;
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-xs-12 col-sm-5">
+                    <h3>Liste des factures et avoirs</h3>
+                    <table class="table table-condensed table-bordered"style="font-size: 13px; background-color: #FFF;">
+                        <thead>
+                            <tr style="background-color: #04335a; color: #FFF;">
+                                <th>ID</th>
+                                <th>Date</th>
+                                <th style="text-align: right;">Total HT</th>
+                                <th style="text-align: right;">Total TTC</th>
+                                <th style="text-align: right;">Solde</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            if ($client->getClientFactures()):
+                                foreach ($client->getClientFactures() as $facture):
+                                    ?>
+                                    <tr>
+                                        <td>
+                                            <a href="<?= site_url('facturation/ficheFacture/' . $facture->getFactureId()); ?>"><?= $facture->getFactureId(); ?></a>
+                                        </td>
+                                        <td><?= date('d/m/y', $facture->getFactureDate()); ?></td>
+                                        <td style="text-align: right;"><?= number_format($facture->getFactureTotalHT(), 2, ',', ' '); ?></td>
+                                        <td style="text-align: right;"><?= number_format($facture->getFactureTotalTTC(), 2, ',', ' '); ?></td>
+                                        <td style="text-align: right;"><?= number_format($facture->getFactureSolde(), 2, ',', ' '); ?></td>
+                                        <td style="text-align: center;">
+                                            <a href="<?= site_url('documents/editionFacture/' . $facture->getFactureId()); ?>" target="_blank"><i class="fas fa-file-pdf"></i></a>
+                                        </td>
+                                    </tr>
+                                    <?php
+                                endforeach;
+                            endif;
+                            if ($client->getClientAvoirs()):
+                                foreach ($client->getClientAvoirs() as $avoir):
+                                    ?>
+                                    <tr>
+                                        <td>
+                                            <a href="<?= site_url('facturation/ficheFacture/' . $avoir->getAvoirFactureId()); ?>"><?= 'AV ' . $avoir->getAvoirId(); ?></a>
+                                        </td>
+                                        <td><?= date('d/m/y', $avoir->getAvoirDate()); ?></td>
+                                        <td><?= number_format($avoir->getAvoirTotalTTC(), 2, ',', ' '); ?></td>
+                                        <td>sur la facture N°<?= $avoir->getAvoirFactureId(); ?></td>
+                                        <td style="text-align: center;">
+                                            <a href="<?= site_url('documents/editionAvoir/' . $avoir->getAvoirId()); ?>" target="_blank"><i class="fas fa-file-pdf"></i></a>
+                                        </td>
+                                    </tr>
                                     <?php
                                 endforeach;
                             endif;
@@ -152,6 +186,7 @@
 
         </div>
     </div>
-    <?php include('formClient.php'); ?>
+    <?php include('formClient.php');
+    ?>
     <?php include('formContact.php'); ?>
 </div>

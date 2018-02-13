@@ -1,16 +1,16 @@
-<div class="container">
+<div class="container fond">
     <div class="row">
         <div class="col-sm-12">
             <h1>
                 <a href="<?= site_url('articles/articlesListe'); ?>">
                     <i class="fa fa-backward"></i>
-                </a>                
+                </a>
                 <?= $article->getArticleDesignation(); ?>
-            </h1>       
+            </h1>
             <div style="position: absolute; top:5px; right: 5px;">
                 <button class="btn btn-default" data-toggle="modal" data-target="#modalAddArticle">
                     <i class="fa fa-pencil"></i> Modifier l'article
-                </button>             
+                </button>
                 <br>
                 <button class="btn btn-xs btn-link tooltipped pull-left" title="Double-click" data-placement="left" id="btnCopyArticle">
                     <i class="fa fa-copy"></i> Dupliquer
@@ -79,7 +79,7 @@
             <select class="selectpicker" name="addCompositionOptionId[]" id="optionChoix" style="width: 200px;" required data-header="Sélectionnez une option" title="Sélectionnez une option" multiple data-actions-box="true"></select>
             <div class="input-group">
                 <input type="text" class="form-control" name="addCompositionQte" id="addCompositionQte" value="0" placeholder="Quantité" required style="text-align: right; width: 80px;">
-                <span class="input-group-addon" id="uniteComposant"></span>                    
+                <span class="input-group-addon" id="uniteComposant"></span>
             </div>
             <button type="submit" class="btn btn-primary"><i class="fa fa-plus-circle"></i> Ajouter ce composant</button>
             <?php echo form_close(); ?>
@@ -111,7 +111,7 @@
                                 <td>
                                     <a href="<?= site_url('articles/ficheComposant/' . $c->getCompositionComposant()->getComposantId()); ?>">
                                         <?= $c->getCompositionComposant()->getComposantDesignation(); ?>
-                                    </a>    
+                                    </a>
                                 </td>
                                 <td><?= $c->getCompositionOption()->getOptionNom(); ?></td>
                                 <td>
@@ -125,7 +125,9 @@
                                 <td style="text-align: right;"><?= number_format($c->getCompositionOption()->getOptionHT(), 2, ',', ' ') . '€'; ?></td>
                                 <td style="text-align: right;"><?= number_format(round($c->getCompositionOption()->getOptionHT() * $c->getCompositionQte(), 2), 2, ',', ' ') . '€'; ?></td>
                                 <td style="text-align: center;">
-                                    <i class="fa fa-trash delComposition tooltipped" style="color: grey;" data-placement="left" data-title="Double-click"></i>
+                                    <button class="btnInvisible delComposition tooltipped" data-placement="left" data-title="Double-click">
+                                        <i class="fa fa-trash" style="color: grey;"></i>
+                                    </button>
                                 </td>
                             </tr>
                             <?php
