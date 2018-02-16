@@ -90,7 +90,7 @@ $(document).ready(function () {
                         }
                         break;
                     case 'error':
-                        $.toaster({priority: 'danger', title: '<strong><i class="glyphicon glyphicon-alert"></i> Oups</strong>', message: '<br>' + data.message});
+                        $.toaster({priority: 'danger', title: '<strong><i class="fas fa-exclamation-triangle"></i> Oups</strong>', message: '<br>' + data.message});
                 }
             }, 'json');
         }
@@ -109,7 +109,7 @@ $(document).ready(function () {
                     window.location.reload();
                     break;
                 case 'error':
-                    $.toaster({priority: 'danger', title: '<strong><i class="glyphicon glyphicon-alert"></i> Oups</strong>', message: '<br>' + data.message});
+                    $.toaster({priority: 'danger', title: '<strong><i class="fas fa-exclamation-triangle"></i> Oups</strong>', message: '<br>' + data.message});
                     break;
             }
         }, 'json');
@@ -120,7 +120,7 @@ $(document).ready(function () {
         $.post(chemin + 'ventes/devenirClientPrincipal', {clientId: $(this).closest('tr').attr('data-clientid')}, function (retour) {
             switch (retour.type) {
                 case 'success':
-                    $.toaster({priority: 'success', title: '<strong><i class="fa fa-thumbs-up"></i> OK</strong>', message: '<br>Client principal changé.'});
+                    $.toaster({priority: 'success', title: '<strong><i class="far fa-thumbs-up"></i> OK</strong>', message: '<br>Client principal changé.'});
                     $('.devenirPrincipal').css('color', 'lightgrey');
                     elem.css('color', 'orangered')
                     $('.btnDelAffaireClient').show();
@@ -128,7 +128,7 @@ $(document).ready(function () {
                     pleaseSave();
                     break;
                 case 'error':
-                    $.toaster({priority: 'danger', title: '<strong><i class="glyphicon glyphicon-alert"></i> Oups</strong>', message: '<br>' + retour.message});
+                    $.toaster({priority: 'danger', title: '<strong><i class="fas fa-exclamation-triangle"></i> Oups</strong>', message: '<br>' + retour.message});
                     break;
             }
         }, 'json');
@@ -139,12 +139,12 @@ $(document).ready(function () {
         $.post(chemin + 'ventes/deleteAffaireClient', {clientId: $(this).closest('tr').attr('data-clientid')}, function (retour) {
             switch (retour.type) {
                 case 'success':
-                    $.toaster({priority: 'success', title: '<strong><i class="fa fa-thumbs-up"></i> OK</strong>', message: '<br>Client supprimé.'});
+                    $.toaster({priority: 'success', title: '<strong><i class="far fa-thumbs-up"></i> OK</strong>', message: '<br>Client supprimé.'});
                     ligne.remove();
                     pleaseSave();
                     break;
                 case 'error':
-                    $.toaster({priority: 'danger', title: '<strong><i class="glyphicon glyphicon-alert"></i> Oups</strong>', message: '<br>' + retour.message});
+                    $.toaster({priority: 'danger', title: '<strong><i class="fas fa-exclamation-triangle"></i> Oups</strong>', message: '<br>' + retour.message});
                     break;
             }
         }, 'json');
@@ -156,7 +156,7 @@ $(document).ready(function () {
         $.post(chemin + 'ventes/autoSaveArticle', {rowId: rowid, param: param, valeur: valeur}, function (retour) {
             switch (retour.type) {
                 case 'error':
-                    $.toaster({priority: 'danger', title: '<strong><i class="glyphicon glyphicon-alert"></i> Oups</strong>', message: '<br>' + retour.message});
+                    $.toaster({priority: 'danger', title: '<strong><i class="fas fa-exclamation-triangle"></i> Oups</strong>', message: '<br>' + retour.message});
                     break;
                 default:
                     ligneArticle.children('td').eq(0).find('.margeArticle').text('Ref Fst: ' + retour.margeArticle);
@@ -204,7 +204,7 @@ $(document).ready(function () {
         $.post(chemin + 'ventes/modAffaireType', {affaireType: $(this).val()}, function (retour) {
             switch (retour.type) {
                 case 'error':
-                    $.toaster({priority: 'danger', title: '<strong><i class="glyphicon glyphicon-alert"></i> Oups</strong>', message: '<br>' + retour.message});
+                    $.toaster({priority: 'danger', title: '<strong><i class="fas fa-exclamation-triangle"></i> Oups</strong>', message: '<br>' + retour.message});
                     break;
                 default:
                     $.toaster({priority: 'success', title: '<strong><i class="fa fa-hand-peace-o"></i> OK</strong>', message: '<br>Modification validée'});
@@ -217,7 +217,7 @@ $(document).ready(function () {
         $.post(chemin + 'ventes/modAffaireObjet', {affaireObjet: $(this).val()}, function (retour) {
             switch (retour.type) {
                 case 'error':
-                    $.toaster({priority: 'danger', title: '<strong><i class="glyphicon glyphicon-alert"></i> Oups</strong>', message: '<br>' + retour.message});
+                    $.toaster({priority: 'danger', title: '<strong><i class="fas fa-exclamation-triangle"></i> Oups</strong>', message: '<br>' + retour.message});
                     break;
                 default:
                     $.toaster({priority: 'success', title: '<strong><i class="fa fa-hand-peace-o"></i> OK</strong>', message: '<br>Modification validée'});
@@ -238,7 +238,7 @@ $(document).ready(function () {
         $.post(chemin + 'ventes/addVenteArticle', {articleId: $('#newArticle').val()}, function (retour) {
             switch (retour.type) {
                 case 'error':
-                    $.toaster({priority: 'danger', title: '<strong><i class="glyphicon glyphicon-alert"></i> Oups</strong>', message: '<br>' + retour.message});
+                    $.toaster({priority: 'danger', title: '<strong><i class="fas fa-exclamation-triangle"></i> Oups</strong>', message: '<br>' + retour.message});
                     break;
                 case 'success':
                     window.location.reload();
@@ -283,7 +283,7 @@ $(document).ready(function () {
         $.post(chemin + 'articles/getOptions', {composantId: $(this).val()}, function (retour) {
             switch (retour.type) {
                 case 'error':
-                    $.toaster({priority: 'danger', title: '<strong><i class="glyphicon glyphicon-alert"></i> Oups</strong>', message: '<br>' + retour.message});
+                    $.toaster({priority: 'danger', title: '<strong><i class="fas fa-exclamation-triangle"></i> Oups</strong>', message: '<br>' + retour.message});
                     break;
                 case 'success':
                     $('#optionChoix option').remove();
@@ -302,7 +302,7 @@ $(document).ready(function () {
         $.post(chemin + 'ventes/addComposantToArticle', donnees, function (retour) {
             switch (retour.type) {
                 case 'error':
-                    $.toaster({priority: 'danger', title: '<strong><i class="glyphicon glyphicon-alert"></i> Oups</strong>', message: '<br>' + retour.message});
+                    $.toaster({priority: 'danger', title: '<strong><i class="fas fa-exclamation-triangle"></i> Oups</strong>', message: '<br>' + retour.message});
                     break;
                 case 'success':
                     window.location.reload();
@@ -316,10 +316,10 @@ $(document).ready(function () {
         $.post(chemin + 'ventes/changeOptionQte', {rowid: ligneOption.attr('data-rowid'), optionId: ligneOption.attr('data-optionid'), qte: $(this).val()}, function (retour) {
             switch (retour.type) {
                 case 'error':
-                    $.toaster({priority: 'danger', title: '<strong><i class="glyphicon glyphicon-alert"></i> Oups</strong>', message: '<br>' + retour.message});
+                    $.toaster({priority: 'danger', title: '<strong><i class="fas fa-exclamation-triangle"></i> Oups</strong>', message: '<br>' + retour.message});
                     break;
                 case 'success':
-                    $.toaster({priority: 'success', title: '<strong><i class="glyphicon glyphicon-alert"></i> Oups</strong>', message: '<br>Prix mis à jour'});
+                    $.toaster({priority: 'success', title: '<strong><i class="fas fa-exclamation-triangle"></i> Oups</strong>', message: '<br>Prix mis à jour'});
                     ligneArticle = $('tr[data-rowid="' + ligneOption.attr('data-rowid') + '"]');
                     ligneArticle.children('td').eq(2).find('input').val(retour.prixVendu);
                     console.log(retour.prixBase);
@@ -339,7 +339,7 @@ $(document).ready(function () {
         $.post(chemin + 'affaires/addAffaire', {}, function (retour) {
             switch (retour.type) {
                 case 'error':
-                    $.toaster({priority: 'danger', title: '<strong><i class="glyphicon glyphicon-alert"></i> Oups</strong>', message: '<br>' + retour.message});
+                    $.toaster({priority: 'danger', title: '<strong><i class="fas fa-exclamation-triangle"></i> Oups</strong>', message: '<br>' + retour.message});
                     break;
                 default:
                     window.location.assign(chemin + 'ventes/concepteur/' + retour.affaireId);
@@ -351,7 +351,7 @@ $(document).ready(function () {
         $.post(chemin + 'affaires/genererDevis', {affaireId: $('#btnSaveAffaire').attr('data-affaireid')}, function (retour) {
             switch (retour.type) {
                 case 'error':
-                    $.toaster({priority: 'danger', title: '<strong><i class="glyphicon glyphicon-alert"></i> Oups</strong>', message: '<br>' + retour.message});
+                    $.toaster({priority: 'danger', title: '<strong><i class="fas fa-exclamation-triangle"></i> Oups</strong>', message: '<br>' + retour.message});
                     break;
                 default:
                     window.location.reload();
@@ -363,7 +363,7 @@ $(document).ready(function () {
         $.post(chemin + 'affaires/genererCommande', {affaireId: $('#btnSaveAffaire').attr('data-affaireid')}, function (retour) {
             switch (retour.type) {
                 case 'error':
-                    $.toaster({priority: 'danger', title: '<strong><i class="glyphicon glyphicon-alert"></i> Oups</strong>', message: '<br>' + retour.message});
+                    $.toaster({priority: 'danger', title: '<strong><i class="fas fa-exclamation-triangle"></i> Oups</strong>', message: '<br>' + retour.message});
                     break;
                 default:
                     window.location.reload();
@@ -404,7 +404,7 @@ $(document).ready(function () {
         $.post(chemin + 'facturation/addReglement', donnees, function (retour) {
             switch (retour.type) {
                 case 'error':
-                    $.toaster({priority: 'danger', title: '<strong><i class="glyphicon glyphicon-alert"></i> Oups</strong>', message: '<br>' + retour.message});
+                    $.toaster({priority: 'danger', title: '<strong><i class="fas fa-exclamation-triangle"></i> Oups</strong>', message: '<br>' + retour.message});
                     break;
                 default:
                     window.location.reload();
@@ -417,7 +417,7 @@ $(document).ready(function () {
         $.post(chemin + 'facturation/getReglement', {reglementId: $(this).closest('tr').attr('data-reglementid')}, function (retour) {
             switch (retour.type) {
                 case 'error':
-                    $.toaster({priority: 'danger', title: '<strong><i class="glyphicon glyphicon-alert"></i> Oups</strong>', message: '<br>' + retour.message});
+                    $.toaster({priority: 'danger', title: '<strong><i class="fas fa-exclamation-triangle"></i> Oups</strong>', message: '<br>' + retour.message});
                     break;
                 default:
                     $('#modalAddReglement .modal-title').text('Modifier le réglement');
@@ -451,6 +451,10 @@ $(document).ready(function () {
                 );
     });
     
+    $('#addFactureClientId').on('change', function(){
+        $('#addFactureEcheancePaiement option[value="' + $('#addFactureClientId option:selected').attr('data-echeance') + '"]').prop('selected', true);
+    });
+    
     $('#formAddFacture').on('submit', function (e) {
         e.preventDefault();
 
@@ -460,13 +464,13 @@ $(document).ready(function () {
         }
         ).promise().done(
                 function () {                    
-                    $.post(chemin + 'facturation/addFacture', {addFactureAffaireId: $('#addFactureAffaireId').val(), addFactureClientId: $('#addFactureClientId').val(), addFactureMode: $('#addFactureMode').val(), addFactureObjet: $('#addFactureObjet').val(), addFactureLignes: lignes}, function (data) {
+                    $.post(chemin + 'facturation/addFacture', {addFactureAffaireId: $('#addFactureAffaireId').val(), addFactureClientId: $('#addFactureClientId').val(), addFactureMode: $('#addFactureMode').val(), addFactureObjet: $('#addFactureObjet').val(), addFactureEcheancePaiement: $('#addFactureEcheancePaiement').val(), addFactureLignes: lignes}, function (data) {
                         switch (data.type) {
                             case 'success':
                                 window.location.reload();
                                 break;
                             case 'error':
-                                $.toaster({priority: 'danger', title: '<strong><i class="glyphicon glyphicon-alert"></i> Oups</strong>', message: '<br>' + data.message});
+                                $.toaster({priority: 'danger', title: '<strong><i class="fas fa-exclamation-triangle"></i> Oups</strong>', message: '<br>' + data.message});
                                 break;
                         }
                     }, 'json');
@@ -486,7 +490,7 @@ $(document).ready(function () {
                     window.location.reload();
                     break;
                 case 'error':
-                    $.toaster({priority: 'danger', title: '<strong><i class="glyphicon glyphicon-alert"></i> Oups</strong>', message: '<br>' + retour.message});
+                    $.toaster({priority: 'danger', title: '<strong><i class="fas fa-exclamation-triangle"></i> Oups</strong>', message: '<br>' + retour.message});
                     break;
             }
         }, 'json');
@@ -506,7 +510,7 @@ $(document).ready(function () {
                     pleaseSave();
                     break;
                 case 'error':
-                    $.toaster({priority: 'danger', title: '<strong><i class="glyphicon glyphicon-alert"></i> Oups</strong>', message: '<br>' + retour.message});
+                    $.toaster({priority: 'danger', title: '<strong><i class="fas fa-exclamation-triangle"></i> Oups</strong>', message: '<br>' + retour.message});
                     break;
             }
         }, 'json' );

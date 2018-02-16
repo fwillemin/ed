@@ -95,9 +95,15 @@ echo '<br>' . $client->getClientCp() . ' ' . $client->getClientVille() . '<span 
 
 <br>
 <br>
-<table style="font-size:11px; width:550px;">
+<table style="font-size:11px; width:550px;" nobr="true">
     <tr>
-        <td style="width:200px; border: none;"></td>
+        <td style="width:200px; border: none; text-decoration: underline;">
+            <?php
+            if ($affaire->getAffaireDevisTauxAcompte() > 0):
+                echo '<br>Acompte de ' . $affaire->getAffaireDevisTauxAcompte() . '% à la signature';
+            endif;
+            ?>
+        </td>
         <td style="width:100px; text-align:right; background-color: lightgrey; font-weight: bold; border: 1px solid black;">Total HT</td>
         <td style="width:50px; text-align:right; background-color: lightgrey; font-weight: bold; border: 1px solid black;">%TVA</td>
         <td style="width:80px; text-align:right; background-color: lightgrey; font-weight: bold; border: 1px solid black;">Total TVA</td>

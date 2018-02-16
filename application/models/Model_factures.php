@@ -18,11 +18,15 @@ class Model_factures extends MY_model {
                 ->set('factureClientId', $facture->getFactureClientId())
                 ->set('factureAffaireId', $facture->getFactureAffaireId())
                 ->set('factureObjet', $facture->getFactureObjet())
+                ->set('factureType', $facture->getFactureType())
+                ->set('factureEcheanceId', $facture->getFactureEcheanceId())
+                ->set('factureEcheanceDate', $facture->getFactureEcheanceDate())
                 ->set('factureTotalHT', $facture->getFactureTotalHT())
                 ->set('factureTotalTVA', $facture->getFactureTotalTVA())
                 ->set('factureTotalTTC', $facture->getFactureTotalTTC())
                 ->set('factureTauxTVA', $facture->getFactureTauxTVA())
                 ->set('factureModeReglement', $facture->getFactureModeReglement())
+                ->set('factureEnvoyee', $facture->getFactureEnvoyee())
                 ->insert($this->table);
         $facture->setFactureId($this->db->insert_id());
     }
@@ -36,11 +40,15 @@ class Model_factures extends MY_model {
         $this->db
                 ->set('factureDate', $facture->getFactureDate())
                 ->set('factureObjet', $facture->getFactureObjet())
+                ->set('factureType', $facture->getFactureType())
+                ->set('factureEcheanceId', $facture->getFactureEcheanceId())
+                ->set('factureEcheanceDate', $facture->getFactureEcheanceDate())
                 ->set('factureTotalHT', $facture->getFactureTotalHT())
                 ->set('factureTotalTVA', $facture->getFactureTotalTVA())
                 ->set('factureTotalTTC', $facture->getFactureTotalTTC())
                 ->set('factureSolde', $facture->getFactureSolde())
                 ->set('factureModeReglement', $facture->getFactureModeReglement())
+                ->set('factureEnvoyee', $facture->getFactureEnvoyee())
                 ->where('factureId', $facture->getFactureId())
                 ->update($this->table);
         return $this->db->affected_rows();

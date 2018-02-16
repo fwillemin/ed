@@ -394,16 +394,24 @@ class Affaires extends My_Controller {
     /**
      * Modifie la date du devis ou du bon de commande d'une affaire.
      */
-    public function modifierDate() {
+    public function modifierDevis() {
         $affaire = $this->managerAffaires->getAffaireById($this->input->post('affaireId'));
-        switch ($this->input->post('quelleDate')):
-            case 'devis':
-                $affaire->setAffaireDevisDate($this->xth->mktimeFromInputDate($this->input->post('modDate')));
-                break;
-            case 'commande':
-                $affaire->setAffaireCommandeDate($this->xth->mktimeFromInputDate($this->input->post('modDate')));
-                break;
-        endswitch;
+        $affaire->setAffaireDevisDate($this->xth->mktimeFromInputDate($this->input->post('modDevisDate')));
+        $affaire->setAffaireDevisTauxAcompte($this->input->post('modDevisAcompte'));
+        $affaire->setAffaireDevisEnvoye($this->input->post('modDevisEnvoye') ? 1 : 0);
+
+        $this->managerAffaires->editer($affaire);
+        redirect('ventes/concepteur');
+        exit;
+    }
+
+    /**
+     * Modifie la date du devis ou du bon de commande d'une affaire.
+     */
+    public function modifierDateCommande() {
+        $affaire = $this->managerAffaires->getAffaireById($this->input->post('affaireId'));
+
+        $affaire->setAffaireCommandeDate($this->xth->mktimeFromInputDate($this->input->post('modDate')));
         $this->managerAffaires->editer($affaire);
         redirect('ventes/concepteur');
         exit;

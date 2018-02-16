@@ -109,10 +109,10 @@ $(document).ready(function () {
         $.post(chemin + 'articles/manageFamilles', {addFamilleId: $(this).closest('tr').attr('data-familleid'), addFamilleNom: $(this).val()}, function (retour) {
             switch (retour.type) {
                 case 'error':
-                    $.toaster({priority: 'danger', title: '<strong><i class="glyphicon glyphicon-alert"></i> Oups</strong>', message: '<br>' + retour.message});
+                    $.toaster({priority: 'danger', title: '<strong><i class="fas fa-exclamation-triangle"></i> Oups</strong>', message: '<br>' + retour.message});
                     break;
                 case 'success':
-                    $.toaster({priority: 'success', title: '<strong><i class="fa fa-hand-peace-o"></i> OK</strong>', message: '<br>Famille modifiée'});
+                    $.toaster({priority: 'success', title: '<strong><i class="far fa-thumbs-up-o"></i> OK</strong>', message: '<br>Famille modifiée'});
                     break;
             }
         }, 'json');
@@ -123,7 +123,7 @@ $(document).ready(function () {
         $.post(chemin + 'articles/manageFamilles', {addFamilleNom: $('#addFamilleNom').val()}, function (retour) {
             switch (retour.type) {
                 case 'error':
-                    $.toaster({priority: 'danger', title: '<strong><i class="glyphicon glyphicon-alert"></i> Oups</strong>', message: '<br>' + retour.message});
+                    $.toaster({priority: 'danger', title: '<strong><i class="fas fa-exclamation-triangle"></i> Oups</strong>', message: '<br>' + retour.message});
                     break;
                 case 'success':
                     window.location.reload();
@@ -137,11 +137,11 @@ $(document).ready(function () {
         $.post(chemin + 'articles/delFamille', {familleId: ligne.attr('data-familleid')}, function (retour) {
             switch (retour.type) {
                 case 'error':
-                    $.toaster({priority: 'danger', title: '<strong><i class="glyphicon glyphicon-alert"></i> Oups</strong>', message: '<br>' + retour.message});
+                    $.toaster({priority: 'danger', title: '<strong><i class="fas fa-exclamation-triangle"></i> Oups</strong>', message: '<br>' + retour.message});
                     break;
                 case 'success':
                     ligne.remove();
-                    $.toaster({priority: 'success', title: '<strong><i class="fa fa-hand-peace-o"></i> OK</strong>', message: '<br>Famille supprimée'});
+                    $.toaster({priority: 'success', title: '<strong><i class="far fa-thumbs-up-o"></i> OK</strong>', message: '<br>Famille supprimée'});
                     break;
             }
         }, 'json');
@@ -156,7 +156,7 @@ $(document).ready(function () {
         $.post( chemin + 'articles/delComposant', {composantId: $('#addComposantId').val()}, function(retour){
             switch (retour.type) {
                 case 'error':
-                    $.toaster({priority: 'danger', title: '<strong><i class="glyphicon glyphicon-alert"></i> Oups</strong>', message: '<br>' + retour.message});
+                    $.toaster({priority: 'danger', title: '<strong><i class="fas fa-exclamation-triangle"></i> Oups</strong>', message: '<br>' + retour.message});
                     break;
                 case 'success':
                     window.location.reload( chemin + 'articles/composantsListe' );
@@ -169,7 +169,7 @@ $(document).ready(function () {
         $.post( chemin + 'articles/copyComposant', {composantId: $('#addComposantId').val()}, function(retour){
             switch (retour.type) {
                 case 'error':
-                    $.toaster({priority: 'danger', title: '<strong><i class="glyphicon glyphicon-alert"></i> Oups</strong>', message: '<br>' + retour.message});
+                    $.toaster({priority: 'danger', title: '<strong><i class="fas fa-exclamation-triangle"></i> Oups</strong>', message: '<br>' + retour.message});
                     break;
                 case 'success':
                     window.location.assign( chemin + 'articles/ficheComposant/' + retour.composantId );
@@ -182,7 +182,7 @@ $(document).ready(function () {
         $.post( chemin + 'articles/copyArticle', {articleId: $('#addArticleId').val()}, function(retour){
             switch (retour.type) {
                 case 'error':
-                    $.toaster({priority: 'danger', title: '<strong><i class="glyphicon glyphicon-alert"></i> Oups</strong>', message: '<br>' + retour.message});
+                    $.toaster({priority: 'danger', title: '<strong><i class="fas fa-exclamation-triangle"></i> Oups</strong>', message: '<br>' + retour.message});
                     break;
                 case 'success':
                     window.location.assign( chemin + 'articles/ficheArticle/' + retour.articleId );
@@ -205,7 +205,7 @@ $(document).ready(function () {
         $.post( chemin + 'articles/manageComposant', donnees, function (retour) {
             switch (retour.type) {
                 case 'error':
-                    $.toaster({priority: 'danger', title: '<strong><i class="glyphicon glyphicon-alert"></i> Oups</strong>', message: '<br>' + retour.message});
+                    $.toaster({priority: 'danger', title: '<strong><i class="fas fa-exclamation-triangle"></i> Oups</strong>', message: '<br>' + retour.message});
                     break;
                 case 'success':
                     window.location.assign( chemin + 'articles/ficheComposant/' + retour.composantId );
@@ -220,7 +220,7 @@ $(document).ready(function () {
         $.post(chemin + 'articles/manageArticle', donnees, function (retour) {
             switch (retour.type) {
                 case 'error':
-                    $.toaster({priority: 'danger', title: '<strong><i class="glyphicon glyphicon-alert"></i> Oups</strong>', message: '<br>' + retour.message});
+                    $.toaster({priority: 'danger', title: '<strong><i class="fas fa-exclamation-triangle"></i> Oups</strong>', message: '<br>' + retour.message});
                     break;
                 case 'success':
                     window.location.assign( chemin + 'articles/ficheArticle/' + retour.articleId );
@@ -300,11 +300,11 @@ $(document).ready(function () {
         $.post(chemin + 'articles/delOption', {optionId: ligne.attr('data-optionid')}, function (retour) {
             switch (retour.type) {
                 case 'error':
-                    $.toaster({priority: 'danger', title: '<strong><i class="glyphicon glyphicon-alert"></i> Oups</strong>', message: '<br>' + retour.message});
+                    $.toaster({priority: 'danger', title: '<strong><i class="fas fa-exclamation-triangle"></i> Oups</strong>', message: '<br>' + retour.message});
                     break;
                 case 'success':
                     ligne.remove();
-                    $.toaster({priority: 'success', title: '<strong><i class="fa fa-hand-peace-o"></i> OK</strong>', message: '<br>' + 'Option supprimée'});
+                    $.toaster({priority: 'success', title: '<strong><i class="far fa-thumbs-up-o"></i> OK</strong>', message: '<br>' + 'Option supprimée'});
                     break;
             }
             optionRAZ();
@@ -316,7 +316,7 @@ $(document).ready(function () {
         $.post(chemin + 'articles/getOptions', {composantId: $(this).val()}, function (retour) {
             switch (retour.type) {
                 case 'error':
-                    $.toaster({priority: 'danger', title: '<strong><i class="glyphicon glyphicon-alert"></i> Oups</strong>', message: '<br>' + retour.message});
+                    $.toaster({priority: 'danger', title: '<strong><i class="fas fa-exclamation-triangle"></i> Oups</strong>', message: '<br>' + retour.message});
                     break;
                 case 'success':
                     $('#uniteComposant').text( $(this).attr('data-composantunite') );
@@ -336,7 +336,7 @@ $(document).ready(function () {
         $.post(chemin + 'articles/manageCompositions', donnees, function (retour) {
             switch (retour.type) {
                 case 'error':
-                    $.toaster({priority: 'danger', title: '<strong><i class="glyphicon glyphicon-alert"></i> Oups</strong>', message: '<br>' + retour.message});
+                    $.toaster({priority: 'danger', title: '<strong><i class="fas fa-exclamation-triangle"></i> Oups</strong>', message: '<br>' + retour.message});
                     break;
                 case 'success':
                     window.location.reload();
@@ -350,7 +350,7 @@ $(document).ready(function () {
         $.post(chemin + 'articles/manageCompositions', {modCompositionId: input.closest('tr').attr('data-compositionid'), modCompositionQte: input.val()}, function (retour) {
             switch (retour.type) {
                 case 'error':
-                    $.toaster({priority: 'danger', title: '<strong><i class="glyphicon glyphicon-alert"></i> Oups</strong>', message: '<br>' + retour.message});
+                    $.toaster({priority: 'danger', title: '<strong><i class="fas fa-exclamation-triangle"></i> Oups</strong>', message: '<br>' + retour.message});
                     break;
                 case 'success':
                     input.css('background-color', 'greenyellow');
@@ -371,7 +371,7 @@ $(document).ready(function () {
         $.post(chemin + 'articles/delComposition', {compositionId: ligne.attr('data-compositionid')}, function (retour) {
             switch (retour.type) {
                 case 'error':
-                    $.toaster({priority: 'danger', title: '<strong><i class="glyphicon glyphicon-alert"></i> Oups</strong>', message: '<br>' + retour.message});
+                    $.toaster({priority: 'danger', title: '<strong><i class="fas fa-exclamation-triangle"></i> Oups</strong>', message: '<br>' + retour.message});
                     break;
                 case 'success':
                     ligne.remove();
@@ -385,7 +385,7 @@ $(document).ready(function () {
         $.post( chemin + 'articles/delArticle', {articleId: $('#addArticleId').val()}, function(retour){
             switch (retour.type) {
                 case 'error':
-                    $.toaster({priority: 'danger', title: '<strong><i class="glyphicon glyphicon-alert"></i> Oups</strong>', message: '<br>' + retour.message});
+                    $.toaster({priority: 'danger', title: '<strong><i class="fas fa-exclamation-triangle"></i> Oups</strong>', message: '<br>' + retour.message});
                     break;
                 case 'success':
                     window.location.reload( chemin + 'articles/articlesListe' );

@@ -6,6 +6,11 @@
  *
  * @author Xanthellis - WILLEMIN François - http://www.xanthellis.com
  */
+/*
+  ALTER TABLE `factures` ADD `factureType` TINYINT(1) NOT NULL COMMENT '1 = Prestation; 2 = Marchandises' AFTER `factureDate`;
+  ALTER TABLE `factures` DROP `factureAbandon`;
+  ALTER TABLE `factures` ADD `factureEcheanceId` TINYINT NOT NULL DEFAULT '1' AFTER `factureModeReglement`, ADD `factureEcheanceDate` INT NOT NULL AFTER `factureEcheanceId`;
+ */
 class Facture {
 
     protected $factureId;
@@ -13,6 +18,7 @@ class Facture {
     protected $factureClientId;
     protected $factureClient;
     protected $factureObjet;
+    protected $factureType;
     protected $factureTauxTVA;
     protected $factureTotalHT;
     protected $factureTotalTVA;
@@ -20,6 +26,10 @@ class Facture {
     protected $factureAffaireId;
     protected $factureAffaire;
     protected $factureSolde;
+    protected $factureEcheanceId;
+    protected $factureEcheanceTexte;
+    protected $factureEcheanceDate;
+    protected $factureEnvoyee;
     protected $factureLignes;
     protected $factureModeReglement;
     protected $factureModeReglementText;
@@ -42,6 +52,21 @@ class Facture {
 
         $CI = & get_instance();
         $this->factureModeReglementText = $CI->xth->affModeReglement($this->factureModeReglement);
+
+        switch ($this->factureEcheanceId):
+            case 1:
+                $this->factureEcheanceTexte = 'A récéption de facture';
+                break;
+            case 2:
+                $this->factureEcheanceTexte = '30 jours récéption de facture';
+                break;
+            case 3:
+                $this->factureEcheanceTexte = '45 jours récéption de facture';
+                break;
+            case 4:
+                $this->factureEcheanceTexte = 'A récéption de facture - Escompte 3%';
+                break;
+        endswitch;
     }
 
     public function hydrateAffaire() {
@@ -92,14 +117,6 @@ class Facture {
         $this->setFactureSolde(round($this->getFactureTotalTTC() - $totalPaye, 2));
     }
 
-    function getFactureTotalAvoirs() {
-        return $this->factureTotalAvoirs;
-    }
-
-    function setFactureTotalAvoirs($factureTotalAvoirs) {
-        $this->factureTotalAvoirs = $factureTotalAvoirs;
-    }
-
     function getFactureId() {
         return $this->factureId;
     }
@@ -118,6 +135,10 @@ class Facture {
 
     function getFactureObjet() {
         return $this->factureObjet;
+    }
+
+    function getFactureType() {
+        return $this->factureType;
     }
 
     function getFactureTauxTVA() {
@@ -148,6 +169,18 @@ class Facture {
         return $this->factureSolde;
     }
 
+    function getFactureEcheanceId() {
+        return $this->factureEcheanceId;
+    }
+
+    function getFactureEcheanceDate() {
+        return $this->factureEcheanceDate;
+    }
+
+    function getFactureEnvoyee() {
+        return $this->factureEnvoyee;
+    }
+
     function getFactureLignes() {
         return $this->factureLignes;
     }
@@ -162,6 +195,14 @@ class Facture {
 
     function getFactureReglements() {
         return $this->factureReglements;
+    }
+
+    function getFactureAvoirs() {
+        return $this->factureAvoirs;
+    }
+
+    function getFactureTotalAvoirs() {
+        return $this->factureTotalAvoirs;
     }
 
     function setFactureId($factureId) {
@@ -182,6 +223,10 @@ class Facture {
 
     function setFactureObjet($factureObjet) {
         $this->factureObjet = $factureObjet;
+    }
+
+    function setFactureType($factureType) {
+        $this->factureType = $factureType;
     }
 
     function setFactureTauxTVA($factureTauxTVA) {
@@ -212,6 +257,18 @@ class Facture {
         $this->factureSolde = $factureSolde;
     }
 
+    function setFactureEcheanceId($factureEcheanceId) {
+        $this->factureEcheanceId = $factureEcheanceId;
+    }
+
+    function setFactureEcheanceDate($factureEcheanceDate) {
+        $this->factureEcheanceDate = $factureEcheanceDate;
+    }
+
+    function setFactureEnvoyee($factureEnvoyee) {
+        $this->factureEnvoyee = $factureEnvoyee;
+    }
+
     function setFactureLignes($factureLignes) {
         $this->factureLignes = $factureLignes;
     }
@@ -228,12 +285,20 @@ class Facture {
         $this->factureReglements = $factureReglements;
     }
 
-    function getFactureAvoirs() {
-        return $this->factureAvoirs;
-    }
-
     function setFactureAvoirs($factureAvoirs) {
         $this->factureAvoirs = $factureAvoirs;
+    }
+
+    function setFactureTotalAvoirs($factureTotalAvoirs) {
+        $this->factureTotalAvoirs = $factureTotalAvoirs;
+    }
+
+    function getFactureEcheanceTexte() {
+        return $this->factureEcheanceTexte;
+    }
+
+    function setFactureEcheanceTexte($factureEcheanceTexte) {
+        $this->factureEcheanceTexte = $factureEcheanceTexte;
     }
 
 }

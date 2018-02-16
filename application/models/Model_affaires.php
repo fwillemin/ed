@@ -46,6 +46,8 @@ class Model_affaires extends MY_model {
                 ->set('affaireTotalTTC', $affaire->getAffaireTotalTTC())
                 ->set('affaireDevisId', $affaire->getAffaireDevisId())
                 ->set('affaireDevisDate', $affaire->getAffaireDevisDate())
+                ->set('affaireDevisTauxAcompte', $affaire->getAffaireDevisTauxAcompte())
+                ->set('affaireDevisEnvoye', $affaire->getAffaireDevisEnvoye())
                 ->set('affaireCommandeId', $affaire->getAffaireCommandeId())
                 ->set('affaireCommandeDate', $affaire->getAffaireCommandeDate())
                 ->set('affairePAO', $affaire->getAffairePAO())

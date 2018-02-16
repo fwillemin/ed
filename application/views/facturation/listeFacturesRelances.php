@@ -34,7 +34,7 @@
     </div>
     <div class="row" style="background-color: #FFF;">
         <div class="col-xs-12">
-            <h2>Liste des factures et avoirs</h2>
+            <h2>Liste des factures à relancer</h2>
             <table id="tableFactures" style="font-size:12px;"
                    data-toggle="table"
                    data-search="true"
@@ -51,6 +51,8 @@
                         <th data-align="right" data-sortable="true">Montant HT</th>
                         <th data-align="right" data-sortable="true">Montant TTC</th>
                         <th data-align="right" data-sortable="true">Solde</th>
+                        <th data-align="right" data-sortable="true">Echéance</th>
+                        <th data-align="right" data-sortable="true">Retard</th>
                         <th data-align="center"><i class="far fa-file-pdf"></i></th>
                     </tr>
                 </thead>
@@ -96,42 +98,13 @@
                                     <?= number_format($f->getFactureSolde(), 2, ',', ' '); ?>
                                 </td>
                                 <td>
+                                    <?= date('d/m/Y', $f->getFactureEcheanceDate()) . ' - ' . $f->getFactureEcheanceTexte(); ?>
+                                </td>
+                                <td>
+                                    <?= floor((time() - $f->getFactureEcheanceDate()) / 86400) . ' jours'; ?>
+                                </td>
+                                <td>
                                     <a href="<?= site_url('documents/editionFacture/' . $f->getFactureId()); ?>" target="_blank" class="directFacture">
-                                        <i class="far fa-file-pdf"></i>
-                                    </a>
-                                </td>
-                            </tr>
-
-                            <?php
-                        endforeach;
-                    endif;
-
-                    if ($avoirs):
-                        foreach ($avoirs as $a):
-                            $totalPeriodeHT -= $a->getAvoirTotalHT();
-                            ?>
-                            <tr data-factureid="<?= $a->getAvoirFactureId(); ?>" class="warning">
-                                <td>
-                                    <?= 'AV ' . $a->getAvoirId(); ?>
-                                </td>
-                                <td></td>
-                                <td>
-                                    <?= date('d/m/Y', $a->getAvoirDate()); ?>
-                                </td>
-                                <td>
-                                    <?= $a->getAvoirClient()->getClientRaisonSociale(); ?>
-                                </td>
-                                <td>
-                                    <?= '-' . number_format($a->getAvoirTotalHT(), 2, ',', ' '); ?>
-                                </td>
-                                <td>
-                                    <?= '-' . number_format($a->getAvoirTotalTTC(), 2, ',', ' '); ?>
-                                </td>
-                                <td>
-                                    Sur facture N°<?= $a->getAvoirFactureId(); ?>
-                                </td>
-                                <td>
-                                    <a href="<?= site_url('documents/editionAvoir/' . $a->getAvoirId()); ?>" target="_blank" class="directFacture">
                                         <i class="far fa-file-pdf"></i>
                                     </a>
                                 </td>

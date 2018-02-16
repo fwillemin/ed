@@ -48,7 +48,15 @@
                             <td style="background-color: lightgray;">Total TTC</td>
                             <td style="text-align: right;"><?= number_format($facture->getFactureTotalTTC(), 2, ',', ' ') . '€'; ?></td>
                         </tr>
+                        <tr>
+                            <td style="background-color: lightgray;">Envoyée</td>
+                            <td style="text-align: center;">
+                                <input type="checkbox" value="1" id="factureEnvoyee" <?= $facture->getFactureEnvoyee() ? 'checked' : ''; ?>>
+                            </td>
+                        </tr>
                     </table>
+                    Echéance de Paiement accordée :<br><strong><?= $facture->getFactureEcheanceTexte(); ?></strong>
+                    <br>Date de paiement : <?= date('d/m/y', $facture->getFactureEcheanceDate()); ?>
                 </div>
                 <div class = "col-xs-12 col-sm-8">
                     <div class="row">

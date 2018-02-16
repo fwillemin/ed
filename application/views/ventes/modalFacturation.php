@@ -19,7 +19,7 @@
                         <select name="addFactureClientId" id="addFactureClientId" class="selectpicker" title="Choisir un client" required >
                             <?php
                             foreach ((array) $this->session->userdata('affaireClients') as $c):
-                                echo '<option value="' . $c->clientId . '">' . $c->clientRaisonSociale . '</option>';
+                                echo '<option value="' . $c->clientId . '" data-echeance="' . $c->clientEcheancePaiement . '">' . $c->clientRaisonSociale . '</option>';
                             endforeach;
                             ?>
                         </select>
@@ -34,6 +34,17 @@
                             <option value="3">Espèces</option>
                             <option value="4">Carte bancaire</option>
                             <option value="5">Traite</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="addFactureEcheancePaiement" class="col-sm-3 control-label">Echeance</label>
+                    <div class="col-sm-4">
+                        <select name="addFactureEcheancePaiement" id="addFactureEcheancePaiement" class="form-control">
+                            <option value="1">A récéption de facture</option>
+                            <option value="4">A récéption de facture - Escompte 3%</option>
+                            <option value="2">A 30 jours</option>
+                            <option value="3">A 45 jours</option>
                         </select>
                     </div>
                 </div>

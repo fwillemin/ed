@@ -73,6 +73,9 @@
                                 <ul class="dropdown-menu">
                                     <li><a href="<?= site_url('facturation/listeFactures'); ?>"><i class="far fa-file"></i> Liste factures</a></li>
                                     <li><a href="<?= site_url('facturation/listeReglements'); ?>"><i class="far fa-credit-card"></i> Réglements</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="<?= site_url('facturation/listeFacturesNonEnvoyees'); ?>"><i class="far fa-file"></i> Factures à envoyer</a></li>
+                                    <li><a href="<?= site_url('facturation/listeFacturesRelances'); ?>"><i class="fas fa-file-excel"></i> Relances</a></li>
                                 </ul>
                             </li>
                         </ul>

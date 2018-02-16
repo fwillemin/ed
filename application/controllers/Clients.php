@@ -70,6 +70,7 @@ class Clients extends My_Controller {
         $client->setClientPays($this->input->post('addClientPays'));
         $client->setClientTelephone($this->input->post('addClientTelephone'));
         $client->setClientNumTva($this->input->post('addClientNumTva'));
+        $client->setClientEcheancePaiement($this->input->post('addClientEcheancePaiement'));
 
         $this->managerClients->editer($client);
         return true;
@@ -86,7 +87,8 @@ class Clients extends My_Controller {
             'clientVille' => strtoupper($this->input->post('addClientVille')),
             'clientPays' => $this->input->post('addClientPays'),
             'clientTelephone' => $this->input->post('addClientTelephone'),
-            'clientNumTva' => $this->input->post('addClientNumTva')
+            'clientNumTva' => $this->input->post('addClientNumTva'),
+            'clientEcheancePaiement' => $this->input->post('addClientEcheancePaiement')
         );
         $client = new Client($dataClient);
         $this->managerClients->ajouter($client);

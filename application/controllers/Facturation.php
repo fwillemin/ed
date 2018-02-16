@@ -17,6 +17,21 @@ class Facturation extends My_Controller {
         endif;
     }
 
+    private function getEcheance($emission, $typeEcheance) {
+        switch ($typeEcheance):
+            case 1:
+            case 4:
+                return $emission;
+                break;
+            case 2:
+                return ($emission + (30 * 86400));
+                break;
+            case 3:
+                return ($emission + (45 * 86400));
+                break;
+        endswitch;
+    }
+
     private function ajouterReglement($affaireId, $clientId, $factureId = null, $date, $montant, $mode, $type, $reglementId = null) {
 
         $reglementSource = $this->managerReglements->getReglementById($reglementId);
@@ -139,18 +154,22 @@ class Facturation extends My_Controller {
         $this->managerRegements->editer($reglement);
     }
 
-    private function ajouterFacture($affaireId, Client $client, $modeReglement, $objet = '') {
+    private function ajouterFacture(Affaire $affaire, Client $client, $modeReglement, $objet = '', $echeance = 1) {
 
         $dataFacture = array(
             'factureDate' => time(),
-            'factureAffaireId' => $affaireId,
+            'factureType' => $affaire->getAffaireType(), /* Vente Marchandises ou service */
+            'factureAffaireId' => $affaire->getAffaireId(),
             'factureClientId' => $client->getClientId(),
             'factureTotalHT' => 0,
             'factureTotalTVA' => 0,
             'factureTotalTTC' => 0,
             'factureTauxTVA' => $client->getClientExoneration() ? 0 : self::tauxTVA,
             'factureModeReglement' => $modeReglement,
-            'factureObjet' => $objet
+            'factureObjet' => $objet,
+            'factureEcheanceId' => $echeance,
+            'factureEcheanceDate' => $this->getEcheance(time(), $echeance),
+            'factureEnvoyee' => 0
         );
         $facture = new Facture($dataFacture);
         $this->managerFactures->ajouter($facture);
@@ -194,7 +213,8 @@ class Facturation extends My_Controller {
             $this->db->trans_start();
 
             $client = $this->managerClients->getClientById($this->input->post('addFactureClientId'));
-            $facture = $this->ajouterFacture($this->input->post('addFactureAffaireId'), $client, $this->input->post('addFactureMode'), $this->input->post('addFactureObjet'));
+            $affaire = $this->managerAffaires->getAffaireById($this->input->post('addFactureAffaireId'));
+            $facture = $this->ajouterFacture($affaire, $client, $this->input->post('addFactureMode'), $this->input->post('addFactureObjet'), $this->input->post('addFactureEcheancePaiement'));
 
             $totalFactureHT = $facture->getFactureTotalHT();
             $totalFactureTTC = $facture->getFactureTotalTTC();
@@ -275,7 +295,11 @@ class Facturation extends My_Controller {
         endif;
 
         $factures = $this->managerFactures->liste($whereFactures);
-        $avoirs = $this->managerAvoirs->liste($whereAvoirs);
+        if ($this->session->userdata('rechFactureEtat') != 'NS'):
+            $avoirs = $this->managerAvoirs->liste($whereAvoirs);
+        else:
+            $avoirs = array();
+        endif;
 
         if ($factures):
             foreach ($factures as $f):
@@ -290,6 +314,54 @@ class Facturation extends My_Controller {
 
         $data = array(
             'avoirs' => $avoirs,
+            'factures' => $factures,
+            'title' => 'Factures',
+            'description' => 'Liste des factures',
+            'keywords' => '',
+            'content' => $this->view_folder . __FUNCTION__
+        );
+        $this->load->view('template/content', $data);
+    }
+
+    public function listeFacturesNonEnvoyees() {
+
+        if (!$this->session->userdata('rechFactureStart')):
+            $this->criteresListeFactures();
+        endif;
+        $whereFactures = array('factureDate >=' => $this->session->userdata('rechFactureStart'), 'factureDate <=' => $this->session->userdata('rechFactureEnd'), 'factureEnvoyee' => 0);
+        $factures = $this->managerFactures->liste($whereFactures);
+
+        if ($factures):
+            foreach ($factures as $f):
+                $f->hydrateClient();
+            endforeach;
+        endif;
+
+        $data = array(
+            'factures' => $factures,
+            'title' => 'Factures',
+            'description' => 'Liste des factures',
+            'keywords' => '',
+            'content' => $this->view_folder . __FUNCTION__
+        );
+        $this->load->view('template/content', $data);
+    }
+
+    public function listeFacturesRelances() {
+
+        if (!$this->session->userdata('rechFactureStart')):
+            $this->criteresListeFactures();
+        endif;
+        $whereFactures = array('factureDate >=' => $this->session->userdata('rechFactureStart'), 'factureDate <=' => $this->session->userdata('rechFactureEnd'), 'factureSolde >' => 0, 'factureEcheanceDate <=' => (time() - 432000));
+        $factures = $this->managerFactures->liste($whereFactures, 'factureEcheanceDate ASC');
+
+        if ($factures):
+            foreach ($factures as $f):
+                $f->hydrateClient();
+            endforeach;
+        endif;
+
+        $data = array(
             'factures' => $factures,
             'title' => 'Factures',
             'description' => 'Liste des factures',
@@ -409,6 +481,27 @@ class Facturation extends My_Controller {
             echo json_encode(array('type' => 'error', 'message' => 'Erreur lors de l\'envoi de l\'email'));
         endif;
         exit;
+    }
+
+    public function setFactureEnvoyee() {
+        if (!$this->form_validation->run('getFacture')):
+            echo json_encode(array('type' => 'error', 'message' => validation_errors()));
+            exit;
+        endif;
+
+        $facture = $this->managerFactures->getFactureById($this->input->post('factureId'));
+        $facture->setFactureEnvoyee($this->input->post('etat'));
+        $this->managerFactures->editer($facture);
+        echo json_encode(array('type' => 'success'));
+        exit;
+    }
+
+    public function migrationFactures() {
+        $factures = $this->managerFactures->liste();
+        foreach ($factures as $f):
+            $f->setFactureEcheanceDate($this->getEcheance($f->getFactureDate(), $f->getFactureEcheanceId()));
+            $this->managerFactures->editer($f);
+        endforeach;
     }
 
 }

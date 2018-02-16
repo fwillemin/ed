@@ -69,6 +69,7 @@ $(document).ready(function () {
                 $('#addClientPays').val(data.client.clientPays);
                 $('#addClientTelephone').val(data.client.clientTelephone);
                 $('#addClientNumTva').val(data.client.clientNumTva);
+                $('#addClientEcheancePaiement option[value="' + data.client.clientEcheancePaiement + '"]').prop('selected', true);
                 if (data.client.clientExoneration == '1') {
                     $('#addClientExoneration').prop('checked', true);
                 } else {
@@ -90,7 +91,7 @@ $(document).ready(function () {
                     window.location.assign(chemin + 'clients');
                     break;
                 case 'error':
-                    $.toaster({priority: 'danger', title: '<strong><i class="glyphicon glyphicon-alert"></i> Oups</strong>', message: '<br>' + data.message});
+                    $.toaster({priority: 'danger', title: '<strong><i class="fas fa-exclamation-triangle"></i> Oups</strong>', message: '<br>' + data.message});
                     break;
             }
         }, 'json');
@@ -122,7 +123,7 @@ $(document).ready(function () {
         $.post(chemin + 'clients/getContact', {contactId: $(this).closest('tr').attr('data-contactid')}, function (data) {
             switch (data.type) {
                 case 'error':
-                    $.toaster({priority: 'danger', title: '<strong><i class="glyphicon glyphicon-alert"></i> Oups</strong>', message: '<br>' + data.message});
+                    $.toaster({priority: 'danger', title: '<strong><i class="fas fa-exclamation-triangle"></i> Oups</strong>', message: '<br>' + data.message});
                     break;
                 default:
                     $('#addContactId').val(data.contact.contactId);
@@ -152,7 +153,7 @@ $(document).ready(function () {
                     window.location.reload();
                     break;
                 case 'error':
-                    $.toaster({priority: 'danger', title: '<strong><i class="glyphicon glyphicon-alert"></i> Oups</strong>', message: '<br>' + retour.message});
+                    $.toaster({priority: 'danger', title: '<strong><i class="fas fa-exclamation-triangle"></i> Oups</strong>', message: '<br>' + retour.message});
                     break;
             }
         }, 'json');
@@ -163,7 +164,7 @@ $(document).ready(function () {
         $.post(chemin + 'clients/delContact', {contactId: $(this).closest('tr').attr('data-contactid')}, function (data) {
             switch (data.type) {
                 case 'error':
-                    $.toaster({priority: 'danger', title: '<strong><i class="glyphicon glyphicon-alert"></i> Oups</strong>', message: '<br>' + data.message});
+                    $.toaster({priority: 'danger', title: '<strong><i class="fas fa-exclamation-triangle"></i> Oups</strong>', message: '<br>' + data.message});
                     break;
                 default:
                     window.location.reload();

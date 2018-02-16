@@ -56,7 +56,7 @@ echo '<br>' . $client->getClientCp() . ' ' . $client->getClientVille() . '<span 
     <?php
     foreach ($facture->getFactureLignes() as $a):
         ?>
-        <tr>
+        <tr nobr="true">
             <td style="border-bottom: 1px solid grey;">
                 <span style="font-weight: bold; font-size: 10px;">
                     <?= $a->getFactureLigneDesignation(); ?>
@@ -99,16 +99,23 @@ echo '<br>' . $client->getClientCp() . ' ' . $client->getClientVille() . '<span 
 
 <br>
 <br>
-<table style="font-size:11px; width:550px;">
+<table style="font-size:11px; width:550px;" nobr="true">
     <tr>
-        <td style="width:200px; border: none;"></td>
-        <td style="width:100px; text-align:right; background-color: lightgrey; font-weight: bold; border: 1px solid black; border: 1px solid black;">Total HT</td>
+        <td rowspan="2" style="width:230px; border: none; font-size:9px;">
+            <br>Mode de réglement : <?= $facture->getFactureModeReglementText(); ?>
+            <br>Echéance : <?=
+            $facture->getFactureEcheanceTexte();
+            if (in_array($facture->getFactureEcheanceId(), [2, 3])) :
+                echo '<br>Soit le ' . date('d/m/y', $facture->getFactureEcheanceDate());
+            endif;
+            ?>
+        </td>
+        <td style="width:80px; text-align:right; background-color: lightgrey; font-weight: bold; border: 1px solid black; border: 1px solid black;">Total HT</td>
         <td style="width:50px; text-align:right; background-color: lightgrey; font-weight: bold; border: 1px solid black; border: 1px solid black;">%TVA</td>
         <td style="width:80px; text-align:right; background-color: lightgrey; font-weight: bold; border: 1px solid black; border: 1px solid black;">Total TVA</td>
-        <td style="width:100px; text-align:right; background-color: lightgrey; font-weight: bold; border: 1px solid black; border: 1px solid black;">Total TTC</td>
+        <td style="width:80px; text-align:right; background-color: lightgrey; font-weight: bold; border: 1px solid black; border: 1px solid black;">Total TTC</td>
     </tr>
     <tr>
-        <td></td>
         <td style="text-align:right; border: 1px solid black;"><?= number_format($facture->getFactureTotalHT(), 2, ',', ' ') . '€'; ?></td>
         <td style="text-align:right; border: 1px solid black;">20.00</td>
         <td style="text-align:right; border: 1px solid black;"><?= number_format($facture->getFactureTotalTVA(), 2, ',', ' ') . '€'; ?></td>
@@ -122,4 +129,5 @@ echo '<br>' . $client->getClientCp() . ' ' . $client->getClientVille() . '<span 
     <br>Enseigne Diffusion se réserve la propriété des marchandises désignées sur ce document, jusqu'au paiement intégral de leur prix en principal et intérêts.
     <br>À défaut de paiement du prix à l'échéance convenue, Enseigne Diffusion pourra reprendre les marchandises.
     <br>La vente sera alors résolue de plein droit et les acomptes déjà versés lui resteront acquis en contrepartie de la jouissance des marchandises dont aura bénéficié l'acheteur.
+    <br>Sauf indication contraire, aucun escompte pour paiement anticipé.
 </span>

@@ -1,4 +1,4 @@
-var chemin = window.location.origin + '/enseignediffusion/index.php/';
+var chemin = window.location.origin + '/index.php/';
 
 function dateFromUnix(timeDate, type) {
     type = type || 'input';
@@ -53,7 +53,7 @@ $(document).ready(function () {
 //        $.post(chemin + 'login/identification', donnees, function (retour) {
 //            switch (retour.type) {
 //                case 'error':
-//                    $.toaster({priority: 'danger', title: '<strong><i class="glyphicon glyphicon-alert"></i> Oups</strong>', message: '<br>' + retour.message});
+//                    $.toaster({priority: 'danger', title: '<strong><i class="fas fa-exclamation-triangle"></i> Oups</strong>', message: '<br>' + retour.message});
 //                    break;
 //                case 'success':
 //                    window.location.assign(chemin + 'ed');
@@ -98,7 +98,7 @@ $(document).ready(function () {
                     window.location.reload();
                     break;
                 case 'error':
-                    $.toaster({priority: 'danger', title: '<strong><i class="glyphicon glyphicon-alert"></i> Oups</strong>', message: '<br>' + retour.message});
+                    $.toaster({priority: 'danger', title: '<strong><i class="fas fa-exclamation-triangle"></i> Oups</strong>', message: '<br>' + retour.message});
                     break;
             }
         }, 'json');

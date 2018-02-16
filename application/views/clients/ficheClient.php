@@ -22,9 +22,12 @@
                         ?>
                     </address>
 
-                    <strong>Gestion de la TVA</strong>
-                    <br>Exonération : <?= $client->getClientExoneration() ? 'Oui' : 'Non'; ?>
-                    <br>Num TVA : <?= $client->getClientNumTVA(); ?>
+                    <br>Délai de paiement<br><strong><?= $client->getClientEcheancePaiementTexte(); ?></strong>
+
+                    <br><br>Exonération TVA : <strong><?= $client->getClientExoneration() ? 'Oui' : 'Non'; ?></strong>
+                    <br>Num TVA : <strong><?= $client->getClientNumTVA(); ?></strong>
+
+
                 </div>
                 <div class="col-sm-2" style="text-align: left;">
                     <button class="btn btn-default tooltipOk" data-placement="left" title="Modifier le client" id="btnModClient" cible="<?php echo $client->getClientId(); ?>">
@@ -169,8 +172,9 @@
                                             <a href="<?= site_url('facturation/ficheFacture/' . $avoir->getAvoirFactureId()); ?>"><?= 'AV ' . $avoir->getAvoirId(); ?></a>
                                         </td>
                                         <td><?= date('d/m/y', $avoir->getAvoirDate()); ?></td>
-                                        <td><?= number_format($avoir->getAvoirTotalTTC(), 2, ',', ' '); ?></td>
-                                        <td>sur la facture N°<?= $avoir->getAvoirFactureId(); ?></td>
+                                        <td style="text-align: right;"><?= number_format($avoir->getAvoirTotalHT(), 2, ',', ' '); ?></td>
+                                        <td style="text-align: right;"><?= number_format($avoir->getAvoirTotalTTC(), 2, ',', ' '); ?></td>
+                                        <td style="text-align: right;">sur la facture N°<?= $avoir->getAvoirFactureId(); ?></td>
                                         <td style="text-align: center;">
                                             <a href="<?= site_url('documents/editionAvoir/' . $avoir->getAvoirId()); ?>" target="_blank"><i class="fas fa-file-pdf"></i></a>
                                         </td>

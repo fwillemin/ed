@@ -24,6 +24,7 @@ class Model_clients extends MY_model {
                 ->set('clientCp', $client->getClientCp())
                 ->set('clientVille', $client->getClientVille())
                 ->set('clientPays', $client->getClientPays())
+                ->set('clientEcheancePaiement', $client->getClientEcheancePaiement())
                 ->insert($this->table);
         $client->setClientId($this->db->insert_id());
     }
@@ -44,6 +45,7 @@ class Model_clients extends MY_model {
                 ->set('clientCp', $client->getClientCp())
                 ->set('clientVille', $client->getClientVille())
                 ->set('clientPays', $client->getClientPays())
+                ->set('clientEcheancePaiement', $client->getClientEcheancePaiement())
                 ->where('clientId', $client->getClientId())
                 ->update($this->table);
         return $this->db->affected_rows();

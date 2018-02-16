@@ -13,7 +13,7 @@ $(document).ready(function () {
     $('#sendFactureByEmail').on('dblclick', function () {
         $.post(chemin + 'facturation/sendFactureByEmail/', {factureId: $(this).attr('data-factureid')}, function (retour) {
             if (retour.type == 'success') {
-                $.toaster({priority: 'success', title: '<strong><i class="far fa-hand-peace"></i> OK</strong>', message: '<br>' + 'Facture envoyée'});
+                $.toaster({priority: 'success', title: '<strong><i class="far fa-thumbs-up"></i> OK</strong>', message: '<br>' + 'Facture envoyée'});
             } else {
                 $.toaster({priority: 'danger', title: '<strong><i class="fas fa-exclamation-triangle"></i> Oups</strong>', message: '<br>' + retour.message});
             }
@@ -76,5 +76,26 @@ $(document).ready(function () {
     });
     $('.directFacture').on('click', function(e){
         e.stopPropagation();
+    });
+    
+    /* Modifie le statut de facture envoyée dans la fiche facture en cochant 
+     * ou non la case correspondante
+     */
+    $('#factureEnvoyee').on('change', function(){
+        if( $(this).prop('checked') === true ){
+            var etat = 1;            
+        } else {
+            var etat = 0;
+        }
+        $.post(chemin + 'facturation/setFactureEnvoyee', {factureId: $('#sendFactureByEmail').attr('data-factureid'), etat: etat}, function(retour){
+            switch (retour.type) {
+                case 'success':
+                    $.toaster({priority: 'success', title: '<strong><i class="far fa-thumbs-up"></i> OK</strong>', message: '<br>' + 'C\'est noté !'});
+                    break;
+                case 'error':                    
+                    $.toaster({priority: 'danger', title: '<strong><i class="fas fa-exclamation-triangle"></i> Oups</strong>', message: '<br>' + retour.message});
+                    break;
+            }
+        }, 'json');
     });
 });

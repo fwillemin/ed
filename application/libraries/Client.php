@@ -6,6 +6,10 @@
  *
  * @author Xanthellis - WILLEMIN François - http://www.xanthellis.com
  */
+/*
+  ALTER TABLE `clients` ADD `clientEcheancePaiement` TINYINT NOT NULL COMMENT '1 reception; 2 30jours; 3 45jours; 4 reception et escompte3%' AFTER `clientPays`;
+  ALTER TABLE `clients` CHANGE `clientEcheancePaiement` `clientEcheancePaiement` TINYINT(4) NOT NULL DEFAULT '1' COMMENT '1 reception; 2 30jours; 3 45jours; 4 reception et escompte3%';
+ */
 class Client {
 
     protected $clientId;
@@ -18,6 +22,8 @@ class Client {
     protected $clientCp;
     protected $clientVille;
     protected $clientPays;
+    protected $clientEcheancePaiement;
+    protected $clientEcheancePaiementTexte;
     protected $clientAffaires;
     protected $clientFactures;
     protected $clientAvoirs;
@@ -36,6 +42,20 @@ class Client {
             if (method_exists($this, $method))
                 $this->$method($value);
         endforeach;
+        switch ($this->clientEcheancePaiement):
+            case 1:
+                $this->clientEcheancePaiementTexte = 'A récéption de facture';
+                break;
+            case 2:
+                $this->clientEcheancePaiementTexte = '30 jours récéption de facture';
+                break;
+            case 3:
+                $this->clientEcheancePaiementTexte = '45 jours récéption de facture';
+                break;
+            case 4:
+                $this->clientEcheancePaiementTexte = 'A récéption de facture - Escompte 3%';
+                break;
+        endswitch;
     }
 
     function hydrateAffaires() {
@@ -176,6 +196,22 @@ class Client {
 
     function setClientPrincipal($clientPrincipal) {
         $this->clientPrincipal = $clientPrincipal;
+    }
+
+    function getClientEcheancePaiement() {
+        return $this->clientEcheancePaiement;
+    }
+
+    function setClientEcheancePaiement($clientEcheancePaiement) {
+        $this->clientEcheancePaiement = $clientEcheancePaiement;
+    }
+
+    function getClientEcheancePaiementTexte() {
+        return $this->clientEcheancePaiementTexte;
+    }
+
+    function setClientEcheancePaiementTexte($clientEcheancePaiementTexte) {
+        $this->clientEcheancePaiementTexte = $clientEcheancePaiementTexte;
     }
 
 }

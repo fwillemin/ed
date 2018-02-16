@@ -65,7 +65,7 @@ $(document).ready(function () {
     $('.btnSendAvoirEmail').on('dblclick', function () {
         $.post(chemin + 'factures/sendAvoirByEmail/', {avoirId: $(this).closest('tr').attr('data-avoirid')}, function (retour) {
             if (retour.type == 'success') {
-                $.toaster({priority: 'success', title: '<strong><i class="far fa-hand-peace"></i> OK</strong>', message: '<br>' + 'Avoir envoyé'});
+                $.toaster({priority: 'success', title: '<strong><i class="far fa-thumbs-up"></i> OK</strong>', message: '<br>' + 'Avoir envoyé'});
             } else {
                 $.toaster({priority: 'danger', title: '<strong><i class="fas fa-exclamation-triangle"></i> Oups</strong>', message: '<br>' + retour.message});
             }

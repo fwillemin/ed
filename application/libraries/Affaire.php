@@ -6,6 +6,10 @@
  *
  * @author Xanthellis - WILLEMIN François - http://www.xanthellis.com
  */
+/*
+  ALTER TABLE `affaires` ADD `affaireDevisTauxAcompte` DECIMAL(5,2) NOT NULL DEFAULT '40' COMMENT '% Acompte demandé' AFTER `affaireDevisDate`;
+  ALTER TABLE `affaires` ADD `affaireDevisEnvoye` BOOLEAN NOT NULL AFTER `affaireDevisTauxAcompte`;
+ */
 class Affaire {
 
     protected $affaireId;
@@ -20,6 +24,8 @@ class Affaire {
     protected $affaireTotalTVA;
     protected $affaireDevisId;
     protected $affaireDevisDate;
+    protected $affaireDevisTauxAcompte;
+    protected $affaireDevisEnvoye;
     protected $affaireCommandeId;
     protected $affaireCommandeDate;
     protected $affaireReglements;
@@ -84,6 +90,10 @@ class Affaire {
         return $this->affaireType;
     }
 
+    function getAffaireObjet() {
+        return $this->affaireObjet;
+    }
+
     function getAffaireDate() {
         return $this->affaireDate;
     }
@@ -112,12 +122,40 @@ class Affaire {
         return $this->affaireDevisDate;
     }
 
+    function getAffaireDevisTauxAcompte() {
+        return $this->affaireDevisTauxAcompte;
+    }
+
     function getAffaireCommandeId() {
         return $this->affaireCommandeId;
     }
 
     function getAffaireCommandeDate() {
         return $this->affaireCommandeDate;
+    }
+
+    function getAffaireReglements() {
+        return $this->affaireReglements;
+    }
+
+    function getAffaireFactures() {
+        return $this->affaireFactures;
+    }
+
+    function getAffairePAO() {
+        return $this->affairePAO;
+    }
+
+    function getAffaireFabrication() {
+        return $this->affaireFabrication;
+    }
+
+    function getAffairePose() {
+        return $this->affairePose;
+    }
+
+    function getAffaireCloture() {
+        return $this->affaireCloture;
     }
 
     function setAffaireId($affaireId) {
@@ -134,6 +172,10 @@ class Affaire {
 
     function setAffaireType($affaireType) {
         $this->affaireType = $affaireType;
+    }
+
+    function setAffaireObjet($affaireObjet) {
+        $this->affaireObjet = $affaireObjet;
     }
 
     function setAffaireDate($affaireDate) {
@@ -164,6 +206,10 @@ class Affaire {
         $this->affaireDevisDate = $affaireDevisDate;
     }
 
+    function setAffaireDevisTauxAcompte($affaireDevisTauxAcompte) {
+        $this->affaireDevisTauxAcompte = $affaireDevisTauxAcompte;
+    }
+
     function setAffaireCommandeId($affaireCommandeId) {
         $this->affaireCommandeId = $affaireCommandeId;
     }
@@ -172,40 +218,12 @@ class Affaire {
         $this->affaireCommandeDate = $affaireCommandeDate;
     }
 
-    function getAffaireReglements() {
-        return $this->affaireReglements;
-    }
-
     function setAffaireReglements($affaireReglements) {
         $this->affaireReglements = $affaireReglements;
     }
 
-    function getAffaireFactures() {
-        return $this->affaireFactures;
-    }
-
     function setAffaireFactures($affaireFactures) {
         $this->affaireFactures = $affaireFactures;
-    }
-
-    function getAffaireObjet() {
-        return $this->affaireObjet;
-    }
-
-    function setAffaireObjet($affaireObjet) {
-        $this->affaireObjet = $affaireObjet;
-    }
-
-    function getAffairePAO() {
-        return $this->affairePAO;
-    }
-
-    function getAffaireFabrication() {
-        return $this->affaireFabrication;
-    }
-
-    function getAffairePose() {
-        return $this->affairePose;
     }
 
     function setAffairePAO($affairePAO) {
@@ -220,12 +238,16 @@ class Affaire {
         $this->affairePose = $affairePose;
     }
 
-    function getAffaireCloture() {
-        return $this->affaireCloture;
-    }
-
     function setAffaireCloture($affaireCloture) {
         $this->affaireCloture = $affaireCloture;
+    }
+
+    function getAffaireDevisEnvoye() {
+        return $this->affaireDevisEnvoye;
+    }
+
+    function setAffaireDevisEnvoye($affaireDevisEnvoye) {
+        $this->affaireDevisEnvoye = $affaireDevisEnvoye;
     }
 
 }

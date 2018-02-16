@@ -54,7 +54,7 @@ echo '<br>' . $client->getClientCp() . ' ' . $client->getClientVille() . '<span 
     <?php
     foreach ($avoir->getAvoirLignes() as $a):
         ?>
-        <tr>
+        <tr nobr="true">
             <td style="border-bottom: 1px solid grey;">
                 <span style="font-weight: bold; font-size: 10px;">
                     <?= $a->getAvoirLigneDesignation(); ?>
@@ -82,15 +82,15 @@ echo '<br>' . $client->getClientCp() . ' ' . $client->getClientVille() . '<span 
 
 <br>
 <br>
-<table style="font-size:11px; width:550px;">
-    <tr>
+<table style="font-size:11px; width:550px;" nobr="true">
+    <tr nobr="true">
         <td style="width:200px; border: none;"></td>
         <td style="width:100px; text-align:right; background-color: lightgrey; font-weight: bold; border: 1px solid black; border: 1px solid black;">Total HT</td>
         <td style="width:50px; text-align:right; background-color: lightgrey; font-weight: bold; border: 1px solid black; border: 1px solid black;">%TVA</td>
         <td style="width:80px; text-align:right; background-color: lightgrey; font-weight: bold; border: 1px solid black; border: 1px solid black;">Total TVA</td>
         <td style="width:100px; text-align:right; background-color: lightgrey; font-weight: bold; border: 1px solid black; border: 1px solid black;">Total TTC</td>
     </tr>
-    <tr>
+    <tr nobr="true">
         <td></td>
         <td style="text-align:right; border: 1px solid black;"><?= number_format($avoir->getAvoirTotalHT(), 2, ',', ' ') . '€'; ?></td>
         <td style="text-align:right; border: 1px solid black;">20.00</td>

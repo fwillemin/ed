@@ -9,14 +9,14 @@
             <div class="modal-body">
                 <?php echo form_open('clients/addClient/', array('class' => 'form-horizontal', 'id' => 'formAddClient')); ?>
                 <input type="hidden" name="addClientId" id="addClientId" value="" >
-                
+
                 <div class="form-group">
                     <label for="addClientRaisonSociale" class="col-sm-3 control-label">Raison sociale<span class="asterix">*</span></label>
                     <div class="col-sm-9">
                         <input type="text" id="addClientRaisonSociale" class="form-control" name="addClientRaisonSociale" value="" required >
                     </div>
                 </div>
-                <div class="form-group">                    
+                <div class="form-group">
                     <label for="addClientExoneration" class="col-sm-3 control-label">Exonération de TVA</label>
                     <div class="col-sm-2">
                         <input type="checkbox" id="addClientExoneration" class="" name="addClientExoneration" value="1" >
@@ -26,16 +26,16 @@
                         <input type="text" id="addClientNumTva" class="form-control" name="addClientNumTva" value="" >
                     </div>
                 </div>
-<!--                <div class="form-group">
-                    <label for="addClientNom" class="col-sm-3 control-label">Nom</span></label>
-                    <div class="col-sm-4">
-                        <input type="text" id="addClientNom" class="form-control" name="addClientNom" value="" >
-                    </div>                
-                    <label for="addClientPrenom" class="col-sm-1 control-label">Prénom</label>
-                    <div class="col-sm-4">
-                        <input type="text" id="addClientPrenom" class="form-control" name="addClientPrenom" value="" >
-                    </div>
-                </div>-->
+                <!--                <div class="form-group">
+                                    <label for="addClientNom" class="col-sm-3 control-label">Nom</span></label>
+                                    <div class="col-sm-4">
+                                        <input type="text" id="addClientNom" class="form-control" name="addClientNom" value="" >
+                                    </div>
+                                    <label for="addClientPrenom" class="col-sm-1 control-label">Prénom</label>
+                                    <div class="col-sm-4">
+                                        <input type="text" id="addClientPrenom" class="form-control" name="addClientPrenom" value="" >
+                                    </div>
+                                </div>-->
                 <div class="form-group">
                     <label for="addClientAdresse1" class="col-sm-3 control-label">Adresse</label>
                     <div class="col-sm-9">
@@ -63,16 +63,27 @@
                     <div class="col-sm-4">
                         <input type="text" id="addClientPays" class="form-control" name="addClientPays" value="FRANCE" required >
                     </div>
-                </div>                
+                </div>
                 <div class="form-group">
                     <label for="addClientTelephone" class="col-sm-3 control-label">Téléphone</label>
                     <div class="col-sm-4">
                         <input type="text" id="addClientTelephone"  class="form-control" name="addClientTelephone" value="" placeholder="Fixe uniquement">
                     </div>
-                </div>              
+                </div>
+                <div class="form-group">
+                    <label for="addClientEcheancePaiement" class="col-sm-3 control-label">Paiement des factures</label>
+                    <div class="col-sm-4">
+                        <select name="addClientEcheancePaiement" id="addClientEcheancePaiement" class="form-control">
+                            <option value="1">A récéption de facture</option>
+                            <option value="4">A récéption de facture - Escompte 3%</option>
+                            <option value="2">A 30 jours</option>
+                            <option value="3">A 45 jours</option>
+                        </select>
+                    </div>
+                </div>
             </div>
-            <div class="modal-footer">                
-                <button class="btn btn-warning pull-right" type="submit" id="btnAddClientSubmit"></button>             
+            <div class="modal-footer">
+                <button class="btn btn-warning pull-right" type="submit" id="btnAddClientSubmit"></button>
                 <?php echo form_close(); ?>
             </div>
         </div>

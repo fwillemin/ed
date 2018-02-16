@@ -78,12 +78,13 @@
                         ?>
                         <button class="btnInvisible" style="position: absolute; top:0px; left: 25px; color: #FFF;"
                                 data-toggle="popover" data-trigger="click"
-                                title="<span style='color: black; font-weight: bold;'>Modifier la date du devis</span>" data-html="true" data-placement="bottom"
-                                data-content='<form id="formModDevisDate" method="POST" action="<?= site_url('affaires/modifierDate'); ?>">
+                                title="<span style='color: black; font-weight: bold;'>Modifier les infos du devis</span>" data-html="true" data-placement="bottom"
+                                data-content='<form id="formModDevis" method="POST" action="<?= site_url('affaires/modifierDevis'); ?>">
                                 <input type="hidden" name="affaireId" value="<?= $affaire->getAffaireId(); ?>">
-                                <input type="hidden" name="quelleDate" value="devis">
-                                <input class="form-control" type="date" name="modDate" value="<?= date('Y-m-d', $affaire->getAffaireDevisDate()); ?>" >
-                                <button class="btn btn-xs btn-primary" style="width: 100%;">Modifier</button>
+                                <input class="form-control" type="date" name="modDevisDate" value="<?= date('Y-m-d', $affaire->getAffaireDevisDate()); ?>" >
+                                <div class="input-group"><span class="input-group-addon">Acompte %</span><input class="form-control" type="text" name="modDevisAcompte" value="<?= $affaire->getAffaireDevisTauxAcompte(); ?>" ></div>
+                                <div class="input-group"><span class="input-group-addon">Envoyé</span><input type="checkbox" name="modDevisEnvoye" value="1" <?= $affaire->getAffaireDevisEnvoye() ? 'checked' : ''; ?> ></div>
+                                <button class="btn btn-sm btn-primary" style="width: 100%;">Modifier</button>
                                 </form>' ><i class="fas fa-cog"></i></button>
 
                     <?php endif; ?>
@@ -107,9 +108,8 @@
                         <button class="btnInvisible" style="position: absolute; top:0px; left: 25px; color: #FFF;"
                                 data-toggle="popover" data-trigger="click"
                                 title="<span style='color: black; font-weight: bold;'>Modifier date commande</span>" data-html="true" data-placement="bottom"
-                                data-content='<form id="formModCommandeDate" method="POST" action="<?= site_url('affaires/modifierDate'); ?>">
+                                data-content='<form id="formModCommandeDate" method="POST" action="<?= site_url('affaires/modifierDateCommande'); ?>">
                                 <input type="hidden" name="affaireId" value="<?= $affaire->getAffaireId(); ?>">
-                                <input type="hidden" name="quelleDate" value="commande">
                                 <input class="form-control" type="date" name="modDate" value="<?= date('Y-m-d', $affaire->getAffaireCommandeDate()); ?>" >
                                 <button class="btn btn-xs btn-primary" style="width: 100%;">Modifier</button>
                                 </form>' ><i class="fas fa-cog"></i></button>

@@ -2,6 +2,8 @@
 
 /**
  * Classe de gestion des Dossiers
+ * Les dossiers sont des plannifications directes sans passer par la phase AFFAIRE
+ * Ils sont plannifier directement.
  * Manager : Model_dossiers
  *
  * @author Xanthellis - WILLEMIN François - http://www.xanthellis.com
@@ -13,44 +15,47 @@ class Dossier {
     protected $dossierDescriptif;
     protected $dossierDateSortie;
     protected $dossierSortieEtat; /* 1 = Attente, 2 = Fait */
-    protected $dossierPao;   
-    protected $dossierFab;   
-    protected $dossierPose;    
+    protected $dossierPao;
+    protected $dossierFab;
+    protected $dossierPose;
     protected $dossierClos;
-    
     protected $dossierAffectations;
 
     public function __construct(array $valeurs = []) {
         /* Si on passe des valeurs, on hydrate l'objet */
-        if(!empty($valeurs)) $this->hydrate ($valeurs);
+        if (!empty($valeurs))
+            $this->hydrate($valeurs);
     }
 
     public function hydrate(array $donnees) {
-       foreach ($donnees as $key => $value):
-            $method = 'set'.ucfirst($key);
-            if(method_exists($this, $method))
+        foreach ($donnees as $key => $value):
+            $method = 'set' . ucfirst($key);
+            if (method_exists($this, $method))
                 $this->$method($value);
         endforeach;
-        $CI =& get_instance();
-        $this->setDossierAffectations( $CI->managerAffectations->liste( array('affectationDossierId' => $this->getDossierId())) );
+        $CI = & get_instance();
+        $this->setDossierAffectations($CI->managerAffectations->liste(array('affectationDossierId' => $this->getDossierId())));
     }
-    
+
     function nextStepSortie() {
-        switch( $this->getDossierSortieEtat() ):
+        switch ($this->getDossierSortieEtat()):
             case 1:
                 $this->setDossierSortieEtat(2);
                 break;
             case 2:
                 $this->setDossierSortieEtat(1);
-                break;            
+                break;
         endswitch;
-    }    
-    function cloture() {
-        $this->setDossierClos(1);        
     }
+
+    function cloture() {
+        $this->setDossierClos(1);
+    }
+
     function ouverture() {
-        $this->setDossierClos(0);        
-    }    
+        $this->setDossierClos(0);
+    }
+
     function getDossierId() {
         return $this->dossierId;
     }
@@ -105,7 +110,8 @@ class Dossier {
 
     function setDossierClos($dossierClos) {
         $this->dossierClos = $dossierClos;
-    }    
+    }
+
     function getDossierAffectations() {
         return $this->dossierAffectation;
     }
@@ -113,13 +119,15 @@ class Dossier {
     function setDossierAffectations($dossierAffectation) {
         $this->dossierAffectation = $dossierAffectation;
     }
+
     function getDossierSortieEtat() {
         return $this->dossierSortieEtat;
     }
 
     function setDossierSortieEtat($dossierSortieEtat) {
-        $this->dossierSortieEtat = $dossierSortieEtat;        
+        $this->dossierSortieEtat = $dossierSortieEtat;
     }
+
     function getDossierPao() {
         return $this->dossierPao;
     }
@@ -127,6 +135,5 @@ class Dossier {
     function setDossierPao($dossierPao) {
         $this->dossierPao = $dossierPao;
     }
-
 
 }

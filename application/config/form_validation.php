@@ -241,6 +241,11 @@ $config = array(
             'field' => 'addClientIntracom',
             'label' => 'Intracommunautaire du client',
             'rules' => 'trim'
+        ),
+        array(
+            'field' => 'addClientEcheancePaiement',
+            'label' => 'Echeance de paiement',
+            'rules' => 'trim|required|in_list[1,2,3,4]'
         )
     ),
     /* Supprime un client */
@@ -462,6 +467,11 @@ $config = array(
             'field' => 'addFactureObjet',
             'label' => 'Objet de la facture',
             'rules' => 'required|trim'
+        ),
+        array(
+            'field' => 'addFactureEcheancePaiement',
+            'label' => 'Echeance de paiement',
+            'rules' => 'required|trim|in_list[1,2,3,4]'
         )
     ),
     /* Facture */
