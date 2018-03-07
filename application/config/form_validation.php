@@ -407,7 +407,7 @@ $config = array(
             'field' => 'addReglementFactureId',
             'label' => 'ID de la facture',
             'rules' => 'callback_existFacture'
-        //'rules' => ''
+//'rules' => ''
         ),
         array(
             'field' => 'addReglementMontant',
@@ -423,24 +423,6 @@ $config = array(
             'rules' => 'required|callback_existReglement'
         )
     ),
-    /* modReglement */
-//    'modReglement' => array(
-//        array(
-//            'field' => 'modReglementId',
-//            'label' => 'ID du réglement',
-//            'rules' => 'required|callback_existReglement'
-//        ),
-//        array(
-//            'field' => 'modReglementType',
-//            'label' => 'Type de réglement',
-//            'rules' => 'required|in_list[1,2]'
-//        ),
-//        array(
-//            'field' => 'modReglementFactureId',
-//            'label' => 'ID de la facture',
-//            'rules' => 'callback_existFacture'
-//        )
-//    ),
     /* addFacture */
     'addFacture' => array(
         array(
@@ -482,6 +464,19 @@ $config = array(
             'rules' => 'required|callback_existFacture'
         )
     ),
+    /* modEcheanceFacture */
+    'modEcheanceFacture' => array(
+        array(
+            'field' => 'factureId',
+            'label' => 'ID de la facture',
+            'rules' => 'required|callback_existFacture'
+        ),
+        array(
+            'field' => 'echeanceId',
+            'label' => 'Echeance',
+            'rules' => 'required|in_list[1,2,3,4]'
+        )
+    ),
     'modAvoirQte' => array(
         array(
             'field' => 'rowId',
@@ -516,6 +511,133 @@ $config = array(
             'field' => 'prix',
             'label' => 'Prix',
             'rules' => 'required|numeric|greater_than_equal_to[0]'
+        )
+    ),
+    /* addDossier */
+    'addDossier' => array(
+        array(
+            'field' => 'addDossierId',
+            'label' => 'ID Dossier',
+            'rules' => 'callback_existDossier'
+        ),
+        array(
+            'field' => 'addDossierClient',
+            'label' => 'Client',
+            'rules' => 'required|trim'
+        ),
+        array(
+            'field' => 'addDossierDescriptif',
+            'label' => 'Descriptif du dossier',
+            'rules' => 'trim'
+        ),
+        array(
+            'field' => 'addDossierFab',
+            'label' => 'Fabrication',
+            'rules' => 'in_list[1]'
+        ),
+        array(
+            'field' => 'addDossierPose',
+            'label' => 'Pose',
+            'rules' => 'in_list[1]'
+        ),
+        array(
+            'field' => 'addDossierPAO',
+            'label' => 'Conception POA',
+            'rules' => 'in_list[1]'
+        ),
+        array(
+            'field' => 'addDossierClos',
+            'label' => 'Cloture',
+            'rules' => 'in_list[1]'
+        )
+    ),
+    /* Dossier */
+    'getDossier' => array(
+        array(
+            'field' => 'dossierId',
+            'label' => 'ID du dossier',
+            'rules' => 'required|callback_existDossier'
+        )
+    ),
+    /* Affectation */
+    'getAffectation' => array(
+        array(
+            'field' => 'affectationId',
+            'label' => 'ID Affectation',
+            'rules' => 'required|callback_existAffectation'
+        )
+    ),
+    /* Ajout d'une affectation */
+    'addAffectation' => array(
+        array(
+            'field' => 'addAffectId',
+            'label' => 'ID Affectation',
+            'rules' => 'callback_existAffectation'
+        ),
+        array(
+            'field' => 'addAffectDossierId',
+            'label' => 'ID Dossier',
+            'rules' => 'required|callback_existDossier'
+        ),
+        array(
+            'field' => 'addAffectType',
+            'label' => 'Type affectation',
+            'rules' => 'required|in_list[1,2,3]'
+        ),
+        array(
+            'field' => 'addAffectDate',
+            'label' => 'Date',
+            'rules' => 'required|trim'
+        ),
+        array(
+            'field' => 'addAffectNbJour',
+            'label' => 'Nombre de jours',
+            'rules' => 'required|trim|is_natural_no_zero'
+        ),
+        array(
+            'field' => 'addAffectEquipeId',
+            'label' => 'ID Equipe',
+            'rules' => 'required|callback_existEquipe'
+        ),
+        array(
+            'field' => 'addAffectIntervenant',
+            'label' => 'Intervenants',
+            'rules' => 'trim'
+        ),
+        array(
+            'field' => 'addAffectCommentaire',
+            'label' => 'Commentaire',
+            'rules' => 'trim'
+        )
+    ),
+    /* Ajout d'un recurrent */
+    'addRecurrent' => array(
+        array(
+            'field' => 'addRecurrentId',
+            'label' => 'ID Recurrent',
+            'rules' => 'callback_existRecurrent'
+        ),
+        array(
+            'field' => 'addRecurrentCritere',
+            'label' => 'Critère',
+            'rules' => 'required|trim'
+        ),
+        array(
+            'field' => 'addRecurrentEquipeId',
+            'label' => 'ID Equipe',
+            'rules' => 'required|callback_existEquipe'
+        ),
+        array(
+            'field' => 'addRecurrentCommentaire',
+            'label' => 'Commentaire',
+            'rules' => 'trim'
+        )
+    ),
+    'getRecurrent' => array(
+        array(
+            'field' => 'recurrentId',
+            'label' => 'ID du recurrent',
+            'rules' => 'required|callback_existRecurrent'
         )
     )
 );

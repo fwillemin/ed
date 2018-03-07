@@ -145,6 +145,66 @@ class My_Controller extends CI_Controller {
         endif;
     }
 
+    /**
+     * Fonction pour from_validation qui vérifie l'existance d'un dossier dans la bdd
+     *
+     * @param int $dossierId ID du dossier
+     * @return boolean TRUE si le dossier existe
+     */
+    public function existDossier($dossierId) {
+        $this->form_validation->set_message('existDossier', 'Ce dossier est introuvable.');
+        if ($this->managerDossiers->count(array('dossierId' => $dossierId)) > 0 || !$dossierId) :
+            return true;
+        else :
+            return false;
+        endif;
+    }
+
+    /**
+     * Fonction pour from_validation qui vérifie l'existance d'une affectation dans la bdd
+     *
+     * @param int $affectationId ID de l'affectation
+     * @return boolean TRUE si l'affectation existe
+     */
+    public function existAffectation($affectationId) {
+        $this->form_validation->set_message('existAffectation', 'Cette affectation est introuvable.');
+        if ($this->managerAffectations->count(array('affectationId' => $affectationId)) == 1 || !$affectationId) :
+            return true;
+        else :
+            return false;
+        endif;
+    }
+
+    /**
+     * Fonction pour from_validation qui vérifie l'existance d'un recurrent dans la bdd
+     *
+     * @param int $recurrentId ID du recurrent
+     * @return boolean TRUE si le recurrent
+     */
+    public function existRecurrent($recurrentId) {
+        $this->form_validation->set_message('existRecurrent', 'Ce recurrent est introuvable.');
+        if ($this->managerRecurrents->count(array('recurrentId' => $recurrentId)) == 1 || !$recurrentId) :
+            return true;
+        else :
+            return false;
+        endif;
+    }
+
+    /**
+     * Fonction pour from_validation qui vérifie l'existance d'une équipe dans la bdd
+     *
+     * @param int $equipeId ID de l'équipe
+     * @return boolean TRUE si l'équipe existe
+     */
+    public function existEquipe($equipeId) {
+        $this->form_validation->set_message('existEquipe', 'Cette équipe est introuvable.');
+        if ($this->managerEquipes->count(array('equipeId' => $equipeId)) == 1 || !$equipeId) :
+            return true;
+        else :
+            return false;
+        endif;
+    }
+
     public function venteInit() {
 
         $dataSession = array('affaireId', 'affaireClientId', 'affaireExonerationTVA', 'affaireDate');
@@ -170,6 +230,24 @@ class My_Controller extends CI_Controller {
     public function setFactureSolde(Facture $facture) {
         $facture->solde();
         $this->managerFactures->editer($facture);
+    }
+
+    /**
+     * Renumerote les affectations d'une journée pour une équipe
+     * @param type $equipe ID de l'équipe
+     * @param type $date Date
+     */
+    public function renumerotation($equipe, $date) {
+        /* On recalcule les positions des autres affectations du même jour */
+        $others = $this->managerAffectations->liste(array('affectationDate' => $date, 'affectationEquipeId' => $equipe));
+        $num = 1;
+        if ($others) :
+            foreach ($others as $o) :
+                $o->setAffectationPosition($num);
+                $this->managerAffectations->editer($o);
+                $num++;
+            endforeach;
+        endif;
     }
 
 }

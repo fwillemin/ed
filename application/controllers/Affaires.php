@@ -67,10 +67,55 @@ class Affaires extends My_Controller {
         $affaires = $this->managerAffaires->listeAll(array('affaireCloture' => 0), 'affairedate DESC', 'array');
         if (!empty($affaires)):
             foreach ($affaires as $a):
+
+                /* Gestion de l'avancement avec les affectations */
+                $a->affaireTerminee = 1;
+                if ($a->affairePAO):
+                    $affectations = $this->managerAffectations->liste(array('affectationAffaireId' => $a->affaireId, 'affectationType' => 3));
+                    if (empty($affectations)):
+                        $a->affaireTerminee = 0;
+                    else:
+                        foreach ($affectations as $affect):
+                            if ($affect->getAffectationEtat() < 3):
+                                $a->affaireTerminee = 0;
+                                continue;
+                            endif;
+                        endforeach;
+                    endif;
+                endif;
+                if ($a->affaireTerminee == 1 && $a->affaireFabrication):
+                    $affectations = $this->managerAffectations->liste(array('affectationAffaireId' => $a->affaireId, 'affectationType' => 1));
+                    if (empty($affectations)):
+                        $a->affaireTerminee = 0;
+                    else:
+                        foreach ($affectations as $affect):
+                            if ($affect->getAffectationEtat() < 3):
+                                $a->affaireTerminee = 0;
+                                continue;
+                            endif;
+                        endforeach;
+                    endif;
+                endif;
+                if ($a->affaireTerminee == 1 && $a->affairePose):
+                    $affectations = $this->managerAffectations->liste(array('affectationAffaireId' => $a->affaireId, 'affectationType' => 2));
+                    if (empty($affectations)):
+                        $a->affaireTerminee = 0;
+                    else:
+                        foreach ($affectations as $affect):
+                            if ($affect->getAffectationEtat() < 3):
+                                $a->affaireTerminee = 0;
+                                continue;
+                            endif;
+                        endforeach;
+                    endif;
+                endif;
+
                 if ($a->affaireCloture == 1):
                     $a->avancement = 'Clôturée';
+                elseif ($a->affaireTerminee == 1 && $a->affaireCommandeId > 0 && $a->affaireDevisId > 0):
+                    $a->avancement = '<span style="color: green;">Terminée</span>';
                 elseif ($a->affaireCommandeId > 0):
-                    $a->avancement = '<span style="color: green;">En cours</span>';
+                    $a->avancement = '<span style="color: purple;">En cours</span>';
                 elseif ($a->affaireDevisId > 0):
                     $a->avancement = '<span style="color: orange;">Devis envoyé le ' . date('d/m/y', $a->affaireDevisDate) . '</span>';
                 else:

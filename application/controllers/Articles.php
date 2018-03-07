@@ -281,7 +281,7 @@ class Articles extends My_Controller {
     public function copyArticle() {
 
         /* Mêmes informations requises pour supprimer ou dupliquer un article */
-        if (!$this->form_validation->run('delArticle')) :
+        if (!$this->form_validation->run('getArticle')) :
             echo json_encode(array('type' => 'error', 'message' => validation_errors()));
             exit;
         endif;

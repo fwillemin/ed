@@ -97,6 +97,7 @@ class Ventes extends My_Controller {
         if ($this->session->userdata('affaireId')):
             $affaire = $this->managerAffaires->getAffaireById($this->session->userdata('affaireId'));
             $affaire->hydrateClients();
+            $affaire->hydrateAffectations();
             $affaire->hydrateFactures();
             $affaire->hydrateReglements();
             if ($affaire->getAffaireReglements()):

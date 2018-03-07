@@ -88,12 +88,13 @@ a, button {
     opacity : 0.4;
 }
 .hachures {
-    background-image: url("hachures.png");
-    background-repeat: repeat;
+/*    background-image: url("hachures.png");
+    background-repeat: repeat;*/
+    background-color: #ebebf2;    
 }
 
 .modal-header {
-    background-color: #e4e9ef;
+    background-color: #e4e9ef;    
     color: #002166;
 }
 

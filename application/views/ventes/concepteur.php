@@ -435,7 +435,24 @@
                 <a class="btn btn-link" href="<?= site_url('ventes/reloadAffaire/' . $affaire->getAffaireId()); ?>" >
                     <i class="fas fa-redo-alt"></i> Annuler toutes les modifications
                 </a>
-            <?php endif;
+                <?php
+            endif;
+            if ($affaire):
+                ?>
+                <button class="btn btn-link" style="color: steelblue;" id="btnDupliquerAffaire" data-affaireid="<?= $affaire->getAffaireId(); ?>">
+                    <i class="fas fa-copy"></i> Dupliquer cette affaire
+                </button>
+                <?php if ($affaire->getAffaireCloture()): ?>
+                    <br><button class="btn btn-link" style="color: green;" id="btnReouvrirAffaire" data-affaireid="<?= $affaire->getAffaireId(); ?>">
+                        <i class="fas fa-unlock"></i> Ré-ouvrir cette affaire
+                    </button>
+                <?php else: ?>
+                    <br><button class="btn btn-link" style="color: red;" id="btnCloturerAffaire" data-affaireid="<?= $affaire->getAffaireId(); ?>">
+                        <i class="fas fa-lock"></i> Cloturer cette affaire
+                    </button>
+                <?php
+                endif;
+            endif;
             ?>
         </div>
         <div class="col-sm-4">
@@ -469,23 +486,68 @@
                 </table>
             </div>
         </div>
-        <?php if ($affaire): ?>
-            <button class="btn btn-link" style="color: steelblue;" id="btnDupliquerAffaire" data-affaireid="<?= $affaire->getAffaireId(); ?>">
-                <i class="fas fa-copy"></i> Dupliquer cette affaire
-            </button>
-            <?php if ($affaire->getAffaireCloture()): ?>
-                <button class="btn btn-link" style="color: green;" id="btnReouvrirAffaire" data-affaireid="<?= $affaire->getAffaireId(); ?>">
-                    <i class="fas fa-unlock"></i> Ré-ouvrir cette affaire
-                </button>
-            <?php else: ?>
-                <button class="btn btn-link" style="color: red;" id="btnCloturerAffaire" data-affaireid="<?= $affaire->getAffaireId(); ?>">
-                    <i class="fas fa-lock"></i> Cloturer cette affaire
-                </button>
-            <?php
-            endif;
-        endif;
-        ?>
     </div>
+
+    <?php
+    if (!empty($affaire->getAffaireAffectations())):
+        ?>
+        <div class="row">
+            <div class="col-xs-12 col-sm-10 col-sm-offset-1">
+                <h4>Affectations de l'affaire</h4>
+                <table class="table table-condensed table-bordered">
+                    <thead>
+                        <tr style="background-color: #04335a; color: #FFF;">
+                            <th style="width: 80px;">Date</th>
+                            <th style="width: 100px;">Type</th>
+                            <th style="width: 170px;">Intervenants</th>
+                            <th>Commentaire</th>
+                            <th style="width: 80px;">Etat</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($affaire->getAffaireAffectations() as $affectation): ?>
+                            <tr>
+                                <td><?= date('d/m/y', $affectation->getAffectationDate()); ?></td>
+                                <td><?php
+                                    switch ($affectation->getAffectationType()):
+                                        case 3:
+                                            echo 'PAO';
+                                            break;
+                                        case 1:
+                                            echo 'Fabrication';
+                                            break;
+                                        case 2:
+                                            echo 'Pose';
+                                            break;
+                                    endswitch;
+                                    ?>
+                                </td>
+                                <td><?= $affectation->getAffectationIntervenant(); ?></td>
+                                <td><?= $affectation->getAffectationCommentaire(); ?></td>
+                                <td><?php
+                                    switch ($affectation->getAffectationEtat()):
+                                        case 3:
+                                            echo 'Terminé';
+                                            break;
+                                        case 1:
+                                            echo 'Attente';
+                                            break;
+                                        case 2:
+                                            echo 'En cours';
+                                            break;
+                                    endswitch;
+                                    ?></td>
+                            </tr>
+
+
+                            <?php
+                        endforeach;
+                        ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    <?php endif; ?>
 </div>
 
 <!-- Confirmation de génération de factures -->

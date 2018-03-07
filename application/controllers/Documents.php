@@ -23,6 +23,18 @@ class Documents extends My_Controller {
         $this->piedPage2 = '';
     }
 
+    private function editionAdresseClient(Client $client) {
+        $adresse = '<br><br><br><br>' . $client->getClientRaisonSociale() . '<span style="color: #FFF;">____</span>'
+                . '<br>' . $client->getClientAdresse1() . '<span style="color: #FFF;">____</span>';
+
+        if ($client->getClientAdresse2()):
+            $adresse .= '<br>' . $client->getClientAdresse2() . '<span style="color: #FFF;">____</span>';
+        endif;
+        $adresse .= '<br>' . $client->getClientCp() . ' ' . $client->getClientVille() . '<span style="color: #FFF;">____</span>'
+                . '<br>' . $client->getClientPays() . '<span style="color: #FFF;">____</span>';
+        return $adresse;
+    }
+
     public function editionDevis($affaireId = null) {
 
         if (!$affaireId):
@@ -64,16 +76,9 @@ class Documents extends My_Controller {
                     <td style=" height: 20px; border: 1px solid black;">' . $affaire->getAffaireId() . '</td>
                 </tr>
                 <tr>
-                    <td colspan="3" style="text-align: right; font-size:12px;">
-                        <br><br>' . $client->getClientRaisonSociale() . '<span style="color: #FFF;">____</span>'
-                . '<br>' . $client->getClientAdresse1() . '<span style="color: #FFF;">____</span>';
-
-        if ($client->getClientAdresse2()):
-            $header .= '<br>' . $client->getClientAdresse2() . '<span style="color: #FFF;">____</span>';
-        endif;
-        $header .= '<br>' . $client->getClientCp() . ' ' . $client->getClientVille() . '<span style="color: #FFF;">____</span>'
-                . '<br>' . $client->getClientPays() . '<span style="color: #FFF;">____</span>
-                    </td>
+                    <td colspan="3" style="text-align: right; font-size:12px;">'
+                . $this->editionAdresseClient($client)
+                . '</td>
                 </tr>
             </table>
 
@@ -198,16 +203,7 @@ class Documents extends My_Controller {
                     <td style=" height: 20px; border: 1px solid black;">' . $facture->getFactureModeReglementText() . '</td>
                 </tr>
                 <tr>
-                    <td colspan="3" style="text-align: right; font-size:12px;">
-                        <br><br>' . $client->getClientRaisonSociale() . '<span style="color: #FFF;">____</span>'
-                . '<br>' . $client->getClientAdresse1() . '<span style="color: #FFF;">____</span>';
-
-        if ($client->getClientAdresse2()):
-            $header .= '<br>' . $client->getClientAdresse2() . '<span style="color: #FFF;">____</span>';
-        endif;
-        $header .= '<br>' . $client->getClientCp() . ' ' . $client->getClientVille() . '<span style="color: #FFF;">____</span>'
-                . '<br>' . $client->getClientPays() . '<span style="color: #FFF;">____</span>
-                    </td>
+                    <td colspan="3" style="text-align: right; font-size:12px;"> ' . $this->editionAdresseClient($client) . '</td>
                 </tr>
             </table>
         </td>
@@ -275,15 +271,8 @@ class Documents extends My_Controller {
                     <td style=" height: 20px; border: 1px solid black;">' . $avoir->getAvoirFactureId() . '</td>
                 </tr>
                 <tr>
-                    <td colspan="3" style="text-align: right; font-size:12px;">
-                        <br><br>' . $client->getClientRaisonSociale() . '<span style="color: #FFF;">____</span>'
-                . '<br>' . $client->getClientAdresse1() . '<span style="color: #FFF;">____</span>';
-        if ($client->getClientAdresse2()):
-            $header .= '<br>' . $client->getClientAdresse2() . '<span style="color: #FFF;">____</span>';
-        endif;
-        $header .= '<br>' . $client->getClientCp() . ' ' . $client->getClientVille() . '<span style="color: #FFF;">____</span>'
-                . '<br>' . $client->getClientPays() . '<span style="color: #FFF;">____</span>
-                    </td></tr>
+                     <td colspan="3" style="text-align: right; font-size:12px;"> ' . $this->editionAdresseClient($client) . '</td>
+                         </tr>
                     </table>
                 </td></tr></table>';
 

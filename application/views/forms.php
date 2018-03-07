@@ -1,6 +1,6 @@
 <?php
 /**
- * Formulaires dans des Modals pour 
+ * Formulaires dans des Modals pour
  * - Ajout de dossiers
  * - Ajout d'affectations
  * - Ajout reccurent
@@ -15,7 +15,7 @@
                 <h4 class="modal-title"></h4>
             </div>
             <div class="modal-body">
-                <?php echo form_open('ed/addDossier', array('class' => 'form-horizontal', 'id' => 'formAddDossier')); ?>
+                <?= form_open('ed/addDossier', array('class' => 'form-horizontal', 'id' => 'formAddDossier')); ?>
                 <input type="hidden" name="addDossierId" id="addDossierId" value="" >
                 <div class="form-group">
                     <label for="addDossierClient" class="col-xs-3">Client</label>
@@ -70,11 +70,11 @@
                 </div>
 
                 <button type="submit" class="btn btn-warning btn" style="width: 100%;" id="btnSubmitFormAddDossier"></button>
-                <?php echo form_close(); ?>
+                <?= form_close(); ?>
             </div>
             <div class="modal-footer" style="padding:3px; text-align: center;">
-                <button class="btn btn-xs btn-danger" id="btnDelDossier" type="button" style="display: none;">
-                    <i class="glyphicon glyphicon-trash"></i> Supprimer ce dossier, ses affectations et tous les éléments le concernant.
+                <button class="btn btn-sm btn-danger" id="btnDelDossier" type="button" style="display: none;">
+                    <i class="glyphicon glyphicon-trash"></i> Supprimer ce dossier
                 </button>
             </div>
         </div>
@@ -91,10 +91,9 @@
             <div class="modal-body">
                 <?php
                 if ($this->ion_auth->is_admin()):
-                    echo '<strong>Client : </strong><span id="textClient"></span>';
-                    echo '<br><strong>Descriptif : </strong><span id="textDescriptif"></span><hr>';
+                    echo '<strong>Client : </strong><span id="infosAffectations"></span><hr>';
 
-                    echo form_open('ed/addAffectation', array('class' => 'form-horizontal', 'id' => 'formAddAffectation'));
+                    echo form_open('affectations/addAffectation', array('class' => 'form-horizontal', 'id' => 'formAddAffectation'));
                     ?>
                     <input type="hidden" name="addAffectId" id="addAffectId" value="" >
 
@@ -102,11 +101,29 @@
                         <label for="addAffectDossierId" class="col-xs-3">Dossier</label>
                         <div class="col-xs-9 col-sm-6">
                             <select class="form-control" name="addAffectDossierId" id="addAffectDossierId">
+                                <option value="0" selected>Choisir un dossier</option>
                                 <?php
                                 if (!empty($dossiers)):
                                     foreach ($dossiers as $d):
                                         if ($d->getDossierClos() == 0):
                                             echo '<option value="' . $d->getDossierId() . '">' . $d->getDossierClient() . '</option>';
+                                        endif;
+                                    endforeach;
+                                endif;
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="addAffectAffaireId" class="col-xs-3">Affaire</label>
+                        <div class="col-xs-9 col-sm-6">
+                            <select class="form-control" name="addAffectAffaireId" id="addAffectAffaireId">
+                                <option value="0" selected>Choisir une affaire</option>
+                                <?php
+                                if (!empty($affaires)):
+                                    foreach ($affaires as $a):
+                                        if ($a->getAffaireCloture() == 0):
+                                            echo '<option value="' . $a->getAffaireId() . '">' . $a->getAffaireClients()[0]->getClientRaisonSociale() . '</option>';
                                         endif;
                                     endforeach;
                                 endif;
@@ -190,7 +207,7 @@
                 <h4 class="modal-title"></h4>
             </div>
             <div class="modal-body">
-                <?php echo form_open('ed/addRecurrent', array('class' => 'form-horizontal', 'id' => 'formAddRecurrent')); ?>
+                <?= form_open('ed/addRecurrent', array('class' => 'form-horizontal', 'id' => 'formAddRecurrent')); ?>
                 <input type="hidden" name="addRecurrentId" id="addRecurrentId" value="" >
 
                 <div class="form-group">
@@ -225,7 +242,7 @@
                     </div>
                 </div>
                 <button type="submit" class="btn btn-warning btn" style="width: 100%;" id="btnSubmitFormAddRecurrent"></button>
-                <?php echo form_close(); ?>
+                <?= form_close(); ?>
             </div>
             <div class="modal-footer" style="padding:3px; text-align: center;">
                 <button class="btn btn-xs btn-danger" id="btnDelRecurrent" type="button" style="display: none;">

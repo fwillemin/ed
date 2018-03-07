@@ -254,19 +254,25 @@ class Facturation extends My_Controller {
         exit;
     }
 
+    private function resetCriteresFactures() {
+        $criteres = array(
+            'rechFactureStart' => mktime(0, 0, 0, date('m'), 1, date('Y')),
+            'rechFactureEnd' => mktime(23, 59, 59, date('m'), date('t'), date('Y')),
+            'rechFactureEtat' => 'ALL'
+        );
+        $this->session->set_userdata($criteres);
+    }
+
     public function criteresListeFactures($etat = 'ALL', $start = null, $end = null, $factureId = null) {
         if ($factureId && $this->existFacture($factureId)):
             $this->session->set_flashdata('rechFactureId', $factureId);
         endif;
+        $this->resetCriteresFactures();
         if ($start):
             $this->session->set_userdata('rechFactureStart', $this->xth->mktimeFromInputDate($start));
-        else:
-            $this->session->set_userdata('rechFactureStart', mktime(0, 0, 0, date('m'), 1, date('Y')));
         endif;
         if ($end):
-            $this->session->set_userdata('rechFactureEnd', $this->xth->mktimeFromInputDate($end));
-        else:
-            $this->session->set_userdata('rechFactureEnd', mktime(23, 59, 59, date('m'), date('t'), date('Y')));
+            $this->session->set_userdata('rechFactureEnd', $this->xth->mktimeFromInputDate($end) + 86300);
         endif;
         $this->session->set_userdata('rechFactureEtat', $etat);
         redirect('facturation/listeFactures');
@@ -326,7 +332,7 @@ class Facturation extends My_Controller {
     public function listeFacturesNonEnvoyees() {
 
         if (!$this->session->userdata('rechFactureStart')):
-            $this->criteresListeFactures();
+            $this->resetCriteresFactures();
         endif;
         $whereFactures = array('factureDate >=' => $this->session->userdata('rechFactureStart'), 'factureDate <=' => $this->session->userdata('rechFactureEnd'), 'factureEnvoyee' => 0);
         $factures = $this->managerFactures->liste($whereFactures);
@@ -491,6 +497,21 @@ class Facturation extends My_Controller {
 
         $facture = $this->managerFactures->getFactureById($this->input->post('factureId'));
         $facture->setFactureEnvoyee($this->input->post('etat'));
+        $this->managerFactures->editer($facture);
+        echo json_encode(array('type' => 'success'));
+        exit;
+    }
+
+    public function modEcheanceFacture() {
+
+        if (!$this->form_validation->run('modEcheanceFacture')):
+            echo json_encode(array('type' => 'error', 'message' => validation_errors()));
+            exit;
+        endif;
+
+        $facture = $this->managerFactures->getFactureById($this->input->post('factureId'));
+        $facture->setFactureEcheanceId($this->input->post('echeanceId'));
+        $facture->setFactureEcheanceDate($this->getEcheance($facture->getFactureDate(), $this->input->post('echeanceId')));
         $this->managerFactures->editer($facture);
         echo json_encode(array('type' => 'success'));
         exit;

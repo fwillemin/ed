@@ -16,6 +16,7 @@ class Model_affectations extends MY_model {
     public function ajouter(Affectation $affectation) {
         $this->db
                 ->set('affectationDossierId', $affectation->getAffectationDossierId())
+                ->set('affectationAffaireId', $affectation->getAffectationAffaireId())
                 ->set('affectationType', $affectation->getAffectationType())
                 ->set('affectationDate', $affectation->getAffectationDate())
                 ->set('affectationEquipeId', $affectation->getAffectationEquipeId())
@@ -35,6 +36,7 @@ class Model_affectations extends MY_model {
     public function editer(Affectation $affectation) {
         $this->db
                 ->set('affectationDossierId', $affectation->getAffectationDossierId())
+                ->set('affectationAffaireId', $affectation->getAffectationAffaireId())
                 ->set('affectationType', $affectation->getAffectationType())
                 ->set('affectationDate', $affectation->getAffectationDate())
                 ->set('affectationEquipeId', $affectation->getAffectationEquipeId())
@@ -66,10 +68,10 @@ class Model_affectations extends MY_model {
      * @return array Liste d'objets de la classe Affectation
      */
     public function liste($where = array(), $tri = 'affectationDate, affectationEquipeId, affectationPosition ASC', $type = 'object') {
-        $query = $this->db->select('a.*, e.equipeNom AS affectationEquipe, d.dossierClient AS affectationClient, d.dossierDescriptif AS affectationDescriptif, d.dossierClos AS affectationDossierClos')
+        $query = $this->db->select('a.*, e.equipeNom AS affectationEquipe')
                 ->from('affectations a')
                 ->join('equipes e', 'e.equipeId = a.affectationEquipeId')
-                ->join('dossiers d', 'd.dossierId = a.affectationDossierId')
+                //->join('dossiers d', 'd.dossierId = a.affectationDossierId', 'left')
                 ->where($where)
                 ->order_by($tri)
                 ->get();
@@ -82,10 +84,10 @@ class Model_affectations extends MY_model {
      * @return \Affectation|boolean
      */
     public function getAffectationById($affectationId, $type = 'object') {
-        $query = $this->db->select('a.*, e.equipeNom AS affectationEquipe, d.dossierClient AS affectationClient, d.dossierDescriptif AS affectationDescriptif, d.dossierClos AS affectationDossierClos')
+        $query = $this->db->select('a.*, e.equipeNom AS affectationEquipe')
                 ->from('affectations a')
                 ->join('equipes e', 'e.equipeId = a.affectationEquipeId')
-                ->join('dossiers d', 'd.dossierId = a.affectationDossierId')
+                //->join('dossiers d', 'd.dossierId = a.affectationDossierId')
                 ->where(array('affectationId' => intval($affectationId)))
                 ->get();
         return $this->retourne($query, $type, self::classe, true);

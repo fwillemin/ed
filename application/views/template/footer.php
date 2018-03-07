@@ -38,7 +38,7 @@
 <script defer type="text/javascript" src="<?= base_url('assets/tables/datatables.js'); ?>"></script>
 
 <script defer type="text/javascript" src="<?= base_url('assets/MegaNavbar/MegaNavbar.js'); ?>"></script>
-<script defer src="https://use.fontawesome.com/releases/v5.0.2/js/all.js"></script>
+<script defer type="text/javascript" src="<?= base_url('assets/js/fontawesome.js'); ?>"></script>
 <script defer type="text/javascript" src="<?= base_url('assets/bootstrap-table/bootstrap-table.min.js'); ?>"></script>
 <script defer type="text/javascript" src="<?= base_url('assets/bootstrap-table/bootstrap-table-contextmenu.min.js'); ?>"></script>
 <script defer type="text/javascript" src="<?= base_url('assets/bootstrap-table/bootstrap-table-fr-FR.min.js'); ?>"></script>

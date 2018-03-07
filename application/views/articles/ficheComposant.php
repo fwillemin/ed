@@ -159,11 +159,16 @@
                                 </td>
                                 <td style="text-align: right;">
                                     <?php
-                                    $tauxMarge = round(($a->getArticleHT() / $a->getArticleAchatHT() - 1) * 100, 2);
-                                    if ($tauxMarge > 0):
-                                        $tauxColor = 'green';
+                                    if ($a->getArticleAchatHT() > 0):
+                                        $tauxMarge = round(($a->getArticleHT() / $a->getArticleAchatHT() - 1) * 100, 2);
+                                        if ($tauxMarge > 0):
+                                            $tauxColor = 'green';
+                                        else:
+                                            $tauxColor = 'orangered';
+                                        endif;
                                     else:
-                                        $tauxColor = 'orangered';
+                                        $tauxColor = 'grey';
+                                        $tauxMarge = 'NC';
                                     endif;
                                     echo '<span class="pull-right" style="color: ' . $tauxColor . ';">' . $tauxMarge . '%</span>';
                                     ?>

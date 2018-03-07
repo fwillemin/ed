@@ -83,7 +83,7 @@
                         <ul class="nav navbar-nav navbar-right">
                             <li class="dropdown-grid">
                                 <?php if ($this->ion_auth->is_admin()): ?>
-                                    <a href="<?= site_url('ed/dossiers'); ?>">Dossiers</a>
+                                    <a href="<?= site_url('ed/planification'); ?>">Planification</a>
                                 <?php endif; ?>
                                 <a href="<?= site_url('ed/journalier'); ?>"><i class="glyphicon glyphicon-calendar"></i> Journalier</a>
                                 <?php if ($this->ion_auth->is_admin()): ?>

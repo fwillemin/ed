@@ -6,18 +6,31 @@
  *
  * @author Xanthellis - WILLEMIN François - http://www.xanthellis.com
  */
+/*
+  ALTER TABLE `affectations` CHANGE `affectationDossierId` `affectationDossierId` INT(11) NULL;
+  ALTER TABLE `affectations` ADD `affectationAffaireId` INT NULL AFTER `affectationType`, ADD INDEX (`affectationAffaireId`);
+  ALTER TABLE `affectations` ADD FOREIGN KEY (`affectationAffaireId`) REFERENCES `affaires`(`affaireId`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ */
 class Affectation {
+
+    const colorAttente = '#dbe5f8';
+    const colorEncours = '#F8B038';
+    const colorTermine = '#0F6837';
 
     protected $affectationId;
     protected $affectationDossierId;
+    protected $affectationDossier;
+    protected $affectationAffaireId;
+    protected $affectationAffaire;
     protected $affectationType;
     protected $affectationDate;
-    protected $affectationEquipeId;   
-    protected $affectationEquipe; 
-    protected $affectationIntervenant; 
-    protected $affectationPosition;    
-    protected $affectationCommentaire;    
+    protected $affectationEquipeId;
+    protected $affectationEquipe;
+    protected $affectationIntervenant;
+    protected $affectationPosition;
+    protected $affectationCommentaire;
     protected $affectationEtat; /* 1=Attente, 2=Encours, 3=Terminé */
+    protected $affectationParentClos;
     protected $affectationClient;
     protected $affectationDescriptif;
     protected $affectationCouleur;
@@ -26,39 +39,58 @@ class Affectation {
 
     public function __construct(array $valeurs = []) {
         /* Si on passe des valeurs, on hydrate l'objet */
-        if(!empty($valeurs)) $this->hydrate ($valeurs);
+        if (!empty($valeurs))
+            $this->hydrate($valeurs);
     }
 
     public function hydrate(array $donnees) {
-       foreach ($donnees as $key => $value):
-            $method = 'set'.ucfirst($key);
-            if(method_exists($this, $method))
+        foreach ($donnees as $key => $value):
+            $method = 'set' . ucfirst($key);
+            if (method_exists($this, $method))
                 $this->$method($value);
         endforeach;
-        
+
         $this->colorier();
     }
-    
-    private function colorier(){
+
+    public function hydrateParent() {
+        $CI = & get_instance();
+        if ($this->affectationAffaireId):
+            $affaire = $CI->managerAffaires->getAffaireById($this->affectationAffaireId);
+            $this->affectationAffaire = $affaire;
+            $affaire->hydrateClients();
+            $this->affectationClient = $affaire->getAffaireClients()[0]->getClientRaisonSociale();
+            $this->affectationParentClos = $affaire->getAffaireCloture();
+            $this->affectationDescriptif = $affaire->getAffaireObjet();
+        else:
+            $dossier = $CI->managerDossiers->getDossierById($this->affectationDossierId);
+            $this->affectationDossier = $dossier;
+            $this->affectationClient = $dossier->getDossierClient();
+            $this->affectationParentClos = $dossier->getDossierClos();
+            $this->affectationDescriptif = $dossier->getDossierDescriptif();
+        endif;
+    }
+
+    private function colorier() {
         /* Couleur de l'affectation */
-        switch( $this->getAffectationEtat() ):
+        switch ($this->getAffectationEtat()):
             case 1:
-                $this->setAffectationCouleur( '#dbe5f8' );
-                $this->setAffectationFontColor( '#000000' );
+                $this->setAffectationCouleur(self::colorAttente);
+                $this->setAffectationFontColor('#000000');
                 break;
             case 2:
-                $this->setAffectationCouleur( '#F8B038' );
-                $this->setAffectationFontColor( '#000000' );
+                $this->setAffectationCouleur(self::colorEncours);
+                $this->setAffectationFontColor('#000000');
                 break;
             case 3:
-                $this->setAffectationCouleur( '#0F6837' );
-                $this->setAffectationFontColor( '#FFFFFF' );
-                break;            
+                $this->setAffectationCouleur(self::colorTermine);
+                $this->setAffectationFontColor('#FFFFFF');
+                break;
         endswitch;
     }
-    
+
     function nextStep() {
-        switch( $this->getAffectationEtat() ):
+        switch ($this->getAffectationEtat()):
             case 1:
                 $this->setAffectationEtat(2);
                 break;
@@ -71,13 +103,25 @@ class Affectation {
         endswitch;
         $this->colorier();
     }
- 
+
     function getAffectationId() {
         return $this->affectationId;
     }
 
     function getAffectationDossierId() {
         return $this->affectationDossierId;
+    }
+
+    function getAffectationDossier() {
+        return $this->affectationDossier;
+    }
+
+    function getAffectationAffaireId() {
+        return $this->affectationAffaireId;
+    }
+
+    function getAffectationAffaire() {
+        return $this->affectationAffaire;
     }
 
     function getAffectationType() {
@@ -92,12 +136,48 @@ class Affectation {
         return $this->affectationEquipeId;
     }
 
+    function getAffectationEquipe() {
+        return $this->affectationEquipe;
+    }
+
+    function getAffectationIntervenant() {
+        return $this->affectationIntervenant;
+    }
+
     function getAffectationPosition() {
         return $this->affectationPosition;
     }
 
+    function getAffectationCommentaire() {
+        return $this->affectationCommentaire;
+    }
+
     function getAffectationEtat() {
         return $this->affectationEtat;
+    }
+
+    function getAffectationParentClos() {
+        return $this->affectationParentClos;
+    }
+
+    function getAffectationClient() {
+        return $this->affectationClient;
+    }
+
+    function getAffectationDescriptif() {
+        return $this->affectationDescriptif;
+    }
+
+    function getAffectationCouleur() {
+        return $this->affectationCouleur;
+    }
+
+    function getAffectationFontColor() {
+        return $this->affectationFontColor;
+    }
+
+    function getAffectationDossierClos() {
+        return $this->affectationDossierClos;
     }
 
     function setAffectationId($affectationId) {
@@ -106,6 +186,18 @@ class Affectation {
 
     function setAffectationDossierId($affectationDossierId) {
         $this->affectationDossierId = $affectationDossierId;
+    }
+
+    function setAffectationDossier($affectationDossier) {
+        $this->affectationDossier = $affectationDossier;
+    }
+
+    function setAffectationAffaireId($affectationAffaireId) {
+        $this->affectationAffaireId = $affectationAffaireId;
+    }
+
+    function setAffectationAffaire($affectationAffaire) {
+        $this->affectationAffaire = $affectationAffaire;
     }
 
     function setAffectationType($affectationType) {
@@ -120,33 +212,28 @@ class Affectation {
         $this->affectationEquipeId = $affectationEquipeId;
     }
 
+    function setAffectationEquipe($affectationEquipe) {
+        $this->affectationEquipe = $affectationEquipe;
+    }
+
+    function setAffectationIntervenant($affectationIntervenant) {
+        $this->affectationIntervenant = $affectationIntervenant;
+    }
+
     function setAffectationPosition($affectationPosition) {
         $this->affectationPosition = $affectationPosition;
+    }
+
+    function setAffectationCommentaire($affectationCommentaire) {
+        $this->affectationCommentaire = $affectationCommentaire;
     }
 
     function setAffectationEtat($affectationEtat) {
         $this->affectationEtat = $affectationEtat;
     }
-    function getAffectationEquipe() {
-        return $this->affectationEquipe;
-    }
 
-    function setAffectationEquipe($affectationEquipe) {
-        $this->affectationEquipe = $affectationEquipe;
-    }
-    function getAffectationCouleur() {
-        return $this->affectationCouleur;
-    }
-
-    function setAffectationCouleur($affectationCouleur) {
-        $this->affectationCouleur = $affectationCouleur;
-    }
-    function getAffectationClient() {
-        return $this->affectationClient;
-    }
-
-    function getAffectationDescriptif() {
-        return $this->affectationDescriptif;
+    function setAffectationParentClos($affectationParentClos) {
+        $this->affectationParentClos = $affectationParentClos;
     }
 
     function setAffectationClient($affectationClient) {
@@ -156,34 +243,17 @@ class Affectation {
     function setAffectationDescriptif($affectationDescriptif) {
         $this->affectationDescriptif = $affectationDescriptif;
     }
-    function getAffectationCommentaire() {
-        return $this->affectationCommentaire;
-    }
 
-    function setAffectationCommentaire($affectationCommentaire) {
-        $this->affectationCommentaire = $affectationCommentaire;
-    }    
-    function getAffectationDossierClos() {
-        return $this->affectationDossierClos;
-    }
-
-    function setAffectationDossierClos($affectationDossierClos) {
-        $this->affectationDossierClos = $affectationDossierClos;
-    }
-    function getAffectationIntervenant() {
-        return $this->affectationIntervenant;
-    }
-
-    function setAffectationIntervenant($affectationIntervenant) {
-        $this->affectationIntervenant = $affectationIntervenant;
-    }
-    function getAffectationFontColor() {
-        return $this->affectationFontColor;
+    function setAffectationCouleur($affectationCouleur) {
+        $this->affectationCouleur = $affectationCouleur;
     }
 
     function setAffectationFontColor($affectationFontColor) {
         $this->affectationFontColor = $affectationFontColor;
     }
 
+    function setAffectationDossierClos($affectationDossierClos) {
+        $this->affectationDossierClos = $affectationDossierClos;
+    }
 
 }

@@ -34,6 +34,7 @@ class Affaire {
     protected $affaireFabrication;
     protected $affairePose;
     protected $affaireCloture;
+    protected $affaireAffectations;
 
     public function __construct(array $valeurs = []) {
         /* Si on passe des valeurs, on hydrate l'objet */
@@ -64,6 +65,11 @@ class Affaire {
         $this->affaireClientsIds = $ids;
     }
 
+    public function hydrateAffectations() {
+        $CI = & get_instance();
+        $this->affaireAffectations = $CI->managerAffectations->liste(array('affectationAffaireId' => $this->affaireId));
+    }
+
     public function hydrateReglements() {
         $CI = & get_instance();
         $this->affaireReglements = $CI->managerReglements->liste(array('reglementAffaireId' => $this->affaireId, 'reglementUtile' => 1));
@@ -72,6 +78,14 @@ class Affaire {
     public function hydrateFactures() {
         $CI = & get_instance();
         $this->affaireFactures = $CI->managerFactures->liste(array('factureAffaireId' => $this->affaireId));
+    }
+
+    function getAffaireAffectations() {
+        return $this->affaireAffectations;
+    }
+
+    function setAffaireAffectations($affaireAffectations) {
+        $this->affaireAffectations = $affaireAffectations;
     }
 
     function getAffaireId() {

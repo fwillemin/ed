@@ -25,10 +25,10 @@
                     if (!empty($recurrents)):
                         foreach ($recurrents as $r):
                             ?>
-                            <tr style="position:relative;" data-recurrentid="<?php echo $r->getRecurrentId(); ?>" >
-                                <td><?php echo $r->getRecurrentCritere(); ?></td>
-                                <td><?php echo $r->getRecurrentEquipe(); ?></td>
-                                <td><?php echo $r->getRecurrentCommentaire(); ?></td>
+                            <tr style="position:relative;" data-recurrentid="<?= $r->getRecurrentId(); ?>" >
+                                <td><?= $r->getRecurrentCritere(); ?></td>
+                                <td><?= $r->getRecurrentEquipe(); ?></td>
+                                <td><?= $r->getRecurrentCommentaire(); ?></td>
                                 <td class="recurrentActions" style="text-align: center; font-size:13px;">
                                     <i class="glyphicon glyphicon-pencil btnModRecurrent" style="padding-right: 10px; cursor: pointer"></i>
                                 </td>
@@ -47,4 +47,4 @@
     </div>
 
 </div>
-<?php include('forms.php'); ?>
+<?php include('application/views/forms.php'); ?>

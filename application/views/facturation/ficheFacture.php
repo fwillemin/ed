@@ -55,7 +55,13 @@
                             </td>
                         </tr>
                     </table>
-                    Echéance de Paiement accordée :<br><strong><?= $facture->getFactureEcheanceTexte(); ?></strong>
+                    Echéance de Paiement accordée :<br>
+                    <select id="modFactureEcheancePaiement" class="form-control" data-factureid="<?= $facture->getFactureId(); ?>">
+                        <option value="1" <?= $facture->getFactureEcheanceId() == 1 ? 'selected' : ''; ?> >A récéption de facture</option>
+                        <option value="4" <?= $facture->getFactureEcheanceId() == 4 ? 'selected' : ''; ?>>A récéption de facture - Escompte 3%</option>
+                        <option value="2" <?= $facture->getFactureEcheanceId() == 2 ? 'selected' : ''; ?>>A 30 jours</option>
+                        <option value="3" <?= $facture->getFactureEcheanceId() == 3 ? 'selected' : ''; ?>>A 45 jours</option>
+                    </select>
                     <br>Date de paiement : <?= date('d/m/y', $facture->getFactureEcheanceDate()); ?>
                 </div>
                 <div class = "col-xs-12 col-sm-8">

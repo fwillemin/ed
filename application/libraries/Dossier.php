@@ -8,12 +8,13 @@
  *
  * @author Xanthellis - WILLEMIN François - http://www.xanthellis.com
  */
+/* Supprimer le champs dossierDateSortie */
+
 class Dossier {
 
     protected $dossierId;
     protected $dossierClient;
     protected $dossierDescriptif;
-    protected $dossierDateSortie;
     protected $dossierSortieEtat; /* 1 = Attente, 2 = Fait */
     protected $dossierPao;
     protected $dossierFab;
@@ -33,27 +34,37 @@ class Dossier {
             if (method_exists($this, $method))
                 $this->$method($value);
         endforeach;
-        $CI = & get_instance();
-        $this->setDossierAffectations($CI->managerAffectations->liste(array('affectationDossierId' => $this->getDossierId())));
     }
 
-    function nextStepSortie() {
-        switch ($this->getDossierSortieEtat()):
-            case 1:
-                $this->setDossierSortieEtat(2);
-                break;
-            case 2:
-                $this->setDossierSortieEtat(1);
-                break;
-        endswitch;
+    function hydrateAffectations() {
+        $CI = & get_instance();
+        $this->dossierAffectations = $CI->managerAffectations->liste(array('affectationDossierId' => $this->dossierId));
     }
 
     function cloture() {
-        $this->setDossierClos(1);
+        $CI = & get_instance();
+        $this->dossierClos = 1;
+        $this->hydrateAffectations();
+        foreach ($this->dossierAffectations as $a):
+            $a->setAffectationEtat(3);
+            $CI->managerAffectations->editer($a);
+        endforeach;
     }
 
     function ouverture() {
-        $this->setDossierClos(0);
+        $CI = & get_instance();
+        $this->dossierClos = 0;
+    }
+
+    function nextStepSortie() {
+        switch ($this->dossierSortieEtat):
+            case 1:
+                $this->dossierSortieEtat = 2;
+                break;
+            case 2:
+                $this->dossierSortieEtat = 1;
+                break;
+        endswitch;
     }
 
     function getDossierId() {
@@ -68,8 +79,12 @@ class Dossier {
         return $this->dossierDescriptif;
     }
 
-    function getDossierDateSortie() {
-        return $this->dossierDateSortie;
+    function getDossierSortieEtat() {
+        return $this->dossierSortieEtat;
+    }
+
+    function getDossierPao() {
+        return $this->dossierPao;
     }
 
     function getDossierFab() {
@@ -84,6 +99,10 @@ class Dossier {
         return $this->dossierClos;
     }
 
+    function getDossierAffectations() {
+        return $this->dossierAffectations;
+    }
+
     function setDossierId($dossierId) {
         $this->dossierId = $dossierId;
     }
@@ -96,8 +115,12 @@ class Dossier {
         $this->dossierDescriptif = $dossierDescriptif;
     }
 
-    function setDossierDateSortie($dossierDateSortie) {
-        $this->dossierDateSortie = $dossierDateSortie;
+    function setDossierSortieEtat($dossierSortieEtat) {
+        $this->dossierSortieEtat = $dossierSortieEtat;
+    }
+
+    function setDossierPao($dossierPao) {
+        $this->dossierPao = $dossierPao;
     }
 
     function setDossierFab($dossierFab) {
@@ -112,28 +135,8 @@ class Dossier {
         $this->dossierClos = $dossierClos;
     }
 
-    function getDossierAffectations() {
-        return $this->dossierAffectation;
-    }
-
-    function setDossierAffectations($dossierAffectation) {
-        $this->dossierAffectation = $dossierAffectation;
-    }
-
-    function getDossierSortieEtat() {
-        return $this->dossierSortieEtat;
-    }
-
-    function setDossierSortieEtat($dossierSortieEtat) {
-        $this->dossierSortieEtat = $dossierSortieEtat;
-    }
-
-    function getDossierPao() {
-        return $this->dossierPao;
-    }
-
-    function setDossierPao($dossierPao) {
-        $this->dossierPao = $dossierPao;
+    function setDossierAffectations($dossierAffectations) {
+        $this->dossierAffectations = $dossierAffectations;
     }
 
 }
