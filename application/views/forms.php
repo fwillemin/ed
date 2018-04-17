@@ -117,13 +117,13 @@
                     <div class="form-group">
                         <label for="addAffectAffaireId" class="col-xs-3">Affaire</label>
                         <div class="col-xs-9 col-sm-6">
-                            <select class="form-control" name="addAffectAffaireId" id="addAffectAffaireId">
+                            <select class="selectpicker" name="addAffectAffaireId" id="addAffectAffaireId" data-live-search="true">
                                 <option value="0" selected>Choisir une affaire</option>
                                 <?php
                                 if (!empty($affaires)):
                                     foreach ($affaires as $a):
                                         if ($a->getAffaireCloture() == 0):
-                                            echo '<option value="' . $a->getAffaireId() . '">' . $a->getAffaireClients()[0]->getClientRaisonSociale() . '</option>';
+                                            echo '<option value="' . $a->getAffaireId() . '"  data-subtext="' . character_limiter($a->getAffaireObjet(), 50) . '">' . $a->getAffaireClients()[0]->getClientRaisonSociale() . '</option>';
                                         endif;
                                     endforeach;
                                 endif;
@@ -131,17 +131,6 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="addAffectType" class="col-xs-3">Type</label>
-                        <div class="col-xs-9 col-sm-6">
-                            <select class="form-control" name="addAffectType" id="addAffectType">
-                                <option value="3">Pao</option>
-                                <option value="1">Fabrication</option>
-                                <option value="2">Pose</option>
-                            </select>
-                        </div>
-                    </div>
-
                     <div class="form-group">
                         <label for="addAffectDate" class="col-xs-3">Date</label>
                         <div class="col-xs-9 col-sm-5">
@@ -158,16 +147,13 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="addAffectEquipeId" class="col-xs-3">Equipe</label>
-                        <div class="col-xs-9 col-sm-5">
-                            <select name="addAffectEquipeId" id="addAffectEquipeId" class="form-control" >
-                                <?php
-                                if (!empty($equipes)):
-                                    foreach ($equipes as $e):
-                                        echo '<option value="' . $e->getEquipeId() . '">' . $e->getEquipeNom() . '</option>';
-                                    endforeach;
-                                endif;
-                                ?>
+                        <label for="addAffectType" class="col-xs-3">Type</label>
+                        <div class="col-xs-9 col-sm-6">
+                            <select class="form-control" name="addAffectType" id="addAffectType">
+                                <option value="3">Pao</option>
+                                <option value="1">Fabrication</option>
+                                <option value="2">Pose</option>
+                                <option value="4">Depannage</option>
                             </select>
                         </div>
                     </div>
@@ -222,15 +208,13 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="addRecurrentEquipeId" class="col-xs-3">Equipe</label>
+                    <label for="addRecurrentType" class="col-xs-3">Poste</label>
                     <div class="col-xs-9 col-sm-5">
-                        <select name="addRecurrentEquipeId" id="addRecurrentEquipeId" class="form-control" >
+                        <select name="addRecurrentType" id="addRecurrentType" class="form-control" >
                             <?php
-                            if (!empty($equipes)):
-                                foreach ($equipes as $e):
-                                    echo '<option value="' . $e->getEquipeId() . '">' . $e->getEquipeNom() . '</option>';
-                                endforeach;
-                            endif;
+                            foreach ($postes as $id => $poste):
+                                echo '<option value="' . $id . '">' . $poste . '</option>';
+                            endforeach;
                             ?>
                         </select>
                     </div>

@@ -92,7 +92,7 @@
                 <div class="col-sm-3 avancement <?= $commandeEtat; ?>" >
                     <?php if ($affaire && $affaire->getAffaireCommandeId()): ?>
 
-                        <a href="<?= site_url('documents/ficheAtelier/' . $affaire->getAffaireId()); ?>" target="_blank" style="color: inherit; cursor: pointer">
+                        <a href="<?= site_url('documents/editionFicheAtelier/' . $affaire->getAffaireId()); ?>" target="_blank" style="color: inherit; cursor: pointer">
                             <i class="fas fa-file-pdf"></i> Fiche Atelier
                         </a>
 
@@ -105,13 +105,14 @@
 
                     if ($affaire && $affaire->getAffaireCommandeDate()):
                         ?>
-                        <button class="btnInvisible" style="position: absolute; top:0px; left: 25px; color: #FFF;"
+                        <button class="btnInvisible" style="position: absolute; top:0px; left: 23px; color: #FFF;"
                                 data-toggle="popover" data-trigger="click"
                                 title="<span style='color: black; font-weight: bold;'>Modifier date commande</span>" data-html="true" data-placement="bottom"
-                                data-content='<form id="formModCommandeDate" method="POST" action="<?= site_url('affaires/modifierDateCommande'); ?>">
+                                data-content='<form id="formModCommande" method="POST" action="<?= site_url('affaires/modifierCommande'); ?>">
                                 <input type="hidden" name="affaireId" value="<?= $affaire->getAffaireId(); ?>">
-                                <input class="form-control" type="date" name="modDate" value="<?= date('Y-m-d', $affaire->getAffaireCommandeDate()); ?>" >
-                                <button class="btn btn-xs btn-primary" style="width: 100%;">Modifier</button>
+                                <input class="form-control" type="date" name="modCommandeDate" value="<?= date('Y-m-d', $affaire->getAffaireCommandeDate()); ?>" >
+                                <div class="input-group"><span class="input-group-addon">Certifiée</span><input type="checkbox" name="modCommandeCertifiee" value="1" <?= $affaire->getAffaireCommandeCertifiee() ? 'checked' : ''; ?> ></div>
+                                <button class="btn btn-sm btn-primary" style="width: 100%;">Modifier</button>
                                 </form>' ><i class="fas fa-cog"></i></button>
                             <?php endif; ?>
                 </div>
@@ -489,7 +490,7 @@
     </div>
 
     <?php
-    if (!empty($affaire->getAffaireAffectations())):
+    if ($affaire && !empty($affaire->getAffaireAffectations())):
         ?>
         <div class="row">
             <div class="col-xs-12 col-sm-10 col-sm-offset-1">

@@ -7,9 +7,10 @@
  * @author Xanthellis - WILLEMIN François - http://www.xanthellis.com
  */
 /*
-  ALTER TABLE `factures` ADD `factureType` TINYINT(1) NOT NULL COMMENT '1 = Prestation; 2 = Marchandises' AFTER `factureDate`;
-  ALTER TABLE `factures` DROP `factureAbandon`;
-  ALTER TABLE `factures` ADD `factureEcheanceId` TINYINT NOT NULL DEFAULT '1' AFTER `factureModeReglement`, ADD `factureEcheanceDate` INT NOT NULL AFTER `factureEcheanceId`;
+  ALTER TABLE `avoirlignes` ADD `avoirLigneMarge` DECIMAL(10,2) NULL AFTER `avoirLigneTauxTVA`;
+  ALTER TABLE `avoirs` ADD `avoirMarge` DECIMAL(10,2) NULL AFTER `avoirTotalTTC`;
+  ALTER TABLE `facturelignes` ADD `factureLigneMarge` DECIMAL(10,2) NULL AFTER `factureLigneQuota`;
+  ALTER TABLE `factures` ADD `factureMarge` DECIMAL(10,2) NULL AFTER `factureEnvoyee`;
  */
 class Facture {
 
@@ -30,6 +31,7 @@ class Facture {
     protected $factureEcheanceTexte;
     protected $factureEcheanceDate;
     protected $factureEnvoyee;
+    protected $factureMarge;
     protected $factureLignes;
     protected $factureModeReglement;
     protected $factureModeReglementText;
@@ -299,6 +301,14 @@ class Facture {
 
     function setFactureEcheanceTexte($factureEcheanceTexte) {
         $this->factureEcheanceTexte = $factureEcheanceTexte;
+    }
+
+    function getFactureMarge() {
+        return $this->factureMarge;
+    }
+
+    function setFactureMarge($factureMarge) {
+        $this->factureMarge = $factureMarge;
     }
 
 }

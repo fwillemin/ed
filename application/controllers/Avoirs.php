@@ -55,6 +55,7 @@ class Avoirs extends My_Controller {
                         'description' => $l->getFactureLigneDescription(),
                         'qty' => 0,
                         'price' => round($l->getFactureLigneTarif() * (100 - $l->getFactureLigneRemise()) / 100, 2),
+                        'marge' => $l->getFactureLigneMarge(),
                         'options' => array(
                             'qteVendue' => $l->getFactureLigneQte(),
                             'prixUnitaire' => $l->getFactureLigneTarif(),
@@ -179,18 +180,20 @@ class Avoirs extends My_Controller {
 
         /* on ajoute les lignes de l'avoir */
         $avoirTotalHT = 0;
+        $avoirMarge = 0;
 
         foreach ($this->cart->contents() as $item) :
             if ($item['qty'] > 0 && $item['price'] > 0):
                 $ligne = $this->saveNewLigneAvoir($item, $avoir->getAvoirId());
                 $avoirTotalHT += $ligne->getAvoirLigneTotalHT();
+                $avoirMarge += $ligne->getAvoirLigneQte() * $ligne->getAvoirLigneMarge();
             endif;
         endforeach;
 
         /* mise à jour du total de la facture */
         $avoir->setAvoirTotalHT($avoirTotalHT);
         $avoir->setAvoirTotalTTC($avoirTotalHT + $tva);
-
+        $avoir->setAvoirMarge($avoirMarge);
         $this->managerAvoirs->editer($avoir);
 
         $facture->hydrateAvoirs();
@@ -221,7 +224,8 @@ class Avoirs extends My_Controller {
             'avoirLigneQte' => $item['qty'],
             'avoirLignePrixUnitaire' => $item['price'],
             'avoirLigneTotalHT' => $ligneTotalHT,
-            'avoirLigneTauxTVA' => $item['options']['tauxTVA']
+            'avoirLigneTauxTVA' => $item['options']['tauxTVA'],
+            'avoirLigneMarge' => $item['marge']
         );
 
         $newLigne = new Avoirligne($dataLigne);

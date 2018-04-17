@@ -23,6 +23,7 @@
                         <th data-align="center" data-width="160">Pao</th>
                         <th data-align="center" data-width="160">Fabrication</th>
                         <th data-align="center" data-width="160">Pose</th>
+                        <th data-align="center" data-width="30"><i class="fas fa-exclamation-triangle"></i></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -31,8 +32,9 @@
                     if (!empty($dossiers)):
                         echo '<tr><td colspan="6"><div style="width: 100%; background-color: steelblue; color: #FFF; padding : 10px;font-size: 18px; font-weight: bold;">Dossiers - Planifications hors affaires</div></td></tr>';
                         foreach ($dossiers as $d):
+                            $aJourDePlanification = true;
                             ?>
-                            <tr style="position:relative;" data-dossierid="<?= $d->getDossierId(); ?>">
+                            <tr style="position:relative;" data-dossierid="<?= $d->getDossierId(); ?>" data-source="planif" data-client="<?= $d->getDossierClient(); ?>" data-objet="<?= $d->getDossierDescriptif(); ?>">
 
                                 <td style="text-align: center; font-size:13px; color:grey;">
 
@@ -50,7 +52,7 @@
                                     <br><?= $d->getDossierDescriptif(); ?>
                                 </td>
 
-                                <td <?php if ($d->getDossierPao() == 0) echo 'class="hachures"'; ?> >
+                                <td>
                                     <?php
                                     $nbPao = 0;
                                     if (!empty($d->getDossierAffectations())):
@@ -60,7 +62,7 @@
                                                 <div class="progHebdo" data-affectid="<?= $a->getAffectationId(); ?>" style="background-color: <?= $a->getAffectationCouleur(); ?>; position:relative;">
                                                     <div class="btnModAffect" style="width:100%; padding: 7px; color: <?= $a->getAffectationFontColor(); ?>" data-client="<?= $d->getDossierClient(); ?>" data-objet="<?= $d->getDossierDescriptif(); ?>">
                                                         <?php
-                                                        echo date('d/m/y', $a->getAffectationDate()) . ' - <strong>' . $a->getAffectationEquipe() . '</strong>';
+                                                        echo date('d/m/y', $a->getAffectationDate());
                                                         ?>
                                                     </div>
                                                     <div class="intervenant">
@@ -74,12 +76,15 @@
                                     endif;
 
                                     if ($d->getDossierPao()):
+                                        if ($nbPao == 0):
+                                            $aJourDePlanification = false;
+                                        endif;
                                         ?>
                                         <button class="btn btn-sm btn-link btnAddAffectation" data-type="3" style="font-size:15px; color: #9999ff; padding:2px; text-align: center; width:100%;"><i class="fas fa-plus-circle"></i></button>
                                     <?php endif;
                                     ?>
                                 </td>
-                                <td <?php if ($d->getDossierFab() == 0) echo 'class="hachures"'; ?> >
+                                <td>
                                     <?php
                                     $nbFab = 0;
                                     if (!empty($d->getDossierAffectations())):
@@ -88,7 +93,7 @@
                                                 ?>
                                                 <div class="progHebdo" data-affectid="<?= $a->getAffectationId(); ?>" style="background-color: <?= $a->getAffectationCouleur(); ?>; position:relative;">
                                                     <div class="btnModAffect" style="width:100%; padding: 7px; color: <?= $a->getAffectationFontColor(); ?>" data-client="<?= $d->getDossierClient(); ?>" data-objet="<?= $d->getDossierDescriptif(); ?>">
-                                                        <?= date('d/m/y', $a->getAffectationDate()) . ' - <strong>' . $a->getAffectationEquipe() . '</strong>'; ?>
+                                                        <?= date('d/m/y', $a->getAffectationDate()); ?>
                                                     </div>
                                                     <div class="intervenant">
                                                         <?= $a->getAffectationIntervenant() ?: '-'; ?>
@@ -101,12 +106,15 @@
                                     endif;
 
                                     if ($d->getDossierFab()):
+                                        if ($nbFab == 0):
+                                            $aJourDePlanification = false;
+                                        endif;
                                         ?>
                                         <button class="btn btn-sm btn-link btnAddAffectation" data-type="1" style="font-size:15px; color: #9999ff; padding:2px; text-align: center; width:100%;"><i class="fas fa-plus-circle"></i></button>
                                     <?php endif;
                                     ?>
                                 </td>
-                                <td <?php if ($d->getDossierPose() == 0) echo 'class="hachures"'; ?> >
+                                <td>
                                     <?php
                                     $nbPose = 0;
                                     if (!empty($d->getDossierAffectations())):
@@ -116,7 +124,7 @@
                                                 <div class="progHebdo" data-affectid="<?= $a->getAffectationId(); ?>" style="background-color: <?= $a->getAffectationCouleur(); ?>">
                                                     <div class="btnModAffect" style="width:100%; padding: 7px; color: <?= $a->getAffectationFontColor(); ?>" data-client="<?= $d->getDossierClient(); ?>" data-objet="<?= $d->getDossierDescriptif(); ?>">
                                                         <?php
-                                                        echo date('d/m/y', $a->getAffectationDate()) . ' - <strong>' . $a->getAffectationEquipe() . '</strong>';
+                                                        echo date('d/m/y', $a->getAffectationDate());
                                                         ?>
                                                     </div>
                                                     <div class="intervenant">
@@ -130,12 +138,21 @@
                                     endif;
 
                                     if ($d->getDossierPose()):
+                                        if ($nbPose == 0):
+                                            $aJourDePlanification = false;
+                                        endif;
                                         ?>
                                         <button class="btn btn-sm btn-link btnAddAffectation" data-type="2" style="font-size:15px; color: #9999ff; padding:2px; text-align: center; width:100%;"><i class="fas fa-plus-circle"></i></button>
                                     <?php endif;
                                     ?>
                                 </td>
-
+                                <td>
+                                    <?php
+                                    if (!$aJourDePlanification):
+                                        echo '<i class="fas fa-exclamation-triangle" style="color: orangered; font-size:20px;"></i>';
+                                    endif;
+                                    ?>
+                                </td>
                             </tr>
                             <?php
                         endforeach;
@@ -146,9 +163,9 @@
                     if (!empty($affaires)):
                         echo '<tr><td colspan="6"><div style="width: 100%; background-color: steelblue; color: #FFF; padding : 10px;font-size: 18px; font-weight: bold;">Affaires en cours</div></td></tr>';
                         foreach ($affaires as $affaire):
-                            //log_message('error', __CLASS__ . '/' . __FUNCTION__ . ' => ' . print_r($affaire, 1));
+                            $aJourDePlanification = true;
                             ?>
-                            <tr style="position:relative;" data-affaireid="<?= $affaire->getAffaireId(); ?>">
+                            <tr style="position:relative;" data-source="planif" data-affaireid="<?= $affaire->getAffaireId(); ?>" data-client="<?= $affaire->getAffaireClients()[0]->getClientRaisonSociale(); ?>" data-objet="<?= $affaire->getAffaireObjet(); ?>">
 
                                 <td style="text-align: center; font-size:13px; color:grey;">
                                     <a href="<?= site_url('ventes/reloadAffaire/' . $affaire->getAffaireId()); ?>">
@@ -157,7 +174,12 @@
                                 </td>
                                 <td>
                                     <span style="font-weight: bold; font-size:15px;"><?= $affaire->getAffaireClients()[0]->getClientRaisonSociale(); ?></span>
-                                    <br><?= $affaire->getAffaireObjet(); ?>
+                                    <br><?=
+                                    $affaire->getAffaireObjet();
+                                    if ($affaire->getAffaireCommandeCertifiee()):
+                                        echo '<img src="' . base_url('assets/img/certifieNB.jpg') . '" style="height: 40px;" class="pull-right">';
+                                    endif;
+                                    ?>
                                 </td>
                                 <td <?php if ($affaire->getAffairePao() == 0) echo 'class="hachures"'; ?> >
                                     <?php
@@ -167,9 +189,9 @@
                                             if ($a->getAffectationType() == 3) :
                                                 ?>
                                                 <div class="progHebdo" data-affectid="<?= $a->getAffectationId(); ?>" style="background-color: <?= $a->getAffectationCouleur(); ?>; position:relative;">
-                                                    <div class="btnModAffect" style="width:100%; padding: 7px; color: <?= $a->getAffectationFontColor(); ?>" data-client="<?= $a->getAffaireClients()[0]->getClientRaisonSociale(); ?>"  data-objet="<?= $a->getAffaireObjet(); ?>">
+                                                    <div class="btnModAffect" style="width:100%; padding: 7px; color: <?= $a->getAffectationFontColor(); ?>" data-client="<?= $affaire->getAffaireClients()[0]->getClientRaisonSociale(); ?>"  data-objet="<?= $affaire->getAffaireObjet(); ?>">
                                                         <?php
-                                                        echo date('d/m/y', $a->getAffectationDate()) . ' - <strong>' . $a->getAffectationEquipe() . '</strong>';
+                                                        echo date('d/m/y', $a->getAffectationDate());
                                                         ?>
                                                     </div>
                                                     <div class="intervenant">
@@ -183,6 +205,9 @@
                                     endif;
 
                                     if ($affaire->getAffairePao()):
+                                        if ($nbPao == 0):
+                                            $aJourDePlanification = false;
+                                        endif;
                                         ?>
                                         <button class="btn btn-sm btn-link btnAddAffectation" data-type="3" style="font-size:15px; color:#9999ff; padding:2px; text-align: center; width:100%;"><i class="fas fa-plus-circle"></i></button>
                                     <?php endif;
@@ -197,7 +222,7 @@
                                                 ?>
                                                 <div class="progHebdo" data-affectid="<?= $a->getAffectationId(); ?>" style="background-color: <?= $a->getAffectationCouleur(); ?>; position:relative;">
                                                     <div class="btnModAffect" style="width:100%; padding: 7px; color: <?= $a->getAffectationFontColor(); ?>" data-client="<?= $affaire->getAffaireClients()[0]->getClientRaisonSociale(); ?>"  data-objet="<?= $affaire->getAffaireObjet(); ?>">
-                                                        <?= date('d/m/y', $a->getAffectationDate()) . ' - <strong>' . $a->getAffectationEquipe() . '</strong>'; ?>
+                                                        <?= date('d/m/y', $a->getAffectationDate()); ?>
                                                     </div>
                                                     <div class="intervenant">
                                                         <?= $a->getAffectationIntervenant(); ?>
@@ -210,6 +235,9 @@
                                     endif;
 
                                     if ($affaire->getAffaireFabrication()):
+                                        if ($nbFab == 0):
+                                            $aJourDePlanification = false;
+                                        endif;
                                         ?>
                                         <button class="btn btn-sm btn-link btnAddAffectation" data-type="1" style="font-size:15px; color:#9999ff; padding:2px; text-align: center; width:100%;"><i class="fas fa-plus-circle"></i></button>
                                     <?php endif;
@@ -225,7 +253,7 @@
                                                 <div class="progHebdo" data-affectid="<?= $a->getAffectationId(); ?>" style="background-color: <?= $a->getAffectationCouleur(); ?>">
                                                     <div class="btnModAffect" style="width:100%; padding: 7px; color: <?= $a->getAffectationFontColor(); ?>" data-client="<?= $affaire->getAffaireClients()[0]->getClientRaisonSociale(); ?>"  data-objet="<?= $affaire->getAffaireObjet(); ?>">
                                                         <?php
-                                                        echo date('d/m/y', $a->getAffectationDate()) . ' - <strong>' . $a->getAffectationEquipe() . '</strong>';
+                                                        echo date('d/m/y', $a->getAffectationDate());
                                                         ?>
                                                     </div>
                                                     <div class="intervenant">
@@ -239,12 +267,21 @@
                                     endif;
 
                                     if ($affaire->getAffairePose()):
+                                        if ($nbPose == 0):
+                                            $aJourDePlanification = false;
+                                        endif;
                                         ?>
                                         <button class="btn btn-sm btn-link btnAddAffectation" data-type="2" style="font-size:15px; color:#9999ff; padding:2px; text-align: center; width:100%;"><i class="fas fa-plus-circle"></i></button>
                                         <?php endif;
                                         ?>
                                 </td>
-
+                                <td>
+                                    <?php
+                                    if (!$aJourDePlanification):
+                                        echo '<i class="fas fa-exclamation-triangle" style="color: orangered; font-size:20px;"></i>';
+                                    endif;
+                                    ?>
+                                </td>
                             </tr>
                             <?php
                         endforeach;

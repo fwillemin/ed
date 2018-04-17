@@ -48,7 +48,7 @@
 
                         <table class="table table-bordered">
                             <thead>
-                            <th style="width:10%;">Equipes</th>
+                            <th style="width:10%;">Postes</th>
                                 <?php
                                 for ($i = 0; $i < 5; $i++):
                                     $timeJourEncours = $premierJourSemaine + $i * 86400;
@@ -58,26 +58,24 @@
                             </thead>
                             <tbody>
                                 <?php
-                                if (!empty($equipes)):
-                                    foreach ($equipes as $e):
-                                        echo '<tr><td>' . $e->getEquipeNom() . '</td>';
-                                        for ($j = 0; $j < 5; $j++):
-                                            echo '<td style="width:18%;" class="jour organisable" id="' . $e->getEquipeId() . '-' . date('d', $premierJourSemaine + $j * 86400) . '" data-equipeid="' . $e->getEquipeId() . '" data-date="' . date('Y-m-d', $premierJourSemaine + $j * 86400) . '">';
-                                            if (!empty($divs[$e->getEquipeId() . '-' . date('d', $premierJourSemaine + $j * 86400)])):
+                                foreach ($postes as $id => $poste):
+                                    echo '<tr><td>' . $poste . '</td>';
+                                    for ($j = 0; $j < 5; $j++):
+                                        echo '<td style="width:18%;" class="jour organisable" id="' . $id . '-' . date('d', $premierJourSemaine + $j * 86400) . '" data-equipeid="' . $id . '" data-date="' . date('Y-m-d', $premierJourSemaine + $j * 86400) . '">';
+                                        if (!empty($divs[$id . '-' . date('d', $premierJourSemaine + $j * 86400)])):
 
-                                                foreach ($divs[$e->getEquipeId() . '-' . date('d', $premierJourSemaine + $j * 86400)] as $key => $value):
+                                            foreach ($divs[$id . '-' . date('d', $premierJourSemaine + $j * 86400)] as $key => $value):
 
-                                                    echo $value;
+                                                echo $value;
 
-                                                endforeach;
+                                            endforeach;
 
-                                            endif;
+                                        endif;
 
-                                            echo '</td>';
-                                        endfor;
-                                        echo '</tr>';
-                                    endforeach;
-                                endif;
+                                        echo '</td>';
+                                    endfor;
+                                    echo '</tr>';
+                                endforeach;
                                 ?>
 
                             </tbody>

@@ -16,7 +16,7 @@ class Model_recurrents extends MY_model {
     public function ajouter(Recurrent $recurrent) {
         $this->db
                 ->set('recurrentCritere', $recurrent->getRecurrentCritere())
-                ->set('recurrentEquipeId', $recurrent->getRecurrentEquipeId())
+                ->set('recurrentType', $recurrent->getRecurrentType())
                 ->set('recurrentCommentaire', $recurrent->getRecurrentCommentaire())
                 ->insert($this->table);
         $recurrent->setRecurrentId($this->db->insert_id());
@@ -30,7 +30,7 @@ class Model_recurrents extends MY_model {
     public function editer(Recurrent $recurrent) {
         $this->db
                 ->set('recurrentCritere', $recurrent->getRecurrentCritere())
-                ->set('recurrentEquipeId', $recurrent->getRecurrentEquipeId())
+                ->set('recurrentType', $recurrent->getRecurrentType())
                 ->set('recurrentCommentaire', $recurrent->getRecurrentCommentaire())
                 ->where('recurrentId', $recurrent->getRecurrentId())
                 ->update($this->table);
@@ -56,9 +56,8 @@ class Model_recurrents extends MY_model {
      * @return array Liste d'objets de la classe Recurrent
      */
     public function liste($where = array(), $tri = 'recurrentId ASC', $type = 'object') {
-        $query = $this->db->select('*, equipeNom AS recurrentEquipe')
-                ->from('recurrents r')
-                ->join('equipes e', 'e.equipeId = r.recurrentEquipeId', 'left')
+        $query = $this->db->select('*')
+                ->from('recurrents')
                 ->where($where)
                 ->order_by($tri)
                 ->get();
@@ -71,9 +70,8 @@ class Model_recurrents extends MY_model {
      * @return \Recurrent|boolean
      */
     public function getRecurrentById($recurrentId, $type = 'object') {
-        $query = $this->db->select('*, equipeNom AS recurrentEquipe')
-                ->from('recurrents r')
-                ->join('equipes e', 'e.equipeId = r.recurrentEquipeId', 'left')
+        $query = $this->db->select('*')
+                ->from('recurrents')
                 ->where(array('recurrentId' => intval($recurrentId)))
                 ->get();
         return $this->retourne($query, $type, self::classe, true);
@@ -86,9 +84,8 @@ class Model_recurrents extends MY_model {
      */
     public function getJour($jour, $type = 'object') {
         $CI = & get_instance();
-        $query = $this->db->select('*, equipeNom AS recurrentEquipe')
-                ->from('recurrents r')
-                ->join('equipes e', 'e.equipeId = r.recurrentEquipeId', 'left')
+        $query = $this->db->select('*')
+                ->from('recurrents')
                 ->where('recurrentCritere', $CI->lang->line('cal_' . strtolower(date('l', $jour))))
                 ->or_where('recurrentCritere', date('d', $jour))
                 ->or_where('recurrentCritere', date('d-m', $jour))
@@ -98,9 +95,8 @@ class Model_recurrents extends MY_model {
 
     public function getSemaine($premierJour, $dernierJour, $type = 'object') {
 
-        $query = $this->db->select('*, equipeNom AS recurrentEquipe')
+        $query = $this->db->select('*')
                 ->from('recurrents r')
-                ->join('equipes e', 'e.equipeId = r.recurrentEquipeId', 'left')
                 ->where_in('recurrentCritere', array('lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'))
                 ->or_where(' ( recurrentCritere >= ', date('d', $premierJour))
                 ->where('recurrentCritere <=', date('d', $dernierJour) . ')')

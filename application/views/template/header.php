@@ -26,7 +26,7 @@
 
         <link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/enseignediffusion.css'); ?>" >
 
-        <!-- reload grunt --><script src="//localhost:35729/livereload.js"></script>
+        <!-- reload grunt -->
 
     </head>
 
@@ -45,7 +45,7 @@
                     <div class="collapse navbar-collapse" id="navbar_id">
                         <ul class="nav navbar-nav navbar-left">
                             <li class="dropdown-short" style="padding:0px; margin: 0px;">
-                                <a href="<?= site_url(); ?>" class=""><img src="<?= base_url('assets/img/logo.png'); ?>" style="max-height: 30px;" ></a>
+                                <a href="<?= site_url(); ?>" class=""><img src="<?= base_url('assets/img/logo.png'); ?>" style="max-height: 40px;" ></a>
                             </li>
                             <li class="dropdown-grid">
                                 <a href="<?= site_url('clients'); ?>" class=""><i class="fa fa-user-circle"></i> Clients</a>
@@ -88,7 +88,7 @@
                                 <a href="<?= site_url('ed/journalier'); ?>"><i class="glyphicon glyphicon-calendar"></i> Journalier</a>
                                 <?php if ($this->ion_auth->is_admin()): ?>
                                     <a href="<?= site_url('ed/hebdomadaire'); ?>"><i class="glyphicon glyphicon-calendar"></i> Hebdomadaire</a>
-                                    <a href="<?= site_url('ed/recurrent'); ?>"><i class="glyphicon glyphicon-repeat"></i> Recurrent</a>
+                                    <a href="<?= site_url('affectations/recurrent'); ?>"><i class="glyphicon glyphicon-repeat"></i> Recurrent</a>
                                 <?php endif; ?>
 
                             </li>

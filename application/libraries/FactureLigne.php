@@ -20,6 +20,7 @@ class FactureLigne {
     protected $factureLigneTotalHT;
     protected $factureLigneTotalTTC;
     protected $factureLigneTotalTVA;
+    protected $factureLigneMarge;
     protected $factureLigneQuota; /* INFO : Quota en % du client qui a été appliqué sur la ligne d'origine de l'affaire. */
 
     public function __construct(array $valeurs = []) {
@@ -138,6 +139,14 @@ class FactureLigne {
 
     function setFactureLigneQuota($factureQuota) {
         $this->factureQuota = $factureQuota;
+    }
+
+    function getFactureLigneMarge() {
+        return $this->factureLigneMarge;
+    }
+
+    function setFactureLigneMarge($factureLigneMarge) {
+        $this->factureLigneMarge = $factureLigneMarge;
     }
 
 }

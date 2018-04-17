@@ -401,7 +401,7 @@ $config = array(
         array(
             'field' => 'addReglementMode',
             'label' => 'Mode de réglement',
-            'rules' => 'required|in_list[1,2,3,4,5]'
+            'rules' => 'required|in_list[1,2,3,4,5,6]'
         ),
         array(
             'field' => 'addReglementFactureId',
@@ -582,7 +582,7 @@ $config = array(
         array(
             'field' => 'addAffectType',
             'label' => 'Type affectation',
-            'rules' => 'required|in_list[1,2,3]'
+            'rules' => 'required|in_list[1,2,3,4]'
         ),
         array(
             'field' => 'addAffectDate',
@@ -593,11 +593,6 @@ $config = array(
             'field' => 'addAffectNbJour',
             'label' => 'Nombre de jours',
             'rules' => 'required|trim|is_natural_no_zero'
-        ),
-        array(
-            'field' => 'addAffectEquipeId',
-            'label' => 'ID Equipe',
-            'rules' => 'required|callback_existEquipe'
         ),
         array(
             'field' => 'addAffectIntervenant',
@@ -623,9 +618,9 @@ $config = array(
             'rules' => 'required|trim'
         ),
         array(
-            'field' => 'addRecurrentEquipeId',
-            'label' => 'ID Equipe',
-            'rules' => 'required|callback_existEquipe'
+            'field' => 'addRecurrentType',
+            'label' => 'Poste',
+            'rules' => 'required|in_list[1,2,3,4]'
         ),
         array(
             'field' => 'addRecurrentCommentaire',

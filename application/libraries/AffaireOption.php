@@ -12,23 +12,32 @@ class AffaireOption {
     protected $affaireOptionAffaireId;
     protected $affaireOptionArticleId; /* Article de classe AffaireArticle pas Article */
     protected $affaireOptionOptionId;
+    protected $affaireOptionOption;
     protected $affaireOptionComposantId;
+    protected $affaireOptionComposant;
     protected $affaireOptionQte;
     protected $affaireOptionPU;
     protected $affaireOptionOriginel;
-        
+
     public function __construct(array $valeurs = []) {
         /* Si on passe des valeurs, on hydrate l'objet */
-        if(!empty($valeurs)) $this->hydrate ($valeurs);        
+        if (!empty($valeurs))
+            $this->hydrate($valeurs);
     }
-        
+
     public function hydrate(array $donnees) {
-       foreach ($donnees as $key => $value):
-            $method = 'set'.ucfirst($key);
-            if(method_exists($this, $method))
+        foreach ($donnees as $key => $value):
+            $method = 'set' . ucfirst($key);
+            if (method_exists($this, $method))
                 $this->$method($value);
-        endforeach;        
-    }   
+        endforeach;
+    }
+
+    public function hydrateComposantEtOption() {
+        $CI = & get_instance();
+        $this->affaireOptionOption = $CI->managerOptions->getOptionById($this->affaireOptionOptionId);
+        $this->affaireOptionComposant = $CI->managerComposants->getComposantById($this->affaireOptionComposantId);
+    }
 
     function getAffaireOptionId() {
         return $this->affaireOptionId;
@@ -85,12 +94,29 @@ class AffaireOption {
     function setAffaireOptionPU($affaireOptionPU) {
         $this->affaireOptionPU = $affaireOptionPU;
     }
+
     function getAffaireOptionOriginel() {
         return $this->affaireOptionOriginel;
     }
 
     function setAffaireOptionOriginel($affaireOptionOriginel) {
         $this->affaireOptionOriginel = $affaireOptionOriginel;
+    }
+
+    function getAffaireOptionOption() {
+        return $this->affaireOptionOption;
+    }
+
+    function getAffaireOptionComposant() {
+        return $this->affaireOptionComposant;
+    }
+
+    function setAffaireOptionOption($affaireOptionOption) {
+        $this->affaireOptionOption = $affaireOptionOption;
+    }
+
+    function setAffaireOptionComposant($affaireOptionComposant) {
+        $this->affaireOptionComposant = $affaireOptionComposant;
     }
 
 }

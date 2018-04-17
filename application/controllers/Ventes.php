@@ -380,24 +380,7 @@ class Ventes extends My_Controller {
         endif;
     }
 
-    private function majMargeArticle($item) {
-
-        $totalAchats = 0;
-        foreach ($item['composants'] as $o):
-            if ($o['qte'] > 0):
-                $totalAchats += round($o['qte'] * $o['prixAchat'], 2);
-            endif;
-        endforeach;
-
-        $margeItem = $item['price'] - $totalAchats;
-        $arrayMaj = array('rowid' => $item['rowid'], 'marge' => $margeItem);
-        $this->cart->update($arrayMaj);
-
-        return round($margeItem);
-    }
-
     private function majMargeAffaire() {
-
         $totalMarges = 0;
         foreach ($this->cart->contents() as $item)
             $totalMarges += $item['marge'] * $item['qty'];

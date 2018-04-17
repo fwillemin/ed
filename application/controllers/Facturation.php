@@ -196,7 +196,8 @@ class Facturation extends My_Controller {
                 'factureLigneTotalHT' => $totalHT,
                 'factureLigneTotalTVA' => $totalTVA,
                 'factureLigneTotalTTC' => $totalHT + $totalTVA,
-                'factureLigneQuota' => $quota
+                'factureLigneQuota' => $quota,
+                'factureLigneMarge' => round($this->majMargeArticle($item) * ($quota / 100), 2)
             );
             $ligne = new FactureLigne($dataLigne);
             $this->managerFactureLignes->ajouter($ligne);
@@ -215,6 +216,7 @@ class Facturation extends My_Controller {
             $client = $this->managerClients->getClientById($this->input->post('addFactureClientId'));
             $affaire = $this->managerAffaires->getAffaireById($this->input->post('addFactureAffaireId'));
             $facture = $this->ajouterFacture($affaire, $client, $this->input->post('addFactureMode'), $this->input->post('addFactureObjet'), $this->input->post('addFactureEcheancePaiement'));
+            $margeFacture = 0;
 
             $totalFactureHT = $facture->getFactureTotalHT();
             $totalFactureTTC = $facture->getFactureTotalTTC();
@@ -230,6 +232,7 @@ class Facturation extends My_Controller {
                             $totalFactureHT += $ligne->getFactureLigneTotalHT();
                             $totalFactureTVA += $ligne->getFactureLigneTotalTVA();
                             $totalFactureTTC += $ligne->getFactureLigneTotalTTC();
+                            $margeFacture += $ligne->getFactureLigneQte() * $ligne->getFactureLigneMarge();
 
                         endif;
                     endif;
@@ -239,6 +242,7 @@ class Facturation extends My_Controller {
                 $facture->setFactureTotalTVA($totalFactureTVA);
                 $facture->setFactureTotalTTC($totalFactureTTC);
                 $facture->setFactureSolde($totalFactureTTC);
+                $facture->setFactureMarge($margeFacture);
                 $this->managerFactures->editer($facture);
 
             endif;
@@ -256,7 +260,7 @@ class Facturation extends My_Controller {
 
     private function resetCriteresFactures() {
         $criteres = array(
-            'rechFactureStart' => mktime(0, 0, 0, date('m'), 1, date('Y')),
+            'rechFactureStart' => mktime(0, 0, 0, 1, 1, date('Y')),
             'rechFactureEnd' => mktime(23, 59, 59, date('m'), date('t'), date('Y')),
             'rechFactureEtat' => 'ALL'
         );

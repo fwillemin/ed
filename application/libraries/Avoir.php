@@ -16,6 +16,7 @@ class Avoir {
     protected $avoirTotalHT;
     protected $avoirTotalTVA;
     protected $avoirTotalTTC;
+    protected $avoirMarge;
     protected $avoirReglements; /* Liste des réglements pour l'avoir */
     protected $avoirLignes;
     protected $avoirFactureId;
@@ -133,6 +134,14 @@ class Avoir {
 
     function setAvoirFactureId($avoirFactureId) {
         $this->avoirFactureId = $avoirFactureId;
+    }
+
+    function getAvoirMarge() {
+        return $this->avoirMarge;
+    }
+
+    function setAvoirMarge($avoirMarge) {
+        $this->avoirMarge = $avoirMarge;
     }
 
 }

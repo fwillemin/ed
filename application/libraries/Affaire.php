@@ -7,8 +7,7 @@
  * @author Xanthellis - WILLEMIN François - http://www.xanthellis.com
  */
 /*
-  ALTER TABLE `affaires` ADD `affaireDevisTauxAcompte` DECIMAL(5,2) NOT NULL DEFAULT '40' COMMENT '% Acompte demandé' AFTER `affaireDevisDate`;
-  ALTER TABLE `affaires` ADD `affaireDevisEnvoye` BOOLEAN NOT NULL AFTER `affaireDevisTauxAcompte`;
+  ALTER TABLE `affaires` ADD `affaireCommandeCertifiee` BOOLEAN NOT NULL DEFAULT FALSE AFTER `affaireCommandeDate`;
  */
 class Affaire {
 
@@ -28,6 +27,7 @@ class Affaire {
     protected $affaireDevisEnvoye;
     protected $affaireCommandeId;
     protected $affaireCommandeDate;
+    protected $affaireCommandeCertifiee;
     protected $affaireReglements;
     protected $affaireFactures;
     protected $affairePAO;
@@ -262,6 +262,14 @@ class Affaire {
 
     function setAffaireDevisEnvoye($affaireDevisEnvoye) {
         $this->affaireDevisEnvoye = $affaireDevisEnvoye;
+    }
+
+    function getAffaireCommandeCertifiee() {
+        return $this->affaireCommandeCertifiee;
+    }
+
+    function setAffaireCommandeCertifiee($affaireCommandeCertifiee) {
+        $this->affaireCommandeCertifiee = $affaireCommandeCertifiee;
     }
 
 }

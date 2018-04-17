@@ -35,28 +35,26 @@
                     <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th style="width:10%;">Equipes</th>
+                                <th style="width:10%;">Postes</th>
                                 <th>Jobs</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php
-                            if (!empty($equipes)):
-                                foreach ($equipes as $e):
-                                    echo '<tr><td>' . $e->getEquipeNom() . '</td><td class="jour" data-equipeid="' . $e->getEquipeId() . '" data-date="' . date('Y-m-d', $jour) . '">';
-                                    if (!empty($affectations[$e->getEquipeId()])):
+                            foreach ($postes as $id => $poste):
+                                echo '<tr><td>' . $poste . '</td><td class="jour" data-type="' . $id . '" data-date="' . date('Y-m-d', $jour) . '">';
+                                if (!empty($affectations[$id])):
 
-                                        foreach ($affectations[$e->getEquipeId()] as $a):
+                                    foreach ($affectations[$id] as $a):
 
-                                            echo $a;
+                                        echo $a;
 
-                                        endforeach;
+                                    endforeach;
 
-                                    endif;
+                                endif;
 
-                                    echo '</td></tr>';
-                                endforeach;
-                            endif;
+                                echo '</td></tr>';
+                            endforeach;
                             ?>
                         </tbody>
                     </table>

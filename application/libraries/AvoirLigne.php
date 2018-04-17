@@ -17,6 +17,7 @@ class AvoirLigne {
     protected $avoirLignePrixUnitaire;
     protected $avoirLigneTauxTVA;
     protected $avoirLigneTotalHT;
+    protected $avoirLigneMarge;
 
     public function __construct(array $valeurs = []) {
         /* Si on passe des valeurs, on hydrate l'objet */
@@ -102,6 +103,14 @@ class AvoirLigne {
 
     function setAvoirLigneTotalHT($avoirLigneTotalHT) {
         $this->avoirLigneTotalHT = $avoirLigneTotalHT;
+    }
+
+    function getAvoirLigneMarge() {
+        return $this->avoirLigneMarge;
+    }
+
+    function setAvoirLigneMarge($avoirLigneMarge) {
+        $this->avoirLigneMarge = $avoirLigneMarge;
     }
 
 }

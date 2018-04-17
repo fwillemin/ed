@@ -27,6 +27,7 @@ class Model_factureLignes extends MY_model {
                 ->set('factureLigneTotalTVA', $factureLigne->getFactureLigneTotalTVA())
                 ->set('factureLigneTotalTTC', $factureLigne->getFactureLigneTotalTTC())
                 ->set('factureLigneQuota', $factureLigne->getFactureLigneQuota())
+                ->set('factureLigneMarge', $factureLigne->getFactureLigneMarge())
                 ->insert($this->table);
         $factureLigne->setFactureLigneId($this->db->insert_id());
     }
@@ -50,6 +51,7 @@ class Model_factureLignes extends MY_model {
                 ->set('factureLigneTotalTVA', $factureLigne->getFactureLigneTotalTVA())
                 ->set('factureLigneTotalTTC', $factureLigne->getFactureLigneTotalTTC())
                 ->set('factureLigneQuota', $factureLigne->getFactureLigneQuota())
+                ->set('factureLigneMarge', $factureLigne->getFactureLigneMarge())
                 ->where('factureLigneId', $factureLigne->getFactureLigneId())
                 ->update($this->table);
         return $this->db->affected_rows();

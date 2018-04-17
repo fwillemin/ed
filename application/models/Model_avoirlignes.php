@@ -23,6 +23,7 @@ class Model_avoirlignes extends MY_model {
                 ->set('avoirLignePrixUnitaire', $ligne->getAvoirLignePrixUnitaire())
                 ->set('avoirLigneTauxTVA', $ligne->getAvoirLigneTauxTVA())
                 ->set('avoirLigneTotalHT', $ligne->getAvoirLigneTotalHT())
+                ->set('avoirLigneMarge', $ligne->getAvoirLigneMarge())
                 ->insert($this->table);
         $ligne->setAvoirLigneId($this->db->insert_id());
     }
@@ -42,6 +43,7 @@ class Model_avoirlignes extends MY_model {
                 ->set('avoirLignePrixUnitaire', $ligne->getAvoirLignePrixUnitaire())
                 ->set('avoirLigneTauxTVA', $ligne->getAvoirLigneTauxTVA())
                 ->set('avoirLigneTotalHT', $ligne->getAvoirLigneTotalHT())
+                ->set('avoirLigneMarge', $ligne->getAvoirLigneMarge())
                 ->where('avoirLigneId', $ligne->getAvoirLigneId())
                 ->update($this->table);
         return $this->db->affected_rows();

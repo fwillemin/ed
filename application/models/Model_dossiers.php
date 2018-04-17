@@ -17,7 +17,7 @@ class Model_dossiers extends MY_model {
         $this->db
                 ->set('dossierClient', $dossier->getDossierClient())
                 ->set('dossierDescriptif', $dossier->getDossierDescriptif())
-                ->set('dossierSortieEtat', $dossier->getDossierSortieEtat())
+                //->set('dossierSortieEtat', $dossier->getDossierSortieEtat())
                 ->set('dossierPao', $dossier->getDossierPao())
                 ->set('dossierFab', $dossier->getDossierFab())
                 ->set('dossierPose', $dossier->getDossierPose())
@@ -35,7 +35,7 @@ class Model_dossiers extends MY_model {
         $this->db
                 ->set('dossierClient', $dossier->getDossierClient())
                 ->set('dossierDescriptif', $dossier->getDossierDescriptif())
-                ->set('dossierSortieEtat', $dossier->getDossierSortieEtat())
+                //->set('dossierSortieEtat', $dossier->getDossierSortieEtat())
                 ->set('dossierPao', $dossier->getDossierPao())
                 ->set('dossierFab', $dossier->getDossierFab())
                 ->set('dossierPose', $dossier->getDossierPose())

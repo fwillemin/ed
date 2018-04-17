@@ -50,7 +50,7 @@ $(document).ready(function () {
     });
 
     $('.jour').on('dblclick', function () {
-        affectationRAZ();        
+        affectationRAZ();
         $('#addAffectDate').val($(this).attr('data-date'));
         $('#addAffectEquipeId option[value="' + $(this).attr('data-equipeid') + '"]').prop('selected', true);
         $('#modalAddAffectation .modal-title').text('Ajouter une affectation');
@@ -62,7 +62,7 @@ $(document).ready(function () {
         $(this).hide();
         $('#dateSelectJour').show();
     });
-    $('#planning').on('dblclick', '.progJourSortie', function (e) {        
+    $('#planning').on('dblclick', '.progJourSortie', function (e) {
         e.stopPropagation();
         e.preventDefault();
         $.post(chemin + 'ed/nextStepSortie', {dossierId: $(this).attr('data-dossierid')}, function (retour) {
@@ -110,13 +110,25 @@ $(document).ready(function () {
         $('#addAffectIntervenant').val('');
         $('#addAffectCommentaire').val('');
         $('#btnDelAffect').hide();
+        $('#addAffectDossierId').closest('.form-group').show();
+        $('#addAffectAffaireId').closest('.form-group').show();
+        $('#addAffectType').closest('.form-group').show();
     }
-    $('.btnAddAffectation').on('click', function () {
+
+    $('#tableDossiers').on('click', '.btnAddAffectation', function () {
+
         affectationRAZ();
-        $('#addAffectDossierId option[value="' + $(this).closest('tr').attr('data-dossierid') + '"]').prop('selected', true);
-        $('#addAffectAffaireId option[value="' + $(this).closest('tr').attr('data-affaireid') + '"]').prop('selected', true);
+        var ligne = $(this).closest('tr');
+        if (ligne.attr('data-source') == 'planif') {
+            /* On masque les lignes de choix du dossier ou de l'affaire */
+            $('#addAffectDossierId').closest('.form-group').hide();
+            $('#addAffectAffaireId').closest('.form-group').hide();
+            $('#addAffectType').closest('.form-group').hide();
+        }
+        $('#addAffectDossierId option[value="' + ligne.attr('data-dossierid') + '"]').prop('selected', true);
+        $('#addAffectAffaireId option[value="' + ligne.attr('data-affaireid') + '"]').prop('selected', true);
         $('#addAffectType').val($(this).attr('data-type'));
-        $('#infosAffectations').html($(this).closest('tr').attr('data-client') + '<br>' + $(this).closest('tr').attr('data-objet'));
+        $('#infosAffectations').html(ligne.attr('data-client') + '<br>' + ligne.attr('data-objet'));
         $('#modalAddAffectation .modal-title').text('Ajouter une affectation');
         $('#btnSubmitFormAddAffect').text('Ajouter');
         $('#modalAddAffectation').modal('show');
@@ -136,15 +148,15 @@ $(document).ready(function () {
             }
         }, 'json');
     });
-    
-    $('#addAffectDossierId').on('change', function(){
+
+    $('#addAffectDossierId').on('change', function () {
         $('#addAffectAffaireId option[value="0"]').prop('selected', true);
     });
-    $('#addAffectAffaireId').on('change', function(){
+    $('#addAffectAffaireId').on('change', function () {
         $('#addAffectDossierId option[value="0"]').prop('selected', true);
     });
 
-    $('#planning, #tableDossiers').on('click', '.btnModAffect', function (e) {     
+    $('#planning, #tableDossiers').on('click', '.btnModAffect', function (e) {
         e.stopPropagation();
         e.preventDefault();
         affectationRAZ();
@@ -169,7 +181,7 @@ $(document).ready(function () {
                         $('#addAffectNbJour').hide();
                         $('#addAffectIntervenant').val(retour.affectation.affectationIntervenant);
                         $('#addAffectCommentaire').val(retour.affectation.affectationCommentaire);
-                        
+
                         $('#infosAffectations').html(affect.attr('data-client') + '<br>' + affect.attr('data-objet'));
 
                         $('#modalAddAffectation .modal-title').text('Modifier cette affectation');
@@ -287,9 +299,8 @@ $(document).ready(function () {
     });
 
     /* PLANIFICATION */
-
     $('#tableDossiers').on('click', '.btnCloseDossier', function () {
-        button = $(this);
+        var button = $(this);
         $.confirm({
             title: 'Clôturer ce dossier ?',
             content: 'Voulez-vous clôturer ce dossier ?<br>Toutes les affectations seront automatiquement passées en "Terminé".',

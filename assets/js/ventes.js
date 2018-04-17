@@ -7,7 +7,7 @@ $(document).ready(function () {
         search: true,
         cardView: false,
         showColumns: true,
-        pageSize: 50,
+        pageSize: 100,
         contextMenu: '#context-menu',
         onClickRow: function (row) {
             window.location.assign(chemin + 'ventes/reloadAffaire/' + row.affaireId)

@@ -84,6 +84,7 @@
 <br>
 <span style="font-size:9px; font-weight: bold;">
     <br>Enseigne Diffusion se réserve la propriété des marchandises désignées sur ce document, jusqu'au paiement intégral de leur prix en principal et intérêts.
+    <br>En cas de retard de paiement, des pénalités équivalentes à 25% du montant dû ainsi qu'un forfait de recouvrement de 100€ seront exigibles
     <br>À défaut de paiement du prix à l'échéance convenue, Enseigne Diffusion pourra reprendre les marchandises.
     <br>La vente sera alors résolue de plein droit et les acomptes déjà versés lui resteront acquis en contrepartie de la jouissance des marchandises dont aura bénéficié l'acheteur.
     <br>Sauf indication contraire, aucun escompte pour paiement anticipé.

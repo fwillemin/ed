@@ -38,7 +38,7 @@ class Ed extends My_Controller {
      */
     private function elementsAPlanifier() {
 
-        $affaires = $this->managerAffaires->liste(array('affaireCloture' => 0, 'affaireCommandeId != ' => 'NULL'));
+        $affaires = $this->managerAffaires->liste(array('affaireCloture' => 0, 'affaireCommandeId != ' => 'NULL'), 'affaireCommandeDate ASC');
         if ($affaires):
             foreach ($affaires as $affaire):
                 $affaire->hydrateClients();
@@ -60,7 +60,7 @@ class Ed extends My_Controller {
         $elements = $this->elementsAPlanifier();
 
         $data = array(
-            'equipes' => $this->managerEquipes->liste(),
+            'postes' => $this->postes,
             'dossiers' => $elements['dossiers'],
             'affaires' => $elements['affaires'],
             'title' => 'Planification',
@@ -107,22 +107,21 @@ class Ed extends My_Controller {
         $dernierJourSemaine = $premierJourSemaine + (7 * 86400);
 
         $divs = array();
-        $equipes = $this->managerEquipes->liste();
-        if (!empty($equipes)) :
-            foreach ($equipes as $e) :
-                for ($i = 0; $i < 5; $i++) :
-                    $d = date('d', $premierJourSemaine + ($i * 86400));
-                    $divs[$e->getEquipeId() . '-' . $d] = array();
-                endfor;
-            endforeach;
-        endif;
+
+        foreach ($this->postes as $id => $poste) :
+            for ($i = 0; $i < 5; $i++) :
+                $d = date('d', $premierJourSemaine + ($i * 86400));
+                $divs[$id . '-' . $d] = array();
+            endfor;
+        endforeach;
+
 
         /* Selection des affectations */
         $affectations = $this->managerAffectations->liste(array('affectationDate >= ' => $premierJourSemaine, 'affectationDate <= ' => $dernierJourSemaine));
         if (!empty($affectations)) :
             foreach ($affectations as $a) :
                 $a->hydrateParent();
-                $divs[$a->getAffectationEquipeId() . '-' . date('d', $a->getAffectationDate())][] = $this->affectationHebdoCodeHTML($a);
+                $divs[$a->getAffectationType() . '-' . date('d', $a->getAffectationDate())][] = $this->affectationHebdoCodeHTML($a);
             endforeach;
         endif;
 
@@ -131,7 +130,7 @@ class Ed extends My_Controller {
             $recur = $this->managerRecurrents->getJour($i);
             if (!empty($recur)) :
                 foreach ($recur as $r) :
-                    $divs[$r->getRecurrentEquipeId() . '-' . date('d', $i)][] = $this->recurrentHebdoCodeHTML($r);
+                    $divs[$r->getRecurrentType() . '-' . date('d', $i)][] = $this->recurrentHebdoCodeHTML($r);
                 endforeach;
             endif;
         endfor;
@@ -139,7 +138,7 @@ class Ed extends My_Controller {
         $elements = $this->elementsAPlanifier();
 
         $data = array(
-            'equipes' => $this->managerEquipes->liste(),
+            'postes' => $this->postes,
             'annee' => $annee,
             'semaine' => $semaine,
             'premierJourSemaine' => $premierJourSemaine,
@@ -160,6 +159,8 @@ class Ed extends My_Controller {
      */
     private function affectationJournalierCodeHTML(Affectation $affectation) {
 
+        log_message('error', __CLASS__ . '/' . __FUNCTION__ . ' => ' . print_r($affectation, 1));
+
         if ($affectation->getAffectationParentClos() == 1) :
             $classAffect = "progJourClos";
         elseif ($affectation->getAffectationEtat() == 3) :
@@ -168,14 +169,23 @@ class Ed extends My_Controller {
             $classAffect = "progJour";
         endif;
 
-        return '<div class="' . $classAffect . '" style="background-color:' . $affectation->getAffectationCouleur() . '; color:' . $affectation->getAffectationFontColor() . ';" data-affectId="' . $affectation->getAffectationId() . '">'
+        $code = '<div class="' . $classAffect . '" style="background-color:' . $affectation->getAffectationCouleur() . '; color:' . $affectation->getAffectationFontColor() . ';" data-affectId="' . $affectation->getAffectationId() . '">'
                 . '<div class="intervenantJournalier" style="">Intervenants : <strong>'
                 . $affectation->getAffectationIntervenant()
                 . '</strong></div>'
                 . '<div style="padding:7px;">'
-                . '<center><span style="font-size:15px; font-weight:bold;">' . $affectation->getAffectationClient() . '</span></center>'
-                . $affectation->getAffectationCommentaire()
-                . '</div></div>';
+                . '<center><span style="font-size:12px; font-weight:bold;">' . $affectation->getAffectationClient() . '</span></center>'
+                . 'Objet : ';
+
+        if ($affectation->getAffectationAffaire()):
+            $code .= $affectation->getAffectationAffaire()->getAffaireObjet();
+        else:
+            $affectation->getAffectationDossier()->getDossierDescriptif();
+        endif;
+
+        $code .= $affectation->getAffectationCommentaire() ? 'Obs : ' . $affectation->getAffectationCommentaire() : '';
+        $code .= '</div></div>';
+        return $code;
     }
 
     /**
@@ -213,8 +223,8 @@ class Ed extends My_Controller {
      * @param Affectation $affectation
      */
     private function recurrentHebdoCodeHTML(Recurrent $recurrent) {
-        return '<div class="progHebdo tooltiped" style="background-color: yellow; color: #000;" data-affectId="0" data-placement="top" title="' . $recurrent->getRecurrentCommentaire() . '">'
-                . '<div style="padding:7px; text-align: center; font-weight: bold;">Enseigne diffusion</div>'
+        return '<div class="progHebdo" style="background-color: yellow; color: #000;" data-affectId="0">'
+                . '<div style="padding:7px; text-align: center; font-weight: bold;">' . $recurrent->getRecurrentCommentaire() . '</div>'
                 . '</div>';
     }
 
@@ -231,33 +241,30 @@ class Ed extends My_Controller {
 
         $affectations = array();
 
-        $equipes = $this->managerEquipes->liste();
-        if (!empty($equipes)) :
-            foreach ($equipes as $e) :
-                $affectations[$e->getEquipeId()] = array();
-            endforeach;
-        endif;
+        foreach ($this->postes as $id => $poste) :
+            $affectations[$id] = array();
+        endforeach;
 
         /* Selection des affectations */
         $affectationsListe = $this->managerAffectations->liste(array('affectationDate' => $this->session->userdata('jour')));
         if (!empty($affectationsListe)) :
             foreach ($affectationsListe as $a) :
                 $a->hydrateParent();
-                $affectations[$a->getAffectationEquipeId()][] = $this->affectationJournalierCodeHTML($a);
+                $affectations[$a->getAffectationType()][] = $this->affectationJournalierCodeHTML($a);
             endforeach;
         endif;
 
         $recurrentsListe = $this->managerRecurrents->getJour($this->session->userdata('jour'));
         if (!empty($recurrentsListe)) :
             foreach ($recurrentsListe as $r) :
-                $affectations[$r->getRecurrentEquipeId()][] = $this->recurrentJournalierCodeHTML($r);
+                $affectations[$r->getRecurrentType()][] = $this->recurrentJournalierCodeHTML($r);
             endforeach;
         endif;
 
         $elements = $this->elementsAPlanifier();
 
         $data = array(
-            'equipes' => $this->managerEquipes->liste(),
+            'postes' => $this->postes,
             'dossiers' => $elements['dossiers'],
             'affaires' => $elements['affaires'],
             'affectations' => $affectations,

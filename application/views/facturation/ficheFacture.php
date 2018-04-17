@@ -161,6 +161,7 @@
                                                 <option value="3">Espèces</option>
                                                 <option value="4">Carte bancaire</option>
                                                 <option value="5">Traite</option>
+                                                <option value="6">Carte bancaire</option>
                                             </select>
                                         </div>
                                     </div>

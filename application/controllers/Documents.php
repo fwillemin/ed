@@ -23,15 +23,24 @@ class Documents extends My_Controller {
         $this->piedPage2 = '';
     }
 
-    private function editionAdresseClient(Client $client) {
-        $adresse = '<br><br><br><br>' . $client->getClientRaisonSociale() . '<span style="color: #FFF;">____</span>'
-                . '<br>' . $client->getClientAdresse1() . '<span style="color: #FFF;">____</span>';
+    private function editionAdresseClient(Client $client, $type = 'postal') {
+
+        $adresse = '';
+        if ($type == 'postal'):
+            $adresse .= '<br><br><br><br><br>';
+            $espaceDroite = '<span style="color: #FFF;">____</span>';
+        else:
+            $espaceDroite = '<span style="color: #FFF;">__</span>';
+        endif;
+
+        $adresse .= $client->getClientRaisonSociale() . $espaceDroite
+                . '<br>' . wordwrap($client->getClientAdresse1(), 30, $espaceDroite . '<br>') . $espaceDroite;
 
         if ($client->getClientAdresse2()):
-            $adresse .= '<br>' . $client->getClientAdresse2() . '<span style="color: #FFF;">____</span>';
+            $adresse .= '<br>' . wordwrap($client->getClientAdresse2(), 30, $espaceDroite . '<br>') . $espaceDroite;
         endif;
-        $adresse .= '<br>' . $client->getClientCp() . ' ' . $client->getClientVille() . '<span style="color: #FFF;">____</span>'
-                . '<br>' . $client->getClientPays() . '<span style="color: #FFF;">____</span>';
+        $adresse .= '<br>' . $client->getClientCp() . ' ' . $client->getClientVille() . $espaceDroite
+                . '<br>' . $client->getClientPays() . $espaceDroite;
         return $adresse;
     }
 
@@ -107,7 +116,7 @@ class Documents extends My_Controller {
         $pdf->SetTitle('Devis ');
         $pdf->SetSubject('Devis ');
 
-        $pdf->SetMargins(13, 70, 5);
+        $pdf->SetMargins(13, 79, 5);
 // set auto page breaks
         $pdf->SetAutoPageBreak(true, 15);
         $pdf->AddPage('', '', FALSE, FALSE, $header);
@@ -117,9 +126,9 @@ class Documents extends My_Controller {
         $pdf->Output('Devis' . $affaire->getAffaireDevisId() . '.pdf', 'FI');
     }
 
-    public function ficheAtelier($affaireId = null) {
+    public function editionFicheAtelier($affaireId = null) {
 
-        if (!$affaireId || !$this->existAffaire($affaireId)):
+        if (!$affaireId):
             redirect('ventes/noway');
             exit;
         endif;
@@ -133,15 +142,51 @@ class Documents extends My_Controller {
             endif;
         endforeach;
         $articles = $this->managerAffaireArticles->liste(array('affaireArticleAffaireId' => $affaire->getAffaireId()));
-        foreach ($articles as $a):
-            $a->hydrateAffaireOptions();
-        endforeach;
+        if (!empty($articles)):
+            foreach ($articles as $article):
+                $article->hydrateAffaireOptions();
+                if (!empty($article->getAffaireArticleOptions())):
+                    foreach ($article->getAffaireArticleOptions() as $option):
+                        $option->hydrateComposantEtOption();
+                    endforeach;
+                endif;
+            endforeach;
+        endif;
+
+        /* --- Génération du HEADER ---- */
+        $header = '<table>
+        <tr style="font-size:12px;">
+        <td style="text-align: center; width:180px;"><img src="assets/img/logoNB.png" style="width: 150px; height: 50px;">
+        </td>
+
+        <td style = "text-align: right; width:240px;">
+        <table style = "width:240px;" cellspacing = "0" cellpadding = "2">
+        <tr>
+        <td colspan = "3" style = "text-align: center; font-weight: bold; height: 20px; font-size:15px; border: 1px solid black;">
+        FICHE ATELIER
+        </td>
+        </tr>
+        <tr style = "background-color: lightgrey; text-align: center; font-weight: bold;">
+        <td style = "width: 120px; border: 1px solid black;">Date</td>
+        <td style = "width: 120; border: 1px solid black;">Code Affaire</td>
+        </tr>
+        <tr style = "text-align: center;">
+        <td style = " height: 20px; border: 1px solid black;">' . date('d/m/Y', $affaire->getAffaireCommandeDate()) . '</td>
+        <td style = " height: 20px; border: 1px solid black;">' . $affaire->getAffaireId() . '</td>
+        </tr>
+        </table>
+        </td>
+
+        <td style = "text-align: right; width:260px;">' . $this->editionAdresseClient($client, 'court') . '</td>
+        <td style = "text-align: right; width:130px;">' . ($affaire->getAffaireCommandeCertifiee() ? '<img src="assets/img/certifieNB.jpg" style="height: 100px;">' : '') . '</td>
+        </tr>
+        </table>';
 
         $data = array(
             'affaire' => $affaire,
             'client' => $client,
             'articles' => $articles,
-            'title' => 'Devis',
+            'title' => 'Fiche atelier',
             'description' => '',
             'keywords' => '',
             'content' => $this->viewFolder . __FUNCTION__
@@ -152,21 +197,20 @@ class Documents extends My_Controller {
         $html = $this->output->get_output();
 
 // create new PDF document
-        $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false, false, $this->piedPage1, $this->piedPage2);
+        $pdf = new MYPDF('LANDSCAPE', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false, false, $this->piedPage1, $this->piedPage2);
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetAuthor($this->parametres[0]->valeur);
-        $pdf->SetTitle('Devis ');
-        $pdf->SetSubject('Devis ');
-//$pdf->SetKeywords('Devis');
+        $pdf->SetTitle('Atelier ');
+        $pdf->SetSubject('Atelier ');
 
-        $pdf->SetMargins(5, 5, 5);
+        $pdf->SetMargins(7, 48, 5);
 // set auto page breaks
-        $pdf->SetAutoPageBreak(true, PDF_MARGIN_BOTTOM);
-        $pdf->AddPage();
+        $pdf->SetAutoPageBreak(true, 15);
+        $pdf->AddPage('', '', FALSE, FALSE, $header);
 
         $pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
 
-        $pdf->Output('Devis' . $affaire->getAffaireDevisId() . '.pdf', 'FI');
+        $pdf->Output('Atelier' . $affaire->getAffaireCommandeId() . '.pdf', 'FI');
     }
 
     public function editionFacture($factureId = null) {
@@ -181,34 +225,34 @@ class Documents extends My_Controller {
 
         $client = $facture->getFactureClient();
         $header = '<table>
-    <tr style="font-size:12px;">
-        <td style="text-align: right; width:283px; ">
+        <tr style = "font-size:12px;">
+        <td style = "text-align: right; width:283px; ">
         </td>
-        <td style="text-align: right; width:300px; ">
+        <td style = "text-align: right; width:300px; ">
 
-            <table style="width:270px;" cellspacing="0" cellpadding="2">
-                <tr>
-                    <td colspan="3" style="text-align: center; font-weight: bold; height: 20px; font-size:15px; border: 1px solid black;">
-                        FACTURE N°' . $facture->getFactureId() .
+        <table style = "width:270px;" cellspacing = "0" cellpadding = "2">
+        <tr>
+        <td colspan = "3" style = "text-align: center; font-weight: bold; height: 20px; font-size:15px; border: 1px solid black;">
+        FACTURE N°' . $facture->getFactureId() .
                 '</td>
-                </tr>
-                <tr style="background-color: lightgrey; text-align: center; font-weight: bold;">
-                    <td style="width: 90px; border: 1px solid black;">N° Facture</td>
-                    <td style="width: 90px; border: 1px solid black;">Date</td>
-                    <td style="width: 90px; border: 1px solid black;">Réglement</td>
-                </tr>
-                <tr style="text-align: center;">
-                    <td style=" height: 20px; border: 1px solid black;">' . $facture->getFactureId() . '</td>
-                    <td style=" height: 20px; border: 1px solid black;">' . date('d/m/Y', $facture->getFactureDate()) . '</td>
-                    <td style=" height: 20px; border: 1px solid black;">' . $facture->getFactureModeReglementText() . '</td>
-                </tr>
-                <tr>
-                    <td colspan="3" style="text-align: right; font-size:12px;"> ' . $this->editionAdresseClient($client) . '</td>
-                </tr>
-            </table>
+        </tr>
+        <tr style = "background-color: lightgrey; text-align: center; font-weight: bold;">
+        <td style = "width: 90px; border: 1px solid black;">N° Facture</td>
+        <td style = "width: 90px; border: 1px solid black;">Date</td>
+        <td style = "width: 90px; border: 1px solid black;">Réglement</td>
+        </tr>
+        <tr style = "text-align: center;">
+        <td style = " height: 20px; border: 1px solid black;">' . $facture->getFactureId() . '</td>
+        <td style = " height: 20px; border: 1px solid black;">' . date('d/m/Y', $facture->getFactureDate()) . '</td>
+        <td style = " height: 20px; border: 1px solid black;">' . $facture->getFactureModeReglementText() . '</td>
+        </tr>
+        <tr>
+        <td colspan = "3" style = "text-align: right; font-size:12px;"> ' . $this->editionAdresseClient($client) . '</td>
+        </tr>
+        </table>
         </td>
-    </tr>
-</table>';
+        </tr>
+        </table>';
 
         $data = array(
             'facture' => $facture,
@@ -229,7 +273,7 @@ class Documents extends My_Controller {
         $pdf->SetTitle('Facture ' . $facture->getFactureId());
         $pdf->SetSubject('Facture ' . $facture->getFactureId());
 
-        $pdf->SetMargins(13, 70, 5);
+        $pdf->SetMargins(13, 79, 5);
 // set auto page breaks
         $pdf->SetAutoPageBreak(true, 15);
         $pdf->AddPage('', '', FALSE, FALSE, $header);
@@ -249,32 +293,32 @@ class Documents extends My_Controller {
         $avoir->hydrateClient();
         $client = $avoir->getAvoirClient();
         $header = '<table>
-    <tr style="font-size:12px;">
-        <td style="text-align: right; width:283px; ">
+        <tr style = "font-size:12px;">
+        <td style = "text-align: right; width:283px; ">
         </td>
-        <td style="text-align: right; width:300px; ">
+        <td style = "text-align: right; width:300px; ">
 
-            <table style="width:270px;" cellspacing="0" cellpadding="2">
-                <tr>
-                    <td colspan="3" style="text-align: center; font-weight: bold; height: 20px; font-size:15px; border: 1px solid black;">
-                        AVOIR N°' . $avoir->getAvoirId() . '
-                            </td>
-                </tr>
-                <tr style="background-color: lightgrey; text-align: center; font-weight: bold;">
-                    <td style="width: 90px; border: 1px solid black;">N° Avoir</td>
-                    <td style="width: 90px; border: 1px solid black;">Date</td>
-                    <td style="width: 90px; border: 1px solid black;">Facture liée</td>
-                </tr>
-                <tr style="text-align: center;">
-                    <td style=" height: 20px; border: 1px solid black;">' . $avoir->getAvoirId() . '</td>
-                    <td style=" height: 20px; border: 1px solid black;">' . date('d/m/Y', $avoir->getAvoirDate()) . '</td>
-                    <td style=" height: 20px; border: 1px solid black;">' . $avoir->getAvoirFactureId() . '</td>
-                </tr>
-                <tr>
-                     <td colspan="3" style="text-align: right; font-size:12px;"> ' . $this->editionAdresseClient($client) . '</td>
-                         </tr>
-                    </table>
-                </td></tr></table>';
+        <table style = "width:270px;" cellspacing = "0" cellpadding = "2">
+        <tr>
+        <td colspan = "3" style = "text-align: center; font-weight: bold; height: 20px; font-size:15px; border: 1px solid black;">
+        AVOIR N°' . $avoir->getAvoirId() . '
+        </td>
+        </tr>
+        <tr style = "background-color: lightgrey; text-align: center; font-weight: bold;">
+        <td style = "width: 90px; border: 1px solid black;">N° Avoir</td>
+        <td style = "width: 90px; border: 1px solid black;">Date</td>
+        <td style = "width: 90px; border: 1px solid black;">Facture liée</td>
+        </tr>
+        <tr style = "text-align: center;">
+        <td style = " height: 20px; border: 1px solid black;">' . $avoir->getAvoirId() . '</td>
+        <td style = " height: 20px; border: 1px solid black;">' . date('d/m/Y', $avoir->getAvoirDate()) . '</td>
+        <td style = " height: 20px; border: 1px solid black;">' . $avoir->getAvoirFactureId() . '</td>
+        </tr>
+        <tr>
+        <td colspan = "3" style = "text-align: right; font-size:12px;"> ' . $this->editionAdresseClient($client) . '</td>
+        </tr>
+        </table>
+        </td></tr></table>';
 
         $data = array(
             'avoir' => $avoir,
@@ -295,7 +339,7 @@ class Documents extends My_Controller {
         $pdf->SetTitle('Avoir' . $avoir->getAvoirId());
         $pdf->SetSubject('Avoir' . $avoir->getAvoirId());
 
-        $pdf->SetMargins(13, 70, 5);
+        $pdf->SetMargins(13, 79, 5);
 // set auto page breaks
         $pdf->SetAutoPageBreak(true, 15);
         $pdf->AddPage('', '', FALSE, FALSE, $header);

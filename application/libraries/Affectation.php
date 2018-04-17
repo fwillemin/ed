@@ -7,9 +7,10 @@
  * @author Xanthellis - WILLEMIN François - http://www.xanthellis.com
  */
 /*
-  ALTER TABLE `affectations` CHANGE `affectationDossierId` `affectationDossierId` INT(11) NULL;
-  ALTER TABLE `affectations` ADD `affectationAffaireId` INT NULL AFTER `affectationType`, ADD INDEX (`affectationAffaireId`);
-  ALTER TABLE `affectations` ADD FOREIGN KEY (`affectationAffaireId`) REFERENCES `affaires`(`affaireId`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+  ALTER TABLE `affectations` CHANGE `affectationType` `affectationType` TINYINT(4) NOT NULL COMMENT '1=Fabrication, 2=Pose, 3=PAO, 4=Depannage';
+  UPDATE `affectations` SET `affectationType` = 4 WHERE `affectationEquipeId` = 3
+  ALTER TABLE affectations DROP FOREIGN KEY affectations_ibfk_2
+  ALTER TABLE `affectations` DROP `affectationEquipeId`
  */
 class Affectation {
 
@@ -24,8 +25,6 @@ class Affectation {
     protected $affectationAffaire;
     protected $affectationType;
     protected $affectationDate;
-    protected $affectationEquipeId;
-    protected $affectationEquipe;
     protected $affectationIntervenant;
     protected $affectationPosition;
     protected $affectationCommentaire;
@@ -132,14 +131,6 @@ class Affectation {
         return $this->affectationDate;
     }
 
-    function getAffectationEquipeId() {
-        return $this->affectationEquipeId;
-    }
-
-    function getAffectationEquipe() {
-        return $this->affectationEquipe;
-    }
-
     function getAffectationIntervenant() {
         return $this->affectationIntervenant;
     }
@@ -206,14 +197,6 @@ class Affectation {
 
     function setAffectationDate($affectationDate) {
         $this->affectationDate = $affectationDate;
-    }
-
-    function setAffectationEquipeId($affectationEquipeId) {
-        $this->affectationEquipeId = $affectationEquipeId;
-    }
-
-    function setAffectationEquipe($affectationEquipe) {
-        $this->affectationEquipe = $affectationEquipe;
     }
 
     function setAffectationIntervenant($affectationIntervenant) {

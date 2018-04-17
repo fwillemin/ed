@@ -29,35 +29,33 @@ class Affectations extends My_Controller {
             exit;
         endif;
 
-        if (!$this->form_validation->run('addAffectation')) :
+        if (!$this->form_validation->run('addAffectation') || (!$this->input->post('addAffectDossierId') && !$this->input->post('addAffectAffaireId'))) :
             echo json_encode(array('type' => 'error', 'message' => validation_errors()));
             exit;
         endif;
 
         $dossier = $this->managerDossiers->getDossierById($this->input->post('addAffectDossierId'));
         $affaire = $this->managerAffaires->getAffaireById($this->input->post('addAffectAffaireId'));
-        $equipe = $this->managerEquipes->getEquipeById($this->input->post('addAffectEquipeId'));
 
         if ($this->input->post('addAffectId')) :
             $affect = $this->managerAffectations->getAffectationById($this->input->post('addAffectId'));
 
-            /* Si on change la date ou l'équipe, on intervient sur les positions de l'affectation */
-            if ($affect->getAffectationDate() != $this->xth->mktimeFromInputDate($this->input->post('addAffectDate')) || $affect->getAffectationEquipeId() != $this->input->post('addAffectEquipeId')) :
+            /* Si on change la date ou le type, on intervient sur les positions de l'affectation */
+            if ($affect->getAffectationDate() != $this->xth->mktimeFromInputDate($this->input->post('addAffectDate')) || $affect->getAffectationType() != $this->input->post('addAffectType')) :
                 $dateOrigine = $affect->getAffectationDate();
-                $equipeOrigine = $affect->getAffectationEquipeId();
+                $typeOrigine = $affect->getAffectationType();
 
                 /* Position dans les nouvelles conditions */
-                $position = $this->managerAffectations->getNewPosition(intval($this->input->post('addAffectEquipeId')), $this->xth->mktimeFromInputDate($this->input->post('addAffectDate')));
+                $position = $this->managerAffectations->getNewPosition(intval($this->input->post('addAffectType')), $this->xth->mktimeFromInputDate($this->input->post('addAffectDate')));
                 $affect->setAffectationPosition($position);
 
-                $affect->setAffectationEquipeId(intval($this->input->post('addAffectEquipeId')));
+                $affect->setAffectationType(intval($this->input->post('addAffectType')));
                 $affect->setAffectationDate($this->xth->mktimeFromInputDate($this->input->post('addAffectDate')));
 
-                /* On renumérote le jour/Equipe d'origine */
-                $this->renumerotation($equipeOrigine, $dateOrigine);
+                /* On renumérote le jour/Type d'origine */
+                $this->renumerotation($typeOrigine, $dateOrigine);
             endif;
 
-            $affect->setAffectationType($this->input->post('addAffectType'));
             $affect->setAffectationIntervenant($this->input->post('addAffectIntervenant'));
             $affect->setAffectationCommentaire($this->input->post('addAffectCommentaire'));
             $this->managerAffectations->editer($affect);
@@ -73,14 +71,13 @@ class Affectations extends My_Controller {
                     $jourAffect += 172800;
                 endif;
 
-                /* Recherche du nombre d'affectation ce jour pour cette équipe pour connaitre la position par défaut de l'affectation */
-                $position = $this->managerAffectations->getNewPosition(intval($this->input->post('addAffectEquipeId')), $jourAffect);
+                /* Recherche du nombre d'affectation ce jour pour ce type d'affectation pour connaitre la position par défaut de l'affectation */
+                $position = $this->managerAffectations->getNewPosition(intval($this->input->post('addAffectType')), $jourAffect);
 
                 $dataAffect = array(
                     'affectationDossierId' => $this->input->post('addAffectDossierId') ?: null,
                     'affectationAffaireId' => $this->input->post('addAffectAffaireId') ?: null,
                     'affectationType' => $this->input->post('addAffectType'),
-                    'affectationEquipeId' => $this->input->post('addAffectEquipeId'),
                     'affectationDate' => $jourAffect,
                     'affectationEtat' => 1,
                     'affectationPosition' => $position,
@@ -117,7 +114,7 @@ class Affectations extends My_Controller {
         endif;
         $affectation = $this->managerAffectations->getAffectationById(intval($this->input->post('affectationId')));
         /* on renumérote les autres affectations de ce jour */
-        $this->renumerotation($affectation->getAffectationEquipeId(), $affectation->getAffectationDate());
+        $this->renumerotation($affectation->getAffectationType(), $affectation->getAffectationDate());
 
         $this->managerAffectations->delete($affectation);
         echo json_encode(array('type' => 'success'));
@@ -132,7 +129,7 @@ class Affectations extends My_Controller {
         $this->managerAffectations->editer($affectation);
 
         /* on recherche l'affectation à décaler */
-        $other = $this->managerAffectations->liste(array('affectationDate' => $affectation->getAffectationDate(), 'affectationEquipeId' => $affectation->getAffectationEquipeId(), 'affectationPosition' => $positionActuelle - 1, 'affectationId <> ' => $affectation->getAffectationId()));
+        $other = $this->managerAffectations->liste(array('affectationDate' => $affectation->getAffectationDate(), 'affectationType' => $affectation->getAffectationType(), 'affectationPosition' => $positionActuelle - 1, 'affectationId <> ' => $affectation->getAffectationId()));
         if ($other) :
             $other[0]->setAffectationPosition($positionActuelle);
             $this->managerAffectations->editer($other[0]);
@@ -149,7 +146,7 @@ class Affectations extends My_Controller {
         $this->managerAffectations->editer($affectation);
 
         /* on recherche l'affectation à décaler */
-        $other = $this->managerAffectations->liste(array('affectationDate' => $affectation->getAffectationDate(), 'affectationEquipeId' => $affectation->getAffectationEquipeId(), 'affectationPosition' => $positionActuelle + 1, 'affectationId <> ' => $affectation->getAffectationId()));
+        $other = $this->managerAffectations->liste(array('affectationDate' => $affectation->getAffectationDate(), 'affectationType' => $affectation->getAffectationType(), 'affectationPosition' => $positionActuelle + 1, 'affectationId <> ' => $affectation->getAffectationId()));
         if ($other) :
             $other[0]->setAffectationPosition($positionActuelle);
             $this->managerAffectations->editer($other[0]);
@@ -216,8 +213,8 @@ class Affectations extends My_Controller {
             exit;
         endif;
         $data = array(
+            'postes' => $this->postes,
             'recurrents' => $this->managerRecurrents->liste(),
-            'equipes' => $this->managerEquipes->liste(),
             'title' => 'Liste des opérations récurrentes',
             'description' => 'Gérer vos opérations récurrentes',
             'content' => $this->viewFolder . '/' . __FUNCTION__
@@ -236,14 +233,14 @@ class Affectations extends My_Controller {
         if ($this->input->post('addRecurrentId')) :
             $recurrent = $this->managerRecurrents->getRecurrentById(intval($this->input->post('addRecurrentId')));
 
-            $recurrent->setRecurrentEquipeId($this->input->post('addRecurrentEquipeId'));
+            $recurrent->setRecurrentType($this->input->post('addRecurrentType'));
             $recurrent->setRecurrentCommentaire($this->input->post('addRecurrentCommentaire'));
             $recurrent->setRecurrentCritere(strtolower($this->input->post('addRecurrentCritere')));
 
             $this->managerRecurrents->editer($recurrent);
         else :
             $dataRecurrent = array(
-                'recurrentEquipeId' => $this->input->post('addRecurrentEquipeId'),
+                'recurrentType' => $this->input->post('addRecurrentType'),
                 'recurrentCommentaire' => $this->input->post('addRecurrentCommentaire'),
                 'recurrentCritere' => strtolower($this->input->post('addRecurrentCritere'))
             );

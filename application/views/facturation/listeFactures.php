@@ -52,11 +52,12 @@
                         <th data-align="right" data-sortable="true">Montant TTC</th>
                         <th data-align="right" data-sortable="true">Solde</th>
                         <th data-align="center"><i class="far fa-file-pdf"></i></th>
+                        <th data-align="right" data-sortable="true">-</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
-                    $totalPeriodeHT = $totalSoldeTTC = 0;
+                    $totalPeriodeHT = $totalSoldeTTC = $totalMarge = 0;
                     if ($factures):
                         foreach ($factures as $f):
                             $totalPeriodeHT += $f->getFactureTotalHT();
@@ -100,6 +101,16 @@
                                         <i class="far fa-file-pdf"></i>
                                     </a>
                                 </td>
+                                <td>
+                                    <?php
+                                    if ($f->getFactureMarge()):
+                                        $totalMarge += $f->getFactureMarge();
+                                        echo number_format($f->getFactureMarge(), 2, ',', ' ');
+                                    else:
+                                        echo 'NC';
+                                    endif;
+                                    ?>
+                                </td>
                             </tr>
 
                             <?php
@@ -135,6 +146,16 @@
                                         <i class="far fa-file-pdf"></i>
                                     </a>
                                 </td>
+                                <td>
+                                    <?php
+                                    if ($a->getAvoirMarge()):
+                                        $totalMarge -= $a->getAvoirMarge();
+                                        echo '-' . number_format($a->getAvoirMarge(), 2, ',', ' ');
+                                    else:
+                                        echo 'NC';
+                                    endif;
+                                    ?>
+                                </td>
                             </tr>
 
                             <?php
@@ -143,7 +164,7 @@
                     ?>
                 </tbody>
             </table>
-            <h4>Total période : <?= number_format($totalPeriodeHT, 2, ',', ' ') . '€ HT - Solde restant : ' . number_format(round($totalSoldeTTC / 1.2, 2), 2, ',', ' ') . '€ HT'; ?></h4>
+            <h4>Total période : <?= number_format($totalPeriodeHT, 2, ',', ' ') . '€ HT (' . $totalMarge . ') - Solde restant : ' . number_format(round($totalSoldeTTC / 1.2, 2), 2, ',', ' ') . '€ HT'; ?></h4>
         </div>
     </div>
 </div>

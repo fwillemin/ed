@@ -8,6 +8,7 @@ class My_Controller extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
+        $this->postes = array('1' => 'Fabrication', '2' => 'Pose', '3' => 'PAO', '4' => 'Dépannage');
     }
 
     /**
@@ -233,13 +234,13 @@ class My_Controller extends CI_Controller {
     }
 
     /**
-     * Renumerote les affectations d'une journée pour une équipe
-     * @param type $equipe ID de l'équipe
+     * Renumerote les affectations d'une journée pour un type
+     * @param int $type ID du type
      * @param type $date Date
      */
-    public function renumerotation($equipe, $date) {
+    public function renumerotation($type, $date) {
         /* On recalcule les positions des autres affectations du même jour */
-        $others = $this->managerAffectations->liste(array('affectationDate' => $date, 'affectationEquipeId' => $equipe));
+        $others = $this->managerAffectations->liste(array('affectationDate' => $date, 'affectationType' => $type));
         $num = 1;
         if ($others) :
             foreach ($others as $o) :
@@ -248,6 +249,27 @@ class My_Controller extends CI_Controller {
                 $num++;
             endforeach;
         endif;
+    }
+
+    /**
+     * Calcule la marge d'un item du concepteur
+     * @param Cart/Item $item Item du Cart Codeigniter
+     * @return int Marge arrondie
+     */
+    public function majMargeArticle($item) {
+
+        $totalAchats = 0;
+        foreach ($item['composants'] as $o):
+            if ($o['qte'] > 0):
+                $totalAchats += round($o['qte'] * $o['prixAchat'], 2);
+            endif;
+        endforeach;
+
+        $margeItem = $item['price'] - $totalAchats;
+        $arrayMaj = array('rowid' => $item['rowid'], 'marge' => $margeItem);
+        $this->cart->update($arrayMaj);
+
+        return round($margeItem);
     }
 
 }

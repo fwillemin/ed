@@ -21,6 +21,7 @@ class Model_avoirs extends MY_model {
                 ->set('avoirTotalHT', $avoir->getAvoirTotalHT())
                 ->set('avoirTotalTVA', $avoir->getAvoirTotalTVA())
                 ->set('avoirTotalTTC', $avoir->getAvoirTotalTTC())
+                ->set('avoirMarge', $avoir->getAvoirMarge())
                 ->insert($this->table);
         $avoir->setAvoirId($this->db->insert_id());
     }
@@ -38,6 +39,7 @@ class Model_avoirs extends MY_model {
                 ->set('avoirTotalHT', $avoir->getAvoirTotalHT())
                 ->set('avoirTotalTVA', $avoir->getAvoirTotalTVA())
                 ->set('avoirTotalTTC', $avoir->getAvoirTotalTTC())
+                ->set('avoirMarge', $avoir->getAvoirMarge())
                 ->where('avoirId', $avoir->getAvoirId())
                 ->update($this->table);
         return $this->db->affected_rows();
