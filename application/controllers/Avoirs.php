@@ -187,9 +187,8 @@ class Avoirs extends My_Controller {
             'avoirTotalTTC' => 0,
             'avoirCommentaire' => $this->session->userdata('avoirCommentaire') ?: ''
         );
-        log_message('error', __CLASS__ . '/' . __FUNCTION__ . ' => ' . print_r($arrayAvoir, 1));
+
         $avoir = new Avoir($arrayAvoir);
-        log_message('error', __CLASS__ . '/' . __FUNCTION__ . ' => ' . print_r($avoir, 1));
         $this->managerAvoirs->ajouter($avoir);
         $this->session->unset_userdata('avoirCommentaire');
 
