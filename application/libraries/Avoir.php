@@ -5,6 +5,7 @@
  * Manager : Model_avoirs
  *
  * @author Xanthellis - WILLEMIN François - http://www.xanthellis.com
+ * ALTER TABLE `avoirs` ADD `avoirCommentaire` TEXT NOT NULL AFTER `avoirMarge`;
  */
 class Avoir {
 
@@ -17,6 +18,7 @@ class Avoir {
     protected $avoirTotalTVA;
     protected $avoirTotalTTC;
     protected $avoirMarge;
+    protected $avoirCommentaire;
     protected $avoirReglements; /* Liste des réglements pour l'avoir */
     protected $avoirLignes;
     protected $avoirFactureId;
@@ -142,6 +144,14 @@ class Avoir {
 
     function setAvoirMarge($avoirMarge) {
         $this->avoirMarge = $avoirMarge;
+    }
+
+    function getAvoirCommentaire() {
+        return $this->avoirCommentaire;
+    }
+
+    function setAvoirCommentaire($avoirCommentaire) {
+        $this->avoirCommentaire = $avoirCommentaire;
     }
 
 }

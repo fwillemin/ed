@@ -26,7 +26,7 @@
 
         <link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/enseignediffusion.css'); ?>" >
 
-        <!-- reload grunt -->
+        <!-- reload grunt --><script src="//localhost:35729/livereload.js"></script>
 
     </head>
 

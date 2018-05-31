@@ -47,6 +47,18 @@ $(document).ready(function () {
             }
         }, 'json');
     });   
+    $('#avoirCommentaire').on('change', function(){        
+        $.post(chemin + 'avoirs/modAvoirCommentaire', {commentaire: $(this).val()}, function(retour){
+            switch (retour.type) {
+                case 'success':
+                    window.location.reload();
+                    break;
+                case 'error':
+                    $.toaster({priority: 'danger', title: '<strong><i class="fas fa-exclamation-triangle"></i> Oups</strong>', message: '<br>' + retour.message});
+                    break;
+            }
+        }, 'json');
+    });   
     
     $('#btnAvoirEnregistrer').on('click', function(){
         $.post(chemin + 'avoirs/addAvoir', {}, function(retour){

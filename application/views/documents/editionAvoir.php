@@ -57,4 +57,8 @@
 </table>
 <br>
 <br>
-<br>
+<?php
+if ($avoir->getAvoirCommentaire()):
+    echo '<span style="font-size: 11px;"><strong>Commentaire : </strong>' . $avoir->getAvoirCommentaire() . '</span>';
+endif;
+?>

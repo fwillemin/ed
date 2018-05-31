@@ -513,6 +513,13 @@ $config = array(
             'rules' => 'required|numeric|greater_than_equal_to[0]'
         )
     ),
+    'avoirCommentaire' => array(
+        array(
+            'field' => 'commentaire',
+            'label' => 'Commentaire',
+            'rules' => 'trim'
+        )
+    ),
     /* addDossier */
     'addDossier' => array(
         array(

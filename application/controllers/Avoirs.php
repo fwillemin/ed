@@ -140,6 +140,17 @@ class Avoirs extends My_Controller {
         exit;
     }
 
+    public function modAvoirCommentaire() {
+
+        if (!$this->form_validation->run('avoirCommentaire')):
+            echo json_encode(array('type' => 'error', 'message' => validation_errors()));
+        else:
+            $this->session->set_userdata('avoirCommentaire', $this->input->post('commentaire'));
+            echo json_encode(array('type' => 'success'));
+        endif;
+        exit;
+    }
+
     public function addAvoir() {
 
         if (!$this->existFacture($this->session->userdata('venteFactureId')) || $this->cart->total() == 0):
@@ -172,11 +183,15 @@ class Avoirs extends My_Controller {
             'avoirDate' => time(),
             'avoirClientId' => $client->getClientId(),
             'avoirTotalTVA' => $tva,
-            'factureTotalHT' => 0,
-            'factureTotalTTC' => 0
+            'avoirTotalHT' => 0,
+            'avoirTotalTTC' => 0,
+            'avoirCommentaire' => $this->session->userdata('avoirCommentaire') ?: ''
         );
+        log_message('error', __CLASS__ . '/' . __FUNCTION__ . ' => ' . print_r($arrayAvoir, 1));
         $avoir = new Avoir($arrayAvoir);
+        log_message('error', __CLASS__ . '/' . __FUNCTION__ . ' => ' . print_r($avoir, 1));
         $this->managerAvoirs->ajouter($avoir);
+        $this->session->unset_userdata('avoirCommentaire');
 
         /* on ajoute les lignes de l'avoir */
         $avoirTotalHT = 0;
@@ -212,8 +227,10 @@ class Avoirs extends My_Controller {
 
         if ($item['id'] == 'Libre'):
             $ligneReference = null;
+            $ligneMarge = null;
         else:
             $ligneReference = $item['id'];
+            $ligneMarge = $item['marge'];
         endif;
 
         $dataLigne = array(
@@ -225,7 +242,7 @@ class Avoirs extends My_Controller {
             'avoirLignePrixUnitaire' => $item['price'],
             'avoirLigneTotalHT' => $ligneTotalHT,
             'avoirLigneTauxTVA' => $item['options']['tauxTVA'],
-            'avoirLigneMarge' => $item['marge']
+            'avoirLigneMarge' => $ligneMarge
         );
 
         $newLigne = new Avoirligne($dataLigne);

@@ -89,7 +89,7 @@
 
                             <tr>
                                 <td style="border-top: 1px solid grey;">
-                                    <textarea name="venteCommentaire" id="venteCommentaire" class="form-control" rows="3" style="background-color:#ededfc;" placeholder="Commentaire"><?= $this->session->userdata('venteCommentaire'); ?></textarea>
+                                    <textarea name="avoirCommentaire" id="avoirCommentaire" class="form-control" rows="3" style="background-color:#ededfc;" placeholder="Commentaire"><?= $this->session->userdata('avoirCommentaire'); ?></textarea>
                                 </td>
                                 <td style="border-top: 1px solid grey;"></td>
                                 <td colspan="4" style="border-top: 1px solid grey;">
