@@ -28,13 +28,12 @@ class Secure extends CI_Controller {
     }
 
     public function tryLogin() {
+
         if (!$this->form_validation->run('identification')) :
             echo json_encode(array('type' => 'error', 'message' => validation_errors()));
             exit;
         else :
             /* On teste la demande de connexion */
-//            log_message('error', __CLASS__ . '/' . __FUNCTION__ . ' ' . $this->input->post('login'));
-//            log_message('error', __CLASS__ . '/' . __FUNCTION__ . ' ' . $this->input->post('pass'));
             if ($this->ion_auth->login($this->input->post('login'), $this->input->post('pass'), 0)) :
                 echo json_encode(array('type' => 'success'));
             else :
@@ -42,7 +41,6 @@ class Secure extends CI_Controller {
                 echo json_encode(array('type' => 'error', 'message' => 'Identifiants de connexion invalides.'));
             endif;
         endif;
-        exit;
     }
 
     /* julien = jded2017

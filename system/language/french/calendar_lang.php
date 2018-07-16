@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CodeIgniter
  *
@@ -37,20 +38,20 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-$lang['cal_su'] = 'Su';
-$lang['cal_mo'] = 'Mo';
-$lang['cal_tu'] = 'Tu';
-$lang['cal_we'] = 'We';
-$lang['cal_th'] = 'Th';
-$lang['cal_fr'] = 'Fr';
+$lang['cal_su'] = 'Di';
+$lang['cal_mo'] = 'Lu';
+$lang['cal_tu'] = 'Ma';
+$lang['cal_we'] = 'Me';
+$lang['cal_th'] = 'Je';
+$lang['cal_fr'] = 'Ve';
 $lang['cal_sa'] = 'Sa';
-$lang['cal_sun'] = 'Sun';
-$lang['cal_mon'] = 'Mon';
-$lang['cal_tue'] = 'Tue';
-$lang['cal_wed'] = 'Wed';
-$lang['cal_thu'] = 'Thu';
-$lang['cal_fri'] = 'Fri';
-$lang['cal_sat'] = 'Sat';
+$lang['cal_sun'] = 'Dim';
+$lang['cal_mon'] = 'Lun';
+$lang['cal_tue'] = 'Mar';
+$lang['cal_wed'] = 'Mer';
+$lang['cal_thu'] = 'Jeu';
+$lang['cal_fri'] = 'Ven';
+$lang['cal_sat'] = 'Sam';
 $lang['cal_sunday'] = 'dimanche';
 $lang['cal_monday'] = 'lundi';
 $lang['cal_tuesday'] = 'mardi';
@@ -62,7 +63,7 @@ $lang['cal_jan'] = 'Jan';
 $lang['cal_feb'] = 'Feb';
 $lang['cal_mar'] = 'Mar';
 $lang['cal_apr'] = 'Apr';
-$lang['cal_may'] = 'May';
+$lang['cal_may'] = 'Mai';
 $lang['cal_jun'] = 'Jun';
 $lang['cal_jul'] = 'Jul';
 $lang['cal_aug'] = 'Aug';

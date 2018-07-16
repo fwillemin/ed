@@ -41,6 +41,15 @@ class My_Controller extends CI_Controller {
         endif;
     }
 
+    public function existFamille($familleId) {
+        $this->form_validation->set_message('existFamille', 'Cette famille est introuvable.');
+        if ($this->managerFamilles->count(array('familleId' => $familleId)) == 1 || !$familleId) :
+            return true;
+        else :
+            return false;
+        endif;
+    }
+
     /**
      * Fonction pour from_validation qui vérifie l'existance de l'article dans la bdd
      *
@@ -208,7 +217,7 @@ class My_Controller extends CI_Controller {
 
     public function venteInit() {
 
-        $dataSession = array('affaireId', 'affaireClientId', 'affaireExonerationTVA', 'affaireDate');
+        $dataSession = array('affaireId', 'affaireClientId', 'affaireExonerationTVA', 'affaireDate', 'affaireRemises');
         $this->session->unset_userdata($dataSession);
         $this->cart->destroy();
         $this->session->set_userdata(
@@ -222,6 +231,19 @@ class My_Controller extends CI_Controller {
                     'affairePose' => 0
                 )
         );
+    }
+
+    public function setAffaireRemises($clientId) {
+        $remises = $this->managerRemises->getRemisesByClientId($clientId);
+        $sessionRemises = array();
+        if (!empty($remises)):
+            foreach ($remises as $remise):
+                $remise->hydrateFamille();
+                $sessionRemises[] = array('remiseFamilleId' => $remise->getRemiseFamilleId(), 'remiseFamille' => $remise->getRemiseFamille()->getFamilleNom(), 'remiseTaux' => $remise->getRemiseTaux());
+            endforeach;
+            unset($remise);
+        endif;
+        return $sessionRemises;
     }
 
     /**
@@ -260,7 +282,7 @@ class My_Controller extends CI_Controller {
 
         $totalAchats = 0;
         foreach ($item['composants'] as $o):
-            if ($o['qte'] > 0):
+            if ($o['qte'] > 0 && $o['prixAchat'] > 0):
                 $totalAchats += round($o['qte'] * $o['prixAchat'], 2);
             endif;
         endforeach;

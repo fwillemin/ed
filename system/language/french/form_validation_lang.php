@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CodeIgniter
  *
@@ -37,32 +38,32 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-$lang['form_validation_required']		= 'Le champs {field} est requis.';
-$lang['form_validation_isset']			= 'Le champs {field} doit avoir une valeur.';
-$lang['form_validation_valid_email']		= 'Le champs {field} ne contient pas d\'email valide.';
-$lang['form_validation_valid_emails']		= 'Tous les emails du champs {field} ne sont pas valides.';
-$lang['form_validation_valid_url']		= 'Le champs {field} doit contenir une URL valide.';
-$lang['form_validation_valid_ip']		= 'Le champs {field} foit contenir une adresse IP valide.';
-$lang['form_validation_min_length']		= 'The {field} field must be at least {param} characters in length.';
-$lang['form_validation_max_length']		= 'The {field} field cannot exceed {param} characters in length.';
-$lang['form_validation_exact_length']		= 'The {field} field must be exactly {param} characters in length.';
-$lang['form_validation_alpha']			= 'The {field} field may only contain alphabetical characters.';
-$lang['form_validation_alpha_numeric']		= 'The {field} field may only contain alpha-numeric characters.';
-$lang['form_validation_alpha_numeric_spaces']	= 'The {field} field may only contain alpha-numeric characters and spaces.';
-$lang['form_validation_alpha_dash']		= 'The {field} field may only contain alpha-numeric characters, underscores, and dashes.';
-$lang['form_validation_numeric']		= 'Le champs {field} ne peut contenir que des nombres.';
-$lang['form_validation_is_numeric']		= 'Le champs {field} ne peut contenir que des caractères numériques';
-$lang['form_validation_integer']		= 'Le champs {field} doit contenir un entier.';
-$lang['form_validation_regex_match']		= 'The {field} field is not in the correct format.';
-$lang['form_validation_matches']		= 'The {field} field does not match the {param} field.';
-$lang['form_validation_differs']		= 'The {field} field must differ from the {param} field.';
-$lang['form_validation_is_unique'] 		= 'Le champs {field} doit contenir une valeur unique';
-$lang['form_validation_is_natural']		= 'Le champs {field} ne peut contenir que des chiffres.';
-$lang['form_validation_is_natural_no_zero']	= 'Le champs {field} ne peut contenir que des nombres supérieurs à 0.';
-$lang['form_validation_decimal']		= 'The {field} field must contain a decimal number.';
-$lang['form_validation_less_than']		= 'The {field} field must contain a number less than {param}.';
-$lang['form_validation_less_than_equal_to']	= 'The {field} field must contain a number less than or equal to {param}.';
-$lang['form_validation_greater_than']		= 'Le champs {field} doit contenir un nombre supérieur à {param}.';
-$lang['form_validation_greater_than_equal_to']	= 'The {field} field must contain a number greater than or equal to {param}.';
-$lang['form_validation_error_message_not_set']	= 'Unable to access an error message corresponding to your field name {field}.';
-$lang['form_validation_in_list']		= 'The {field} field must be one of: {param}.';
+$lang['form_validation_required'] = 'Le champs "{field}" est requis.';
+$lang['form_validation_isset'] = 'Le champs "{field}" doit avoir une valeur.';
+$lang['form_validation_valid_email'] = 'Le champs "{field}" ne contient pas d\'email valide.';
+$lang['form_validation_valid_emails'] = 'Tous les emails du champs "{field}" ne sont pas valides.';
+$lang['form_validation_valid_url'] = 'Le champs "{field}" doit contenir une URL valide.';
+$lang['form_validation_valid_ip'] = 'Le champs "{field}" foit contenir une adresse IP valide.';
+$lang['form_validation_min_length'] = 'Le champs "{field}" doit contenir au moins {param} caractères.';
+$lang['form_validation_max_length'] = 'The "{field}" field cannot exceed {param} characters in length.';
+$lang['form_validation_exact_length'] = 'The "{field}" field must be exactly {param} characters in length.';
+$lang['form_validation_alpha'] = 'The "{field}" field may only contain alphabetical characters.';
+$lang['form_validation_alpha_numeric'] = 'The "{field}" field may only contain alpha-numeric characters.';
+$lang['form_validation_alpha_numeric_spaces'] = 'The "{field}" field may only contain alpha-numeric characters and spaces.';
+$lang['form_validation_alpha_dash'] = 'The "{field}" field may only contain alpha-numeric characters, underscores, and dashes.';
+$lang['form_validation_numeric'] = 'Le champs "{field}" ne peut contenir que des nombres.';
+$lang['form_validation_is_numeric'] = 'Le champs "{field}" ne peut contenir que des caractères numériques';
+$lang['form_validation_integer'] = 'Le champs "{field}" doit contenir un entier.';
+$lang['form_validation_regex_match'] = 'The "{field}" field is not in the correct format.';
+$lang['form_validation_matches'] = 'Le champs "{field}" ne correspond pas au champs "{param}".';
+$lang['form_validation_differs'] = 'The "{field}" field must differ from the {param} field.';
+$lang['form_validation_is_unique'] = 'Le champs "{field}" doit contenir une valeur unique';
+$lang['form_validation_is_natural'] = 'Le champs "{field}" ne peut contenir que des chiffres.';
+$lang['form_validation_is_natural_no_zero'] = 'Le champs "{field}" ne peut contenir que des nombres supérieurs à 0.';
+$lang['form_validation_decimal'] = 'The "{field}" field must contain a decimal number.';
+$lang['form_validation_less_than'] = 'The "{field}" field must contain a number less than {param}.';
+$lang['form_validation_less_than_equal_to'] = 'The "{field}" field must contain a number less than or equal to {param}.';
+$lang['form_validation_greater_than'] = 'Le champs "{field}" doit contenir un nombre supérieur à {param}.';
+$lang['form_validation_greater_than_equal_to'] = 'The "{field}" field must contain a number greater than or equal to {param}.';
+$lang['form_validation_error_message_not_set'] = 'Unable to access an error message corresponding to your field name "{field}".';
+$lang['form_validation_in_list'] = 'The "{field}" field must be one of: {param}.';

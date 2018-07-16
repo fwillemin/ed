@@ -517,20 +517,25 @@ class Affaires extends My_Controller {
     public function cloturerAffaire($affaireId = null) {
         if ($affaireId && $this->existAffaire($affaireId)) {
             $affaire = $this->managerAffaires->getAffaireById($affaireId);
-            $affaire->hydrateAffectations();
-
-            if (!empty($affaire->getAffaireAffectations())):
-                foreach ($affaire->getAffaireAffectations() as $affectation):
-                    $affectation->setAffectationEtat(3);
-                    $this->managerAffectations->editer($affectation);
-                endforeach;
-            endif;
-
             $affaire->setAffaireCloture(abs($affaire->getAffaireCloture() - 1));
             $this->managerAffaires->editer($affaire);
         }
         redirect('ventes/listeAffaires');
         exit;
+    }
+
+    public function toggleEditionFicheAtelier() {
+
+        if (!$this->form_validation->run('getAffaire')):
+            echo json_encode(array('type' => 'error', 'message' => validation_errors()));
+            exit;
+        endif;
+
+        $affaire = $this->managerAffaires->getAffaireById($this->input->post('affaireId'));
+        $affaire->setAffaireFicheAtelierEditee(abs($affaire->getAffaireFicheAtelierEditee() - 1));
+        $this->managerAffaires->editer($affaire);
+
+        echo json_encode(array('type' => 'success'));
     }
 
 }

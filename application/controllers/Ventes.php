@@ -15,8 +15,6 @@ class Ventes extends My_Controller {
         if (!$this->ion_auth->logged_in() || !$this->ion_auth->is_admin()) :
             redirect('secure/login');
         endif;
-
-        //$this->affaireError = ''; /* Erreurs lors de l'enregistrement d'une affaire */
     }
 
     /**
@@ -33,6 +31,11 @@ class Ventes extends My_Controller {
             $sessionClients = array();
             foreach ($affaire->getAffaireClients() as $c):
                 $sessionClients[] = $c;
+                if ($c->principal):
+                    $sessionRemises = $this->setAffaireRemises($c->clientId);
+                else:
+                    $sessionRemises = array();
+                endif;
             endforeach;
 
             $dataSession = array(
@@ -43,7 +46,8 @@ class Ventes extends My_Controller {
                 'affairePAO' => $affaire->getAffairePAO(),
                 'affaireFabrication' => $affaire->getAffaireFabrication(),
                 'affairePose' => $affaire->getAffairePose(),
-                'affaireClients' => $sessionClients
+                'affaireClients' => $sessionClients,
+                'affaireRemises' => $sessionRemises
             );
 
             $this->session->set_userdata($dataSession);
@@ -158,6 +162,7 @@ class Ventes extends My_Controller {
                     'affaireOptionId' => null,
                     'optionId' => $c->getCompositionOption()->getOptionId(),
                     'optionUnite' => $c->getCompositionComposant()->getComposantUnite()->getUniteSymbole(),
+                    'prixAchat' => $c->getCompositionOption()->getOptionPrixAchat(),
                     'name' => $c->getCompositionComposant()->getComposantDesignation() . ' ' . $c->getCompositionOption()->getOptionNom(),
                     'qte' => $c->getCompositionQte(),
                     'prix' => $c->getCompositionOption()->getOptionHT(),
@@ -165,16 +170,25 @@ class Ventes extends My_Controller {
                 );
             endforeach;
 
+            $remiseArticle = 0;
+            if ($this->session->userdata('affaireRemises')):
+                foreach ($this->session->userdata('affaireRemises') as $remise) {
+                    if ($remise['remiseFamilleId'] == $article->getArticleFamilleId()):
+                        $remiseArticle = $remise['remiseTaux'];
+                        continue;
+                    endif;
+                }
+            endif;
 
             $data = array(
                 'id' => $article->getArticleId() . '-' . $compteur,
                 'name' => $article->getArticleDesignation(),
                 'description' => $article->getArticleDescription(),
                 'qty' => 1,
-                'price' => $article->getArticleHT(), /* Prix vendu - la remise eventuelle */
+                'price' => $this->calculPrixItem($article->getArticleHT(), $remiseArticle), /* Prix vendu - la remise eventuelle */
                 'prixVendu' => $article->getArticleHT(), /* Prix de vente effectif dans le ligne de l'article. Soit "articleHT" soit un prix forcé */
                 'articleHT' => $article->getArticleHT(), /* Prix public HT de l'article, somme des options */
-                'remise' => 0,
+                'remise' => $remiseArticle,
                 'affaireArticleId' => null,
                 'marge' => $article->getArticleHT() - $prixAchatArticle,
                 'composants' => $compositions
@@ -470,6 +484,7 @@ class Ventes extends My_Controller {
             $clientsAffaire = $this->session->userdata('affaireClients');
             if (empty($clientsAffaire)):
                 $principal = 1;
+                $this->session->set_userdata('affaireRemises', $this->setAffaireRemises($client->clientId));
             else:
                 foreach ($clientsAffaire as $c):
                     if ($c->clientId == $client->clientId):
@@ -517,9 +532,11 @@ class Ventes extends My_Controller {
 
     public function devenirClientPrincipal() {
 
+        $this->session->unset_userdata('affaireRemises');
         foreach ($this->session->userdata('affaireClients') as $c):
             if ($c->clientId == $this->input->post('clientId')):
                 $c->principal = 1;
+                $this->session->set_userdata('affaireRemises', $this->setAffaireRemises($c->clientId));
             else:
                 $c->principal = 0;
             endif;

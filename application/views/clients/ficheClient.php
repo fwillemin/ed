@@ -42,7 +42,7 @@
                     <h4>Contacts <button type="button" class="btn btn-sm btn-link" id="btnAddContact" ><i class="fa fa-plus-circle"></i> Ajouter</button></h4>
                     <table class="table table-bordered table-condensed" style="font-size:11px;">
                         <thead>
-                            <tr>
+                            <tr style="background-color: #04335a; color: #FFF;">
                                 <th>Nom</th>
                                 <th>Téléphone</th>
                                 <th>Email</th>
@@ -76,6 +76,57 @@
                         </tbody>
                     </table>
 
+                    <h4>Remises</h4>
+                    <?= form_open('clients/addRemise', array('class' => 'form-inline', 'id' => 'formAddRemise')); ?>
+                    <input type="hidden" name="addRemiseClientId" id="addRemiseClientId" value="<?= $client->getClientId(); ?>">
+                    <select class="form-control" id="addRemiseFamilleId" name="addRemiseFamilleId">
+                        <?php
+                        if (!empty($familles)):
+                            foreach ($familles as $famille):
+                                echo '<option value="' . $famille->getFamilleId() . '">' . $famille->getFamilleNom() . '</option>';
+                            endforeach;
+                        endif;
+                        ?>
+                    </select>
+                    <input type="text" value="" placeholder="Taux" class="form-control" id="addRemiseTaux" name="addRemiseTaux">
+                    <button class="btn btn-primary" type="submit">
+                        <i class="fa fa-plus-square"></i> Ajouter
+                    </button>
+                    <?= form_close(); ?>
+                    <br>
+                    <table class="table table-bordered table-condensed" style="font-size:15px;">
+                        <thead>
+                            <tr style="background-color: #04335a; color: #FFF;">
+                                <th>Famille</th>
+                                <th style="width:70px; text-align: right">Taux</th>
+                                <th style="width:20px;"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            if (!empty($client->getClientRemises())):
+                                foreach ($client->getClientRemises() as $remise):
+                                    ?>
+                                    <tr data-remisefamilleid="<?= $remise->getRemiseFamilleId(); ?>" >
+                                        <td>
+                                            <?= $remise->getRemiseFamille()->getFamilleNom(); ?>
+                                        </td>
+                                        <td style="text-align: right;">
+                                            <?= $remise->getRemiseTaux() . '%'; ?>
+                                        </td>
+                                        <td style="text-align: center;">
+                                            <button class="btn btn-xs btn-link btnDelRemise" style="padding:0px; margin:0px;">
+                                                <i class="fa fa-trash" style="cursor: pointer; color: grey;"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <?php
+                                endforeach;
+                            endif;
+                            ?>
+                        </tbody>
+                    </table>
+
                 </div>
 
             </div>
@@ -83,7 +134,7 @@
             <div class="row" style="margin-top:10px;">
                 <div class="col-xs-12 col-sm-7">
                     <h3>Historique des affaires</h3>
-                    <table class="table table-condensed table-bordered"style="font-size: 13px; background-color: #FFF;">
+                    <table class="table table-condensed table-bordered" style="font-size: 13px; background-color: #FFF;">
                         <thead>
                             <tr style="background-color: #04335a; color: #FFF;">
                                 <th>ID</th>

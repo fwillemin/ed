@@ -641,6 +641,24 @@ $config = array(
             'label' => 'ID du recurrent',
             'rules' => 'required|callback_existRecurrent'
         )
+    ),
+    /* Ajout d'un remise */
+    'addRemise' => array(
+        array(
+            'field' => 'addRemiseClientId',
+            'label' => 'ID Client',
+            'rules' => 'required|callback_existClient'
+        ),
+        array(
+            'field' => 'addRemiseFamilleId',
+            'label' => 'ID Famille',
+            'rules' => 'required|callback_existFamille'
+        ),
+        array(
+            'field' => 'addRemiseTaux',
+            'label' => 'Taux de remise',
+            'rules' => 'required|numeric|greater_than[0]|less_than[100]'
+        )
     )
 );
 ?>

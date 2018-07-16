@@ -9,6 +9,7 @@ class Ed extends My_Controller {
         $this->viewFolder = strtolower(__CLASS__);
 
         if (!$this->ion_auth->logged_in()) :
+            log_message('error', __CLASS__ . '/' . __FUNCTION__ . ' => ' . 'Non connecté');
             redirect('secure/login');
         endif;
 
@@ -212,6 +213,7 @@ class Ed extends My_Controller {
                 . '<div class="btnModAffect" style="padding:7px; text-align: center; font-weight: bold; position:relative;" data-client="' . $affectation->getAffectationClient() . '"  data-objet="' . $affectation->getAffectationDescriptif() . '">'
                 . '<button class="btn btn-default btn-xs btnHebdoNext" style="position:absolute; top:0px; right:0px;" data-affectid="' . $affectation->getAffectationId() . '"><i class="glyphicon glyphicon-repeat"></i></button>'
                 . $affectation->getAffectationClient()
+                . '<br><span style="font-weight: normal; font-size:10px; font-style: italic;">' . $affectation->getAffectationDescriptif() . '</span>'
                 . '</div>'
                 . '<div class="intervenant">Intervenants : <strong>'
                 . $affectation->getAffectationIntervenant()

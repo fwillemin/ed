@@ -1,4 +1,4 @@
-var chemin = window.location.origin + '/enseignediffusion/index.php/';
+var chemin = 'http://192.168.0.1/ENSEIGNE/planning/index.php/';
 
 function dateFromUnix(timeDate, type) {
     type = type || 'input';

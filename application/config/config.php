@@ -24,7 +24,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   | a PHP script and you can easily do that on your own.
   |
  */
-$config['base_url'] = 'http://192.168.0.1/enseignediffusion/';
+$config['base_url'] = 'http://192.168.0.1/ENSEIGNE/planning/';
+//$config['base_url'] = 'https://planning.enseignediffusion.fr/';
 
 /*
   |--------------------------------------------------------------------------
@@ -137,7 +138,7 @@ $config['subclass_prefix'] = 'MY_';
   | Note: This will NOT disable or override the CodeIgniter-specific
   |	autoloading (application/config/autoload.php)
  */
-$config['composer_autoload'] = TRUE;
+$config['composer_autoload'] = FALSE;
 
 /*
   |--------------------------------------------------------------------------
@@ -315,7 +316,7 @@ $config['cache_query_string'] = FALSE;
   | https://codeigniter.com/user_guide/libraries/encryption.html
   |
  */
-$config['encryption_key'] = 'enseignediff2016';
+$config['encryption_key'] = 'enseignediff2017';
 
 /*
   |--------------------------------------------------------------------------
@@ -370,7 +371,7 @@ $config['encryption_key'] = 'enseignediff2016';
  */
 $config['sess_driver'] = 'files';
 $config['sess_cookie_name'] = 'ci_session';
-$config['sess_expiration'] = 0;
+$config['sess_expiration'] = 6000;
 $config['sess_save_path'] = NULL;
 $config['sess_match_ip'] = FALSE;
 $config['sess_time_to_update'] = 300;
@@ -423,7 +424,7 @@ $config['standardize_newlines'] = FALSE;
   |          for backwards compatibility purposes!
   |
  */
-$config['global_xss_filtering'] = TRUE;
+$config['global_xss_filtering'] = FALSE;
 
 /*
   |--------------------------------------------------------------------------

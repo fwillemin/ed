@@ -51,6 +51,7 @@ class Model_affaires extends MY_model {
                 ->set('affaireCommandeId', $affaire->getAffaireCommandeId())
                 ->set('affaireCommandeDate', $affaire->getAffaireCommandeDate())
                 ->set('affaireCommandeCertifiee', $affaire->getAffaireCommandeCertifiee())
+                ->set('affaireFicheAtelierEditee', $affaire->getAffaireFicheAtelierEditee())
                 ->set('affairePAO', $affaire->getAffairePAO())
                 ->set('affaireFabrication', $affaire->getAffaireFabrication())
                 ->set('affairePose', $affaire->getAffairePose())

@@ -187,6 +187,15 @@
                     ?>
                 </tbody>
             </table>
+            <?php
+            if ($this->session->userdata('affaireRemises')):
+                echo 'Remises<table class="table table-bordered table-condensed" style="font-size: 11px; background-color: #FFF;">';
+                foreach ($this->session->userdata('affaireRemises') as $remise):
+                    echo '<tr><td>' . $remise['remiseFamille'] . '</td><td style="text-align: center;">' . $remise['remiseTaux'] . '%</td></tr>';
+                endforeach;
+                echo '</table>';
+            endif;
+            ?>
         </div>
 
         <div class="col-sm-4" style="border-right: 1px solid black; padding: 0px 8px 0px 8px;">

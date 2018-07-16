@@ -462,4 +462,17 @@ $(document).ready(function () {
         }
     });
 
+    $('.editionFicheAtelier').on('change', function () {
+        $.post(chemin + 'affaires/toggleEditionFicheAtelier', {affaireId: $(this).closest('tr').attr('data-affaireid')}, function (retour) {
+            switch (retour.type) {
+                case 'error':
+                    $.toaster({priority: 'danger', title: '<strong><i class="fas fa-exclamation-triangle"></i> Oups</strong>', message: '<br>' + retour.message});
+                    break;
+                case 'success':
+                    $.toaster({priority: 'success', title: '<strong><i class="fas fa-check"></i> OK</strong>', message: '<br>Edition modifiée'});           
+                    break;
+            }
+        }, 'json');
+    });
+
 });

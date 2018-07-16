@@ -173,6 +173,7 @@
                                     </a>
                                 </td>
                                 <td>
+                                    <input type="checkbox" class="editionFicheAtelier" value="1" <?php if ($affaire->getAffaireFicheAtelierEditee()) echo 'checked'; ?> >
                                     <span style="font-weight: bold; font-size:15px;"><?= $affaire->getAffaireClients()[0]->getClientRaisonSociale(); ?></span>
                                     <br><?=
                                     $affaire->getAffaireObjet();

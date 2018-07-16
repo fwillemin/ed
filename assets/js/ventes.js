@@ -120,12 +120,8 @@ $(document).ready(function () {
         $.post(chemin + 'ventes/devenirClientPrincipal', {clientId: $(this).closest('tr').attr('data-clientid')}, function (retour) {
             switch (retour.type) {
                 case 'success':
-                    $.toaster({priority: 'success', title: '<strong><i class="far fa-thumbs-up"></i> OK</strong>', message: '<br>Client principal changé.'});
-                    $('.devenirPrincipal').css('color', 'lightgrey');
-                    elem.css('color', 'orangered')
-                    $('.btnDelAffaireClient').show();
-                    elem.closest('tr').children('td').eq(2).find('i').hide();
-                    pleaseSave();
+                    window.location.reload();
+
                     break;
                 case 'error':
                     $.toaster({priority: 'danger', title: '<strong><i class="fas fa-exclamation-triangle"></i> Oups</strong>', message: '<br>' + retour.message});

@@ -46,9 +46,17 @@ class Clients extends My_Controller {
         $client->hydrateContacts();
         $client->hydrateFactures();
         $client->hydrateAvoirs();
+        $client->hydrateRemises();
+        if ($client->getClientRemises()):
+            foreach ($client->getClientRemises() as $remise):
+                $remise->hydrateFamille();
+            endforeach;
+        endif;
+        //log_message('error', __CLASS__ . '/' . __FUNCTION__ . ' => ' . print_r($client, true));
 
         $data = array(
             'client' => $client,
+            'familles' => $this->managerFamilles->liste(),
             'title' => 'Fiche client',
             'description' => 'Fiche du client ' . $client->getClientRaisonSociale(),
             'keywords' => '',
@@ -289,6 +297,36 @@ class Clients extends My_Controller {
             echo json_encode(array('type' => 'success', 'clients' => $clients));
             exit;
         endif;
+    }
+
+    public function addRemise() {
+
+        if (!$this->form_validation->run('addRemise')):
+            echo json_encode(array('type' => 'error', 'message' => validation_errors()));
+            exit;
+        endif;
+
+        $remise = $this->managerRemises->count(array('remiseFamilleId' => $this->input->post('addRemiseFamilleId'), 'remiseClientId' => $this->input->post('addRemiseClientId')));
+        if ($remise > 0):
+            echo json_encode(array('type' => 'error', 'message' => 'Ce client a déjà une remise pour cette famille'));
+        else:
+            $dataRemise = array(
+                'remiseClientId' => $this->input->post('addRemiseClientId'),
+                'remiseFamilleId' => $this->input->post('addRemiseFamilleId'),
+                'remiseTaux' => $this->input->post('addRemiseTaux')
+            );
+            $remise = new Remise($dataRemise);
+            $this->managerRemises->ajouter($remise);
+            echo json_encode(array('type' => 'success'));
+        endif;
+    }
+
+    public function delRemise() {
+        log_message('error', __CLASS__ . '/' . __FUNCTION__ . ' => ' . print_r($_POST, true));
+        $remise = $this->managerRemises->getRemise($this->input->post('clientId'), $this->input->post('familleId'));
+        $this->managerRemises->delete($remise);
+        echo json_encode(array('type' => 'success'));
+        exit;
     }
 
 }

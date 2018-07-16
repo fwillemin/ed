@@ -7,7 +7,7 @@
  * @author Xanthellis - WILLEMIN François - http://www.xanthellis.com
  */
 /*
-  ALTER TABLE `affaires` ADD `affaireCommandeCertifiee` BOOLEAN NOT NULL DEFAULT FALSE AFTER `affaireCommandeDate`;
+  ALTER TABLE `affaires` ADD `affaireFicheAtelierEditee` BOOLEAN NOT NULL AFTER `affaireCommandeCertifiee`;
  */
 class Affaire {
 
@@ -28,6 +28,7 @@ class Affaire {
     protected $affaireCommandeId;
     protected $affaireCommandeDate;
     protected $affaireCommandeCertifiee;
+    protected $affaireFicheAtelierEditee;
     protected $affaireReglements;
     protected $affaireFactures;
     protected $affairePAO;
@@ -270,6 +271,14 @@ class Affaire {
 
     function setAffaireCommandeCertifiee($affaireCommandeCertifiee) {
         $this->affaireCommandeCertifiee = $affaireCommandeCertifiee;
+    }
+
+    function getAffaireFicheAtelierEditee() {
+        return $this->affaireFicheAtelierEditee;
+    }
+
+    function setAffaireFicheAtelierEditee($affaireFicheAtelierEditee) {
+        $this->affaireFicheAtelierEditee = $affaireFicheAtelierEditee;
     }
 
 }

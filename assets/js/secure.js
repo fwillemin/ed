@@ -5,11 +5,10 @@ $(document).ready(function () {
         var donnees = $(this).serialize();
         $.post(chemin + 'secure/tryLogin', donnees, function (retour) {
             switch (retour.type) {
-                case 'success':
-                    window.location.assign( chemin + 'ed/hebdomadaire');
+                case 'success':                  
+                    window.location.assign(chemin + 'ed/');
                     break;
-                default:                    
-                    //$('#consoleLogin').css('border', '1px solid orangered');
+                default:                                        
                     $.toaster({priority: 'danger', title: '<strong><i class="glyphicon glyphicon-alert"></i> Oups</strong>', message: '<br>' + retour.message});
                     break;
             }

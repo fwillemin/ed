@@ -28,6 +28,7 @@ class Client {
     protected $clientFactures;
     protected $clientAvoirs;
     protected $clientContacts;
+    protected $clientRemises;
     protected $clientPrincipal; /* 1 si client principal dans l'affaire chargée */
 
     public function __construct(array $valeurs = []) {
@@ -76,6 +77,11 @@ class Client {
     function hydrateAvoirs() {
         $CI = & get_instance();
         $this->clientAvoirs = $CI->managerAvoirs->liste(array('avoirClientId' => $this->clientId));
+    }
+
+    function hydrateRemises() {
+        $CI = & get_instance();
+        $this->clientRemises = $CI->managerRemises->getRemisesByClientId($this->clientId);
     }
 
     function getClientId() {
@@ -212,6 +218,14 @@ class Client {
 
     function setClientEcheancePaiementTexte($clientEcheancePaiementTexte) {
         $this->clientEcheancePaiementTexte = $clientEcheancePaiementTexte;
+    }
+
+    function getClientRemises() {
+        return $this->clientRemises;
+    }
+
+    function setClientRemises($clientRemises) {
+        $this->clientRemises = $clientRemises;
     }
 
 }
