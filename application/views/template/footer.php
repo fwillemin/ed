@@ -40,7 +40,7 @@
 <?php if ($this->ion_auth->logged_in()): ?>
     <script defer type="text/javascript" src="<?= base_url('assets/MegaNavbar/MegaNavbar.js'); ?>"></script>
 <?php endif; ?>
-<script defer src="https://use.fontawesome.com/releases/v5.0.10/js/all.js" integrity="sha384-slN8GvtUJGnv6ca26v8EzVaR9DC58QEwsIk9q1QXdCU8Yu8ck/tL/5szYlBbqmS+" crossorigin="anonymous"></script>
+<script defer src="https://use.fontawesome.com/releases/v5.2.0/js/all.js" integrity="sha384-4oV5EgaV02iISL2ban6c/RmotsABqE4yZxZLcYMAdG7FAPsyHYAPpywE9PJo+Khy" crossorigin="anonymous"></script>
 <script defer type="text/javascript" src="<?= base_url('assets/bootstrap-table/bootstrap-table.min.js'); ?>"></script>
 <script defer type="text/javascript" src="<?= base_url('assets/bootstrap-table/bootstrap-table-contextmenu.min.js'); ?>"></script>
 <script defer type="text/javascript" src="<?= base_url('assets/bootstrap-table/bootstrap-table-fr-FR.min.js'); ?>"></script>

@@ -83,8 +83,23 @@ $(document).ready(function () {
         e.stopPropagation();
         $.post(chemin + 'affectations/nextStep', {affectationId: $(this).attr('data-affectid')}, function (retour) {
             switch (retour.type) {
-                case 'success':
-                    //window.location.reload();
+                case 'success':                    
+                    elem.css('background-color', retour.backgroundColor);
+                    elem.css('color', retour.fontColor);
+                    break;
+                case 'error':
+                    $.toaster({priority: 'danger', title: '<strong><i class="fas fa-exclamation-triangle"></i> Oups</strong>', message: '<br>' + retour.message});
+                    break;
+            }
+        }, 'json');
+    });
+    
+    $('.btnPlanifNext').on('click', function (e) {
+        var elem = $(this).closest('div');
+        e.stopPropagation();
+        $.post(chemin + 'affectations/nextStep', {affectationId: $(this).attr('data-affectid')}, function (retour) {
+            switch (retour.type) {
+                case 'success':                    
                     elem.css('background-color', retour.backgroundColor);
                     elem.css('color', retour.fontColor);
                     break;

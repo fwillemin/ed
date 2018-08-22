@@ -61,9 +61,8 @@
                                                 ?>
                                                 <div class="progHebdo" data-affectid="<?= $a->getAffectationId(); ?>" style="background-color: <?= $a->getAffectationCouleur(); ?>; position:relative;">
                                                     <div class="btnModAffect" style="width:100%; padding: 7px; color: <?= $a->getAffectationFontColor(); ?>" data-client="<?= $d->getDossierClient(); ?>" data-objet="<?= $d->getDossierDescriptif(); ?>">
-                                                        <?php
-                                                        echo date('d/m/y', $a->getAffectationDate());
-                                                        ?>
+                                                        <button type="button" class="btn btn-link btn-xs btnPlanifNext" style="position:absolute; top:0px; right:0px; color: turquoise;" data-affectid="<?= $a->getAffectationId(); ?>"><i class="fas fa-redo-alt"></i></button>
+                                                        <?= date('d/m/y', $a->getAffectationDate()); ?>
                                                     </div>
                                                     <div class="intervenant">
                                                         <?= $a->getAffectationIntervenant() ?: '-'; ?>
@@ -93,6 +92,7 @@
                                                 ?>
                                                 <div class="progHebdo" data-affectid="<?= $a->getAffectationId(); ?>" style="background-color: <?= $a->getAffectationCouleur(); ?>; position:relative;">
                                                     <div class="btnModAffect" style="width:100%; padding: 7px; color: <?= $a->getAffectationFontColor(); ?>" data-client="<?= $d->getDossierClient(); ?>" data-objet="<?= $d->getDossierDescriptif(); ?>">
+                                                        <button type="button" class="btn btn-link btn-xs btnPlanifNext" style="position:absolute; top:0px; right:0px; color: turquoise;" data-affectid="<?= $a->getAffectationId(); ?>"><i class="fas fa-redo-alt"></i></button>
                                                         <?= date('d/m/y', $a->getAffectationDate()); ?>
                                                     </div>
                                                     <div class="intervenant">
@@ -122,10 +122,9 @@
                                             if ($a->getAffectationType() == 2) :
                                                 ?>
                                                 <div class="progHebdo" data-affectid="<?= $a->getAffectationId(); ?>" style="background-color: <?= $a->getAffectationCouleur(); ?>">
-                                                    <div class="btnModAffect" style="width:100%; padding: 7px; color: <?= $a->getAffectationFontColor(); ?>" data-client="<?= $d->getDossierClient(); ?>" data-objet="<?= $d->getDossierDescriptif(); ?>">
-                                                        <?php
-                                                        echo date('d/m/y', $a->getAffectationDate());
-                                                        ?>
+                                                    <div class="btnModAffect" style="width:100%; padding: 7px; color: <?= $a->getAffectationFontColor(); ?>; position:relative;" data-client="<?= $d->getDossierClient(); ?>" data-objet="<?= $d->getDossierDescriptif(); ?>">
+                                                        <button type="button" class="btn btn-link btn-xs btnPlanifNext" style="position:absolute; top:0px; right:0px; color: turquoise;" data-affectid="<?= $a->getAffectationId(); ?>"><i class="fas fa-redo-alt"></i></button>
+                                                        <?= date('d/m/y', $a->getAffectationDate()); ?>
                                                     </div>
                                                     <div class="intervenant">
                                                         <?= $a->getAffectationIntervenant() ?: '-'; ?>
@@ -191,9 +190,8 @@
                                                 ?>
                                                 <div class="progHebdo" data-affectid="<?= $a->getAffectationId(); ?>" style="background-color: <?= $a->getAffectationCouleur(); ?>; position:relative;">
                                                     <div class="btnModAffect" style="width:100%; padding: 7px; color: <?= $a->getAffectationFontColor(); ?>" data-client="<?= $affaire->getAffaireClients()[0]->getClientRaisonSociale(); ?>"  data-objet="<?= $affaire->getAffaireObjet(); ?>">
-                                                        <?php
-                                                        echo date('d/m/y', $a->getAffectationDate());
-                                                        ?>
+                                                        <button type="button" class="btn btn-link btn-xs btnPlanifNext" style="position:absolute; top:0px; right:0px; color: turquoise;" data-affectid="<?= $a->getAffectationId(); ?>"><i class="fas fa-redo-alt"></i></button>
+                                                        <?= date('d/m/y', $a->getAffectationDate()); ?>
                                                     </div>
                                                     <div class="intervenant">
                                                         <?= $a->getAffectationIntervenant(); ?>
@@ -223,6 +221,7 @@
                                                 ?>
                                                 <div class="progHebdo" data-affectid="<?= $a->getAffectationId(); ?>" style="background-color: <?= $a->getAffectationCouleur(); ?>; position:relative;">
                                                     <div class="btnModAffect" style="width:100%; padding: 7px; color: <?= $a->getAffectationFontColor(); ?>" data-client="<?= $affaire->getAffaireClients()[0]->getClientRaisonSociale(); ?>"  data-objet="<?= $affaire->getAffaireObjet(); ?>">
+                                                        <button type="button" class="btn btn-link btn-xs btnPlanifNext" style="position:absolute; top:0px; right:0px; color: turquoise;" data-affectid="<?= $a->getAffectationId(); ?>"><i class="fas fa-redo-alt"></i></button>
                                                         <?= date('d/m/y', $a->getAffectationDate()); ?>
                                                     </div>
                                                     <div class="intervenant">
@@ -252,10 +251,9 @@
                                             if ($a->getAffectationType() == 2) :
                                                 ?>
                                                 <div class="progHebdo" data-affectid="<?= $a->getAffectationId(); ?>" style="background-color: <?= $a->getAffectationCouleur(); ?>">
-                                                    <div class="btnModAffect" style="width:100%; padding: 7px; color: <?= $a->getAffectationFontColor(); ?>" data-client="<?= $affaire->getAffaireClients()[0]->getClientRaisonSociale(); ?>"  data-objet="<?= $affaire->getAffaireObjet(); ?>">
-                                                        <?php
-                                                        echo date('d/m/y', $a->getAffectationDate());
-                                                        ?>
+                                                    <div class="btnModAffect" style="width:100%; padding: 7px; color: <?= $a->getAffectationFontColor(); ?>; position:relative;" data-client="<?= $affaire->getAffaireClients()[0]->getClientRaisonSociale(); ?>"  data-objet="<?= $affaire->getAffaireObjet(); ?>">
+                                                        <button type="button" class="btn btn-link btn-xs btnPlanifNext" style="position:absolute; top:0px; right:0px; color: turquoise;" data-affectid="<?= $a->getAffectationId(); ?>"><i class="fas fa-redo-alt"></i></button>
+                                                        <?= date('d/m/y', $a->getAffectationDate()); ?>
                                                     </div>
                                                     <div class="intervenant">
                                                         <?= $a->getAffectationIntervenant(); ?>
