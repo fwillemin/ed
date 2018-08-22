@@ -356,8 +356,23 @@
                                 <?= number_format(round($item['price'] * $item['qty'], 2), 2, ',', ' '); ?>
                             </td>
                             <td style="text-align: right; position: relative;">
-                                <button class="btnInvisible btnAddComposant"><i class="fas fa-plus-square" style="color: #007fff;"></i></button>
-                                <button class="btnInvisible delArticle"><i class="fas fa-trash" style="color: grey;"></i></button>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-caret-square-down"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a class="btnAddComposant"><i class="fas fa-plus-square" style="color: #007fff;"></i> Ajouter un composant</a>
+                                        </li>
+                                        <li>
+                                            <a class="btnDupliquerArticle"><i class="fas fa-copy" style="color: green;"></i> Dupliquer cet article</a>
+                                        </li>
+                                        <li class="divider"></li>
+                                        <li>
+                                            <a class="delArticle"><i class="fas fa-trash" style="color: palevioletred;"></i> Supprimer cet article</a>
+                                        </li>
+                                    </ul>
+                                </div>
                                 <button class="btnInvisible showOptions"><i class="fas fa-eye-slash" style="color: orangered; position: absolute; bottom: 3px; right: 3px; font-size: 15px; cursor: pointer;"></i></button>
                             </td>
                         </tr>

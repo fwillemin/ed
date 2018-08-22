@@ -71,7 +71,7 @@ $(document).ready(function () {
     });
 
     /* Sélection du client */
-    $('#btnClientSearch').on('click', function () {        
+    $('#btnClientSearch').on('click', function () {
         $('#modalClientSearch').modal('show');
     });
 
@@ -251,15 +251,43 @@ $(document).ready(function () {
         );
     });
 
-    $('.delArticle').on('dblclick', function () {
+    $('.delArticle').on('click', function () {
         var rowid = $(this).closest('tr').attr('data-rowid');
-        $.post(chemin + 'ventes/delArticle', {rowId: rowid}).done(
+        $.confirm({
+            title: 'Supprimer cet article',
+            content: 'L\'article sera supprimé.',
+            type: 'blue',
+            theme: 'material',
+            buttons: {
+                confirm: {
+                    btnClass: 'btn-green',
+                    text: 'SUPPRIMER',
+                    action: function () {
+                        $.post(chemin + 'ventes/delArticle', {rowId: rowid}).done(
+                                function () {
+                                    $('tr[data-rowid="' + rowid + '"]').remove();
+                                    pleaseSave();
+                                }
+                        )
+                    }
+                },
+                cancel: {
+                    btnClass: 'btn-red',
+                    text: 'Annuler'
+                }
+            }
+        });
+    });
+
+    $('.btnDupliquerArticle').on('click', function () {
+        var rowid = $(this).closest('tr').attr('data-rowid');
+        $.post(chemin + 'ventes/dupliquerVenteArticle', {rowId: rowid}).done(
                 function () {
-                    $('tr[data-rowid="' + rowid + '"]').remove();
-                    pleaseSave();
+                    window.location.reload();
                 }
         )
     });
+
     $('.delComposant').on('dblclick', function () {
         var optionId = $(this).closest('tr').attr('data-optionid');
         $.post(chemin + 'ventes/delComposant', {optionId: optionId, rowId: $(this).closest('tr').attr('data-rowid')}).done(
@@ -322,7 +350,7 @@ $(document).ready(function () {
                     ligneArticle.children('td').eq(0).find('.margeArticle').text('Ref Fst: ' + retour.margeArticle);
                     ligneArticle.children('td').eq(2).find('.resetPrixDeVente').text(retour.prixBase + '€');
                     ligneArticle.children('td').eq(2).find('.resetPrixDeVente').attr('data-valeur', retour.prixBase);
-                    ligneArticle.children('td').eq(4).text(retour.prixTotal);                    
+                    ligneArticle.children('td').eq(4).text(retour.prixTotal);
                     $('#margeAffaire').html('<i class="fas fa-trophy"></i> ' + retour.margeAffaire);
                     majTotauxAffaire(retour.totaux);
                     pleaseSave();
@@ -393,8 +421,8 @@ $(document).ready(function () {
             }
         });
     });
-    
-    $('#formAddReglement').on('submit', function (e) {        
+
+    $('#formAddReglement').on('submit', function (e) {
         e.preventDefault();
         var donnees = $(this).serialize();
         $.post(chemin + 'facturation/addReglement', donnees, function (retour) {
@@ -429,7 +457,7 @@ $(document).ready(function () {
                         if ($(this).attr('data-factureclientid') == retour.reglement.reglementClientId) {
                             $(this).prop('disabled', false);
                         }
-                        if( $(this).val() == retour.reglement.reglementFactureId ){
+                        if ($(this).val() == retour.reglement.reglementFactureId) {
                             $(this).prop('selected', true);
                         }
                     });
@@ -446,11 +474,11 @@ $(document).ready(function () {
                 Math.round($(this).attr('data-subtotal') * $(this).val()) / 100
                 );
     });
-    
-    $('#addFactureClientId').on('change', function(){
+
+    $('#addFactureClientId').on('change', function () {
         $('#addFactureEcheancePaiement option[value="' + $('#addFactureClientId option:selected').attr('data-echeance') + '"]').prop('selected', true);
     });
-    
+
     $('#formAddFacture').on('submit', function (e) {
         e.preventDefault();
 
@@ -459,7 +487,7 @@ $(document).ready(function () {
             lignes.push([$(this).closest('tr').attr('data-rowid'), $(this).val()]);
         }
         ).promise().done(
-                function () {                    
+                function () {
                     $.post(chemin + 'facturation/addFacture', {addFactureAffaireId: $('#addFactureAffaireId').val(), addFactureClientId: $('#addFactureClientId').val(), addFactureMode: $('#addFactureMode').val(), addFactureObjet: $('#addFactureObjet').val(), addFactureEcheancePaiement: $('#addFactureEcheancePaiement').val(), addFactureLignes: lignes}, function (data) {
                         switch (data.type) {
                             case 'success':
@@ -493,15 +521,15 @@ $(document).ready(function () {
     });
 
     /* Planification */
-    $('.modOptionPlanif').on('change', function(){
+    $('.modOptionPlanif').on('change', function () {
         console.log('...');
         var etat = 0;
-        if( $(this).prop('checked') === true ){
+        if ($(this).prop('checked') === true) {
             etat = 1;
         }
-        $.post( chemin + 'ventes/modOptionPlanification', {option: $(this).attr('data-option'), valeur: etat}, function(retour){
+        $.post(chemin + 'ventes/modOptionPlanification', {option: $(this).attr('data-option'), valeur: etat}, function (retour) {
             switch (retour.type) {
-                case 'success':                    
+                case 'success':
                     $.toaster({priority: 'success', title: '<strong><i class="fa fa-hand-peace-o"></i> OK</strong>', message: '<br>' + 'Option modifiée'});
                     pleaseSave();
                     break;
@@ -509,7 +537,7 @@ $(document).ready(function () {
                     $.toaster({priority: 'danger', title: '<strong><i class="fas fa-exclamation-triangle"></i> Oups</strong>', message: '<br>' + retour.message});
                     break;
             }
-        }, 'json' );
+        }, 'json');
     });
 
     $('#btnDupliquerAffaire').confirm({
@@ -517,18 +545,18 @@ $(document).ready(function () {
         content: 'Vous êtes sur le point de dupliquer une affaire.',
         type: 'blue',
         theme: 'material',
-        buttons: {            
+        buttons: {
             confirm: {
                 btnClass: 'btn-green',
                 text: 'Dupliquer',
-                action : function () {
+                action: function () {
                     window.location.assign(chemin + 'affaires/dupliquerAffaire/' + $('#btnDupliquerAffaire').attr('data-affaireid'));
                 }
-                
+
             },
             cancel: {
                 btnClass: 'btn-red',
-                text: 'Annuler'                
+                text: 'Annuler'
             }
         }
     });
@@ -537,18 +565,18 @@ $(document).ready(function () {
         content: 'Voulez-vous clôturer cette affaire ?<br>Elle sera comptée comme :<br><strong>Terminée</strong> si une commande a été générée<br><strong>Perdue</strong> si seul un devis a été crée.',
         type: 'blue',
         theme: 'material',
-        buttons: {            
+        buttons: {
             confirm: {
                 btnClass: 'btn-green',
                 text: 'Clôturer',
-                action : function () {
+                action: function () {
                     window.location.assign(chemin + 'affaires/cloturerAffaire/' + $('#btnDupliquerAffaire').attr('data-affaireid'));
                 }
-                
+
             },
             cancel: {
                 btnClass: 'btn-red',
-                text: 'Annuler'                
+                text: 'Annuler'
             }
         }
     });
@@ -557,18 +585,18 @@ $(document).ready(function () {
         content: 'Voulez-vous reprendre cette affaire comme "NON CLOTUREE" ?',
         type: 'blue',
         theme: 'material',
-        buttons: {            
+        buttons: {
             confirm: {
                 btnClass: 'btn-green',
                 text: 'Reprendre',
-                action : function () {
+                action: function () {
                     window.location.assign(chemin + 'affaires/cloturerAffaire/' + $('#btnDupliquerAffaire').attr('data-affaireid'));
                 }
-                
+
             },
             cancel: {
                 btnClass: 'btn-red',
-                text: 'Annuler'                
+                text: 'Annuler'
             }
         }
     });

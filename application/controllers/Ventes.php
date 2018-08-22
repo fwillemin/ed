@@ -205,6 +205,21 @@ class Ventes extends My_Controller {
         exit;
     }
 
+    /* Dupliquer un article complet dans une affaire */
+
+    public function dupliquerVenteArticle() {
+        $item = $this->cart->get_item($this->input->post('rowId'));
+        unset($item['rowid']);
+
+        /* Recherche du meme article déjà présent dans le panier */
+        $compteur = $this->getNbOccurence(explode('-', $item['id'])[0]) + 1;
+
+        $item['id'] = explode('-', $item['id'])[0] . '-' . $compteur;
+
+        $this->cart->insert($item);
+        $this->session->set_userdata('pleaseSave', 1);
+    }
+
     private function reloadVenteArticle(AffaireArticle $affaireArticle) {
 
         $article = $this->managerArticles->getArticleById($affaireArticle->getAffaireArticleArticleId());
