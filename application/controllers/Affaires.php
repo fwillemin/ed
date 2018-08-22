@@ -517,6 +517,18 @@ class Affaires extends My_Controller {
     public function cloturerAffaire($affaireId = null) {
         if ($affaireId && $this->existAffaire($affaireId)) {
             $affaire = $this->managerAffaires->getAffaireById($affaireId);
+
+            if ($affaire->getAffaireCloture() == 0):
+                /* Cloture de toutes les affectations liées */
+                $affaire->hydrateAffectations();
+                if (!empty($affaire->getAffaireAffectations())):
+                    foreach ($affaire->getAffaireAffectations() as $affectation):
+                        $affectation->setAffectationEtat(3);
+                        $this->managerAffectations->editer($affectation);
+                    endforeach;
+                endif;
+            endif;
+
             $affaire->setAffaireCloture(abs($affaire->getAffaireCloture() - 1));
             $this->managerAffaires->editer($affaire);
         }
