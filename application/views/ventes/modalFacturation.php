@@ -88,13 +88,14 @@
                                     <td>
                                         <select class="form-control input-sm calcQuota" data-subtotal="<?= $item['subtotal']; ?>" >
                                             <option value="100" selected >100%</option>
+                                            <option value="0">0%</option>
                                             <option value="20">20%</option>
                                             <option value="25">25%</option>
                                             <option value="33.33">33.33%</option>
                                             <option value="50">50%</option>
                                             <option value="66.66">66.66%</option>
                                             <option value="75">75%</option>
-                                            <option value="0">0%</option>
+                                            <option value="80">80%</option>
                                         </select>
                                     </td>
                                     <td>

@@ -163,8 +163,9 @@ class Avoirs extends My_Controller {
         $facture->hydrateClient();
         $client = $facture->getFactureClient();
 
-        if ($this->cart->total() > ($facture->getFactureTotalHT() - $facture->getFactureTotalAvoirs())):
-            echo json_encode(array('type' => 'error', 'message' => 'Le total de l\'avoir est supérieur à la valeur de la facture.'));
+        if (round($this->cart->total(), 2) > ($facture->getFactureTotalHT() - $facture->getFactureTotalAvoirs())):
+            $max = $facture->getFactureTotalHT() - $facture->getFactureTotalAvoirs();
+            echo json_encode(array('type' => 'error', 'message' => 'Le total de l\'avoir (' . $this->cart->total() . '€) est supérieur à la valeur résiduelle de la facture. (' . $max . '€)'));
             exit;
         endif;
 

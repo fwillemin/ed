@@ -4,6 +4,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Documents extends My_Controller {
 
+    CONST hauteurPiedPage = 50;
+
     public function __construct() {
         parent::__construct();
         $this->viewFolder = strtolower(__CLASS__) . '/';
@@ -118,7 +120,7 @@ class Documents extends My_Controller {
 
         $pdf->SetMargins(13, 79, 5);
 // set auto page breaks
-        $pdf->SetAutoPageBreak(true, 15);
+        $pdf->SetAutoPageBreak(true, self::hauteurPiedPage); /* Anciennement 15 */
         $pdf->AddPage('', '', FALSE, FALSE, $header);
 
         $pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
@@ -205,7 +207,7 @@ class Documents extends My_Controller {
 
         $pdf->SetMargins(7, 48, 5);
 // set auto page breaks
-        $pdf->SetAutoPageBreak(true, 15);
+        $pdf->SetAutoPageBreak(true, self::hauteurPiedPage);
         $pdf->AddPage('', '', FALSE, FALSE, $header);
 
         $pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
@@ -275,7 +277,7 @@ class Documents extends My_Controller {
 
         $pdf->SetMargins(13, 79, 5);
 // set auto page breaks
-        $pdf->SetAutoPageBreak(true, 15);
+        $pdf->SetAutoPageBreak(true, self::hauteurPiedPage);
         $pdf->AddPage('', '', FALSE, FALSE, $header);
 
         $pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
@@ -341,7 +343,7 @@ class Documents extends My_Controller {
 
         $pdf->SetMargins(13, 79, 5);
 // set auto page breaks
-        $pdf->SetAutoPageBreak(true, 15);
+        $pdf->SetAutoPageBreak(true, self::hauteurPiedPage);
         $pdf->AddPage('', '', FALSE, FALSE, $header);
 
         $pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
