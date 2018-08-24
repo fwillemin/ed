@@ -1,9 +1,6 @@
 <div class="container fond" style="">
 
     <div class="row">
-        <div style="position: absolute; top:5px; right:5px; color: steelblue; font-weight: bold;" id="margeAffaire">
-            <i class="fas fa-trophy"></i> <?= $this->session->userdata('margeAffaire'); ?>
-        </div>
         <div class = "col-sm-4">
             <?php
             if ($this->session->userdata('pleaseSave') == '1'):
@@ -48,8 +45,12 @@
             endif;
             ?>
 
-            <div class="row" style="position:relative; background-color: #2a293f; padding: 8px 8px 6px 8px; position: relative; top: 30px; border-top-left-radius: 10px;">
+            <div class="row" style="position:relative; background-color: #2a293f; padding: 8px 8px 6px 8px; position: relative; top: 0px; border-top-left-radius: 10px;">
 
+                <div class="col-sm-2">
+                    <label class="label" style="font-size: 15px;">Ss-Tr</label>
+                    <input class="modOptionPlanif" data-option="affaireST" type="checkbox" <?= $this->session->userdata('affaireST') ? "checked" : ''; ?> data-toggle="toggle" data-size="mini" data-onstyle="danger" data-on="<i class='fas fa-clock'></i>" data-off="-" value="1">
+                </div>
                 <div class="col-sm-2">
                     <label class="label" style="font-size: 15px;">PAO</label>
                     <input class="modOptionPlanif" data-option="affairePAO" type="checkbox" <?= $this->session->userdata('affairePAO') ? "checked" : ''; ?> data-toggle="toggle" data-size="mini" data-onstyle="success" data-on="<i class='fas fa-thumbs-up'></i>" data-off="-" value="1">
@@ -62,7 +63,11 @@
                     <label class="label" style="font-size: 15px;">Pose</label>
                     <input class="modOptionPlanif" data-option="affairePose" type="checkbox" <?= $this->session->userdata('affairePose') ? "checked" : ''; ?> data-toggle="toggle" data-size="mini" data-onstyle="success" data-on="<i class='fas fa-thumbs-up'></i>" data-off="-" value="1">
                 </div>
-                <div class="col-sm-3 avancement <?= $devisEtat; ?>" >
+                <div class="col-sm-4" style="text-align: right; color:gold;">
+                    <i class="fas fa-trophy"></i> <?= $this->session->userdata('margeAffaire'); ?>
+                </div>
+
+                <div class="col-sm-6 avancement <?= $devisEtat; ?>" style="padding:8px 5px 0px 5px; border-top:1px solid lightgrey; margin-top:4px;">
                     <?php if ($affaire && $affaire->getAffaireDevisId()): ?>
                         <a href="<?= site_url('documents/editionDevis/' . $affaire->getAffaireId()); ?>" target="_blank" style="color: inherit; cursor: pointer">
                             <i class="fas fa-file-pdf"></i> Devis N°<?= $affaire->getAffaireDevisId(); ?>
@@ -76,7 +81,7 @@
 
                     if ($affaire && $affaire->getAffaireDevisDate()):
                         ?>
-                        <button class="btnInvisible" style="position: absolute; top:0px; left: 25px; color: #FFF;"
+                        <button class="btnInvisible" style="position: absolute; top:8px; left: 115px; color: #FFF;"
                                 data-toggle="popover" data-trigger="click"
                                 title="<span style='color: black; font-weight: bold;'>Modifier les infos du devis</span>" data-html="true" data-placement="bottom"
                                 data-content='<form id="formModDevis" method="POST" action="<?= site_url('affaires/modifierDevis'); ?>">
@@ -89,7 +94,7 @@
 
                     <?php endif; ?>
                 </div>
-                <div class="col-sm-3 avancement <?= $commandeEtat; ?>" >
+                <div class="col-sm-6 avancement <?= $commandeEtat; ?>" style="padding:8px 5px 0px 5px; border-top:1px solid lightgrey; margin-top:4px;">
                     <?php if ($affaire && $affaire->getAffaireCommandeId()): ?>
 
                         <a href="<?= site_url('documents/editionFicheAtelier/' . $affaire->getAffaireId()); ?>" target="_blank" style="color: inherit; cursor: pointer">
@@ -105,7 +110,7 @@
 
                     if ($affaire && $affaire->getAffaireCommandeDate()):
                         ?>
-                        <button class="btnInvisible" style="position: absolute; top:0px; left: 23px; color: #FFF;"
+                        <button class="btnInvisible" style="position: absolute; top:8px; left: 115px; color: #FFF;"
                                 data-toggle="popover" data-trigger="click"
                                 title="<span style='color: black; font-weight: bold;'>Modifier date commande</span>" data-html="true" data-placement="bottom"
                                 data-content='<form id="formModCommande" method="POST" action="<?= site_url('affaires/modifierCommande'); ?>">

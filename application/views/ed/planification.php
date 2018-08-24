@@ -176,6 +176,9 @@
                                     <span style="font-weight: bold; font-size:15px;"><?= $affaire->getAffaireClients()[0]->getClientRaisonSociale(); ?></span>
                                     <br><?=
                                     $affaire->getAffaireObjet();
+                                    if ($affaire->getAffaireST()):
+                                        echo '<br><span style="color: red;">Attente retour <strong>sous-traitance</strong></span>';
+                                    endif;
                                     if ($affaire->getAffaireCommandeCertifiee()):
                                         echo '<img src="' . base_url('assets/img/certifieNB.jpg') . '" style="height: 40px;" class="pull-right">';
                                     endif;

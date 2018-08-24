@@ -70,43 +70,48 @@ class Affaires extends My_Controller {
 
                 /* Gestion de l'avancement avec les affectations */
                 $a->affaireTerminee = 1;
-                if ($a->affairePAO):
-                    $affectations = $this->managerAffectations->liste(array('affectationAffaireId' => $a->affaireId, 'affectationType' => 3));
-                    if (empty($affectations)):
-                        $a->affaireTerminee = 0;
-                    else:
-                        foreach ($affectations as $affect):
-                            if ($affect->getAffectationEtat() < 3):
-                                $a->affaireTerminee = 0;
-                                continue;
-                            endif;
-                        endforeach;
+                if ($a->affaireST):
+                    $a->affaireTerminee = 0;
+                else:
+
+                    if ($a->affairePAO):
+                        $affectations = $this->managerAffectations->liste(array('affectationAffaireId' => $a->affaireId, 'affectationType' => 3));
+                        if (empty($affectations)):
+                            $a->affaireTerminee = 0;
+                        else:
+                            foreach ($affectations as $affect):
+                                if ($affect->getAffectationEtat() < 3):
+                                    $a->affaireTerminee = 0;
+                                    continue;
+                                endif;
+                            endforeach;
+                        endif;
                     endif;
-                endif;
-                if ($a->affaireTerminee == 1 && $a->affaireFabrication):
-                    $affectations = $this->managerAffectations->liste(array('affectationAffaireId' => $a->affaireId, 'affectationType' => 1));
-                    if (empty($affectations)):
-                        $a->affaireTerminee = 0;
-                    else:
-                        foreach ($affectations as $affect):
-                            if ($affect->getAffectationEtat() < 3):
-                                $a->affaireTerminee = 0;
-                                continue;
-                            endif;
-                        endforeach;
+                    if ($a->affaireTerminee == 1 && $a->affaireFabrication):
+                        $affectations = $this->managerAffectations->liste(array('affectationAffaireId' => $a->affaireId, 'affectationType' => 1));
+                        if (empty($affectations)):
+                            $a->affaireTerminee = 0;
+                        else:
+                            foreach ($affectations as $affect):
+                                if ($affect->getAffectationEtat() < 3):
+                                    $a->affaireTerminee = 0;
+                                    continue;
+                                endif;
+                            endforeach;
+                        endif;
                     endif;
-                endif;
-                if ($a->affaireTerminee == 1 && $a->affairePose):
-                    $affectations = $this->managerAffectations->liste(array('affectationAffaireId' => $a->affaireId, 'affectationType' => 2));
-                    if (empty($affectations)):
-                        $a->affaireTerminee = 0;
-                    else:
-                        foreach ($affectations as $affect):
-                            if ($affect->getAffectationEtat() < 3):
-                                $a->affaireTerminee = 0;
-                                continue;
-                            endif;
-                        endforeach;
+                    if ($a->affaireTerminee == 1 && $a->affairePose):
+                        $affectations = $this->managerAffectations->liste(array('affectationAffaireId' => $a->affaireId, 'affectationType' => 2));
+                        if (empty($affectations)):
+                            $a->affaireTerminee = 0;
+                        else:
+                            foreach ($affectations as $affect):
+                                if ($affect->getAffectationEtat() < 3):
+                                    $a->affaireTerminee = 0;
+                                    continue;
+                                endif;
+                            endforeach;
+                        endif;
                     endif;
                 endif;
 
@@ -144,6 +149,7 @@ class Affaires extends My_Controller {
                 $affaire->setAffaireTotalHT($totauxAffaire['ht']);
                 $affaire->setAffaireTotalTVA($totauxAffaire['tva']);
                 $affaire->setAffaireTotalTTC($totauxAffaire['ttc']);
+                $affaire->setAffaireST($this->session->userdata('affaireST'));
                 $affaire->setAffairePAO($this->session->userdata('affairePAO'));
                 $affaire->setAffaireFabrication($this->session->userdata('affaireFabrication'));
                 $affaire->setAffairePose($this->session->userdata('affairePose'));
@@ -160,6 +166,7 @@ class Affaires extends My_Controller {
                     'affaireTotalHT' => $totauxAffaire['ht'],
                     'affaireTotalTVA' => $totauxAffaire['tva'],
                     'affaireTotalTTC' => $totauxAffaire['ttc'],
+                    'affaireST' => $this->session->userdata('affaireST'),
                     'affairePAO' => $this->session->userdata('affairePAO'),
                     'affaireFabrication' => $this->session->userdata('affaireFabrication'),
                     'affairePose' => $this->session->userdata('affairePose')

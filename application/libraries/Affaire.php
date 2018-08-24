@@ -31,6 +31,7 @@ class Affaire {
     protected $affaireFicheAtelierEditee;
     protected $affaireReglements;
     protected $affaireFactures;
+    protected $affaireST;
     protected $affairePAO;
     protected $affaireFabrication;
     protected $affairePose;
@@ -279,6 +280,14 @@ class Affaire {
 
     function setAffaireFicheAtelierEditee($affaireFicheAtelierEditee) {
         $this->affaireFicheAtelierEditee = $affaireFicheAtelierEditee;
+    }
+
+    function getAffaireST() {
+        return $this->affaireST;
+    }
+
+    function setAffaireST($affaireST) {
+        $this->affaireST = $affaireST;
     }
 
 }

@@ -43,6 +43,7 @@ class Ventes extends My_Controller {
                 'affaireDate' => $affaire->getAffaireDate(),
                 'affaireType' => $affaire->getAffaireType(),
                 'affaireObjet' => $affaire->getAffaireObjet(),
+                'affaireST' => $affaire->getAffaireST(),
                 'affairePAO' => $affaire->getAffairePAO(),
                 'affaireFabrication' => $affaire->getAffaireFabrication(),
                 'affairePose' => $affaire->getAffairePose(),

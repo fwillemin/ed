@@ -521,8 +521,7 @@ $(document).ready(function () {
     });
 
     /* Planification */
-    $('.modOptionPlanif').on('change', function () {
-        console.log('...');
+    $('.modOptionPlanif').on('change', function () {        
         var etat = 0;
         if ($(this).prop('checked') === true) {
             etat = 1;
