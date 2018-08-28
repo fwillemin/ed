@@ -60,16 +60,12 @@
                                 <?php
                                 foreach ($postes as $id => $poste):
                                     echo '<tr><td>' . $poste . '</td>';
-                                    for ($j = 0; $j < 5; $j++):
-                                        echo '<td style="width:18%;" class="jour organisable" id="' . $id . '-' . date('d', $premierJourSemaine + $j * 86400) . '" data-equipeid="' . $id . '" data-date="' . date('Y-m-d', $premierJourSemaine + $j * 86400) . '">';
+                                    for ($j = 0; $j < 6; $j++):
+                                        echo '<td style="width:18%;"' . ($id == 5 ? '' : ' class="jour organisable"') . ' id="' . $id . '-' . date('d', $premierJourSemaine + $j * 86400) . '" data-equipeid="' . $id . '" data-date="' . date('Y-m-d', $premierJourSemaine + $j * 86400) . '">';
                                         if (!empty($divs[$id . '-' . date('d', $premierJourSemaine + $j * 86400)])):
-
                                             foreach ($divs[$id . '-' . date('d', $premierJourSemaine + $j * 86400)] as $key => $value):
-
                                                 echo $value;
-
                                             endforeach;
-
                                         endif;
 
                                         echo '</td>';

@@ -67,7 +67,7 @@ class Model_maquettes extends MY_model {
      * @param array $tri Critères de tri des maquettes
      * @return array Liste d'objets de la classe Maquette
      */
-    public function liste($where = array(), $tri = 'maquetteDate DESC', $type = 'object') {
+    public function liste($where = array(), $tri = 'maquetteDateLimite DESC', $type = 'object') {
         $query = $this->db->select('*')
                 ->from($this->table)
                 ->where($where)

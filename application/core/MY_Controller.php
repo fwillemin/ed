@@ -8,7 +8,7 @@ class My_Controller extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->postes = array('1' => 'Fabrication', '2' => 'Pose', '3' => 'PAO', '4' => 'Dépannage');
+        $this->postes = array('1' => 'Fabrication', '2' => 'Pose', '3' => 'PAO', '4' => 'Dépannage', '5' => 'Maquettes');
     }
 
     /**

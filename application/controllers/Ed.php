@@ -126,6 +126,14 @@ class Ed extends My_Controller {
             endforeach;
         endif;
 
+        /* Selection des maquettes */
+        $maquettes = $this->managerMaquettes->liste(array('maquetteDateLimite >=' => $premierJourSemaine, 'maquetteDateLimite <=' => $dernierJourSemaine));
+        if (!empty($maquettes)) :
+            foreach ($maquettes as $maquette) :
+                $divs['5-' . date('d', $maquette->getMaquetteDateLimite())][] = $this->maquetteHebdoCodeHTML($maquette);
+            endforeach;
+        endif;
+
         /* Les récurrents */
         for ($i = $premierJourSemaine; $i < $dernierJourSemaine; $i += 86400) :
             $recur = $this->managerRecurrents->getJour($i);
@@ -147,6 +155,7 @@ class Ed extends My_Controller {
             'divs' => $divs,
             'dossiers' => $elements['dossiers'],
             'affaires' => $elements['affaires'],
+            'maquettes' => $this->managerMaquettes->liste(array('maquetteDateLimite >=' => $premierJourSemaine, 'maquetteDateLimite <=' => $dernierJourSemaine)),
             'title' => 'Hebdomadaire',
             'description' => 'Planning hebdomadaire',
             'content' => $this->viewFolder . '/' . __FUNCTION__
@@ -218,6 +227,36 @@ class Ed extends My_Controller {
                 . '<div class="intervenant">Intervenants : <strong>'
                 . $affectation->getAffectationIntervenant()
                 . '</strong></div></div>';
+    }
+
+    private function maquetteHebdoCodeHTML(Maquette $maquette) {
+
+        $maquette->hydrateClient();
+        if ($maquette->getMaquetteClientId()):
+            $client = $maquette->getMaquetteClient()->getClientRaisonSociale();
+        else:
+            $client = $maquette->getMaquetteClientText();
+        endif;
+        switch ($maquette->getMaquetteAvancement()):
+            case 1:
+                $button = '<span style="color: steelblue;"><i class="fas fa-pause"></i></span>';
+                break;
+            case 2:
+                $button = '<span style="color: goldenrod;"><i class="fas fa-play"></i></span>';
+                break;
+            case 3:
+                $button = '<span style="color: green;"><i class="fas fa-check"></i></span>';
+                break;
+        endswitch;
+
+        return '<div class="maquetteHebdo" style="overflow:hidden;">'
+                . '<div class="row"><div class="col-xs-2">'
+                . '<button class="btn btn-xs btn-default btnMaquetteAvancement" data-maquetteId="' . $maquette->getMaquetteId() . '">'
+                . $button
+                . '</button>'
+                . '</div><div class="col-xs-10">'
+                . '<a href="' . site_url('maquettes/ficheMaquette/' . $maquette->getMaquetteId()) . '">' . $client . '</a>'
+                . '</div></div></div>';
     }
 
     /**
