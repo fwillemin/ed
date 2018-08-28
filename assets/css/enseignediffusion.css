@@ -1,10 +1,10 @@
 body {
--webkit-user-select: none; /* Chrome/Safari */        
--moz-user-select: none; /* Firefox */
--ms-user-select: none; /* IE10+ */
-background-image: url("../../assets/img/fond.png");
-background-size: cover;
-background-attachment: fixed;
+    -webkit-user-select: none; /* Chrome/Safari */        
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+ */
+    background-image: url("../../assets/img/fond.png");
+    background-size: cover;
+    background-attachment: fixed;
 }
 a, button {
     outline: none;
@@ -88,14 +88,18 @@ a, button {
     opacity : 0.4;
 }
 .hachures {
-/*    background-image: url("hachures.png");
-    background-repeat: repeat;*/
+    /*    background-image: url("hachures.png");
+        background-repeat: repeat;*/
     background-color: #ebebf2;    
 }
 
 .modal-header {
     background-color: #e4e9ef;    
     color: #002166;
+    font-size: 12px;    
+    border: 1px solid #FFF;
+    height: 50px;
+    padding: 5px 10px;
 }
 
 

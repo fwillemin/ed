@@ -215,6 +215,15 @@ class My_Controller extends CI_Controller {
         endif;
     }
 
+    public function existMaquette($maquetteId) {
+        $this->form_validation->set_message('existMaquette', 'Cette maquette est introuvable.');
+        if ($this->managerMaquettes->count(array('maquetteId' => $maquetteId)) == 1 || !$maquetteId) :
+            return true;
+        else :
+            return false;
+        endif;
+    }
+
     public function venteInit() {
 
         $dataSession = array('affaireId', 'affaireClientId', 'affaireExonerationTVA', 'affaireDate', 'affaireRemises');

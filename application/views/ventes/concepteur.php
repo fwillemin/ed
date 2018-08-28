@@ -47,7 +47,7 @@
 
             <div class="row" style="position:relative; background-color: #2a293f; padding: 8px 8px 6px 8px; position: relative; top: 0px; border-top-left-radius: 10px;">
 
-                <div class="col-sm-2">
+                <div class="col-sm-3" style="text-align: right;">
                     <label class="label" style="font-size: 15px;">Ss-Tr</label>
                     <input class="modOptionPlanif" data-option="affaireST" type="checkbox" <?= $this->session->userdata('affaireST') ? "checked" : ''; ?> data-toggle="toggle" data-size="mini" data-onstyle="danger" data-on="<i class='fas fa-clock'></i>" data-off="-" value="1">
                 </div>
@@ -63,8 +63,8 @@
                     <label class="label" style="font-size: 15px;">Pose</label>
                     <input class="modOptionPlanif" data-option="affairePose" type="checkbox" <?= $this->session->userdata('affairePose') ? "checked" : ''; ?> data-toggle="toggle" data-size="mini" data-onstyle="success" data-on="<i class='fas fa-thumbs-up'></i>" data-off="-" value="1">
                 </div>
-                <div class="col-sm-4" style="text-align: right; color:gold;">
-                    <i class="fas fa-trophy"></i> <?= $this->session->userdata('margeAffaire'); ?>
+                <div class="col-sm-3" style="text-align: right; color:grey;">
+                    <?= round($this->session->userdata('margeAffaire')); ?>
                 </div>
 
                 <div class="col-sm-6 avancement <?= $devisEtat; ?>" style="padding:8px 5px 0px 5px; border-top:1px solid lightgrey; margin-top:4px;">

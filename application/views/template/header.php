@@ -62,6 +62,13 @@
                                 </ul>
                             </li>
                             <li class="dropdown-short">
+                                <a href="javascript:;" data-toggle="dropdown" href="javascript:;" class="dropdown-toggle"><i class="fas fa-paint-brush"></i> Maquettes <span class="fa fa-caret-down" style="margin-left: 5px;"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="<?= site_url('maquettes/listeMaquettes/ajouter'); ?>"><i class="fa fa-asterisk"></i> Nouvelle</a></li>
+                                    <li><a href="<?= site_url('maquettes/listeMaquettes'); ?>"><i class="fa fa-list-ul"></i> Liste des Maquettes</a></li>
+                                </ul>
+                            </li>
+                            <li class="dropdown-short">
                                 <a href="javascript:;" data-toggle="dropdown" href="javascript:;" class="dropdown-toggle"><i class="fas fa-handshake"></i> Affaires <span class="fa fa-caret-down" style="margin-left: 5px;"></span></a>
                                 <ul class="dropdown-menu">
                                     <li><a href="<?= site_url('ventes/resetConcepteur'); ?>"><i class="fa fa-asterisk"></i> Nouvelle</a></li>

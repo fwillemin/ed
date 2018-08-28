@@ -69,7 +69,7 @@ class Model_clients extends MY_model {
      * @param string $type Type de retour des données (array, Object)
      * @return array Liste d'objets de la classe Client
      */
-    public function liste($where = array(), $tri = 'c.clientNom ASC', $type = 'object') {
+    public function liste($where = array(), $tri = 'c.clientRaisonSociale ASC', $type = 'object') {
         $query = $this->db->select('c.*')
                 ->from($this->table . ' c')
                 ->where($where)

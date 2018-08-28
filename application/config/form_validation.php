@@ -659,6 +659,51 @@ $config = array(
             'label' => 'Taux de remise',
             'rules' => 'required|numeric|greater_than[0]|less_than[100]'
         )
+    ),
+    /* Ajout d'une maquette */
+    'addMaquette' => array(
+        array(
+            'field' => 'addMaquetteId',
+            'label' => 'ID Maquette',
+            'rules' => 'callback_existMaquette'
+        ),
+        array(
+            'field' => 'addMaquetteClientId',
+            'label' => 'ID Client',
+            'rules' => 'callback_existClient'
+        ),
+        array(
+            'field' => 'addMaquetteClientText',
+            'label' => 'Client Text',
+            'rules' => 'trim'
+        ),
+        array(
+            'field' => 'addMaquetteDateCreation',
+            'label' => 'Date du RDV',
+            'rules' => 'required'
+        ),
+        array(
+            'field' => 'addMaquetteDateLimite',
+            'label' => 'Date limite',
+            'rules' => 'required'
+        ),
+        array(
+            'field' => 'addMaquetteDescription',
+            'label' => 'Description',
+            'rules' => 'required|trim'
+        ),
+        array(
+            'field' => 'addMaquetteDifficulte',
+            'label' => 'Difficulte',
+            'rules' => 'required|in_list[1,2,3]'
+        )
+    ),
+    'getMaquette' => array(
+        array(
+            'field' => 'recurrentId',
+            'label' => 'ID du recurrent',
+            'rules' => 'required|callback_existRecurrent'
+        )
     )
 );
 ?>
