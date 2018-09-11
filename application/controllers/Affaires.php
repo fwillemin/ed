@@ -405,6 +405,7 @@ class Affaires extends My_Controller {
             $affaire = $this->managerAffaires->getAffaireById($this->input->post('affaireId'));
             $affaire->setAffaireDevisId($nextDevisId);
             $affaire->setAffaireDevisDate(time());
+            $affaire->setAffaireDevisTauxAcompte(40);
             $this->managerAffaires->editer($affaire);
 
             echo json_encode(array('type' => 'success'));

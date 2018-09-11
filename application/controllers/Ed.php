@@ -169,8 +169,6 @@ class Ed extends My_Controller {
      */
     private function affectationJournalierCodeHTML(Affectation $affectation) {
 
-        log_message('error', __CLASS__ . '/' . __FUNCTION__ . ' => ' . print_r($affectation, 1));
-
         if ($affectation->getAffectationParentClos() == 1) :
             $classAffect = "progJourClos";
         elseif ($affectation->getAffectationEtat() == 3) :

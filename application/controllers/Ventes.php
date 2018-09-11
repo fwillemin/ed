@@ -211,6 +211,7 @@ class Ventes extends My_Controller {
     public function dupliquerVenteArticle() {
         $item = $this->cart->get_item($this->input->post('rowId'));
         unset($item['rowid']);
+        $item['affaireArticleId'] = null;
 
         /* Recherche du meme article déjà présent dans le panier */
         $compteur = $this->getNbOccurence(explode('-', $item['id'])[0]) + 1;

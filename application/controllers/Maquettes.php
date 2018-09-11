@@ -37,7 +37,6 @@ class Maquettes extends My_Controller {
 
         $maquette = $this->managerMaquettes->getMaquetteById($maquetteId);
         $maquette->hydrateClient();
-        $maquette->hydrateAffaire();
 
         $data = array(
             'maquette' => $maquette,
@@ -121,7 +120,6 @@ class Maquettes extends My_Controller {
                     'maquetteDescription' => $this->input->post('addMaquetteDescription'),
                     'maquetteDifficulte' => $this->input->post('addMaquetteDifficulte'),
                     'maquetteAvancement' => 1,
-                    'maquetteAffaireId' => null,
                     'maquettePathFiles' => $this->input->post('addMaquettePathFiles')
                 );
 

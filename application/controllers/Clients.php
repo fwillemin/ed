@@ -42,6 +42,7 @@ class Clients extends My_Controller {
         endif;
 
         $client = $this->managerClients->getClientById($clientId);
+        $client->hydrateMaquettes();
         $client->hydrateAffaires();
         $client->hydrateContacts();
         $client->hydrateFactures();

@@ -21,8 +21,6 @@ class Maquette {
     protected $maquetteDifficulte;
     protected $maquetteAvancement;
     protected $maquetteAvancementText;
-    protected $maquetteAffaireId;
-    protected $maquetteAffaire;
     protected $maquettePathFiles;
 
     public function __construct(array $valeurs = []) {
@@ -58,26 +56,11 @@ class Maquette {
         endif;
     }
 
-    public function hydrateAffaire() {
-        $CI = & get_instance();
-        if ($this->maquetteAffaireId):
-            $this->maquetteAffaire = $CI->managerAffaires->getAffaireById($this->maquetteAffaireId);
-        endif;
-    }
-
     public function avancement() {
         $this->maquetteAvancement++;
         if ($this->maquetteAvancement > 3):
             $this->maquetteAvancement = 1;
         endif;
-    }
-
-    function getMaquetteAvancementText() {
-        return $this->maquetteAvancementText;
-    }
-
-    function setMaquetteAvancementText($maquetteAvancementText) {
-        $this->maquetteAvancementText = $maquetteAvancementText;
     }
 
     function getMaquetteId() {
@@ -116,12 +99,8 @@ class Maquette {
         return $this->maquetteAvancement;
     }
 
-    function getMaquetteAffaireId() {
-        return $this->maquetteAffaireId;
-    }
-
-    function getMaquetteAffaire() {
-        return $this->maquetteAffaire;
+    function getMaquetteAvancementText() {
+        return $this->maquetteAvancementText;
     }
 
     function getMaquettePathFiles() {
@@ -164,12 +143,8 @@ class Maquette {
         $this->maquetteAvancement = $maquetteAvancement;
     }
 
-    function setMaquetteAffaireId($maquetteAffaireId) {
-        $this->maquetteAffaireId = $maquetteAffaireId;
-    }
-
-    function setMaquetteAffaire($maquetteAffaire) {
-        $this->maquetteAffaire = $maquetteAffaire;
+    function setMaquetteAvancementText($maquetteAvancementText) {
+        $this->maquetteAvancementText = $maquetteAvancementText;
     }
 
     function setMaquettePathFiles($maquettePathFiles) {

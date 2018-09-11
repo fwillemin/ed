@@ -22,7 +22,6 @@ class Model_maquettes extends MY_model {
                 ->set('maquetteDescription', $maquette->getMaquetteDescription())
                 ->set('maquetteDifficulte', $maquette->getMaquetteDifficulte())
                 ->set('maquetteAvancement', $maquette->getMaquetteAvancement())
-                ->set('maquetteAffaireId', $maquette->getMaquetteAffaireId())
                 ->set('maquettePathFiles', $maquette->getMaquettePathFiles())
                 ->insert($this->table);
         $maquette->setMaquetteId($this->db->insert_id());
@@ -42,7 +41,6 @@ class Model_maquettes extends MY_model {
                 ->set('maquetteDescription', $maquette->getMaquetteDescription())
                 ->set('maquetteDifficulte', $maquette->getMaquetteDifficulte())
                 ->set('maquetteAvancement', $maquette->getMaquetteAvancement())
-                ->set('maquetteAffaireId', $maquette->getMaquetteAffaireId())
                 ->set('maquettePathFiles', $maquette->getMaquettePathFiles())
                 ->where('maquetteId', $maquette->getMaquetteId())
                 ->update($this->table);

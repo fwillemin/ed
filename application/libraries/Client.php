@@ -29,6 +29,7 @@ class Client {
     protected $clientAvoirs;
     protected $clientContacts;
     protected $clientRemises;
+    protected $clientMaquettes;
     protected $clientPrincipal; /* 1 si client principal dans l'affaire chargée */
 
     public function __construct(array $valeurs = []) {
@@ -82,6 +83,11 @@ class Client {
     function hydrateRemises() {
         $CI = & get_instance();
         $this->clientRemises = $CI->managerRemises->getRemisesByClientId($this->clientId);
+    }
+
+    function hydrateMaquettes() {
+        $CI = & get_instance();
+        $this->clientMaquettes = $CI->managerMaquettes->liste(array('maquetteClientId' => $this->clientId));
     }
 
     function getClientId() {
