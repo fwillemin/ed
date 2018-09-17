@@ -26,7 +26,7 @@
                 <?= number_format($a->getFactureLigneQte(), 2, ',', ' '); ?>
             </td>
             <td style="text-align: right; border-bottom: 1px solid grey;">
-                <?= number_format($a->getFactureLigneTarif(), 2, ',', ' '); ?>
+                <?= number_format(round($a->getFactureLigneTarif() / (1 - $a->getFactureLigneRemise() / 100), 2), 2, ',', ' '); ?>
             </td>
             <td style="text-align: center; border-bottom: 1px solid grey;">
                 <?php
@@ -36,7 +36,7 @@
                 ?>
             </td>
             <td style="text-align: right; border-bottom: 1px solid grey;">
-                <?= number_format(round($a->getFactureLigneTarif() * ( 100 + $a->getFactureLigneRemise() ) / 100, 2), 2, ',', ' '); ?>
+                <?= number_format($a->getFactureLigneTarif(), 2, ',', ' '); ?>
             </td>
             <td style="text-align: right; border-bottom: 1px solid grey;">
                 <?php
