@@ -290,7 +290,7 @@
                                     <?php echo $r->getReglementType() == 1 ? 'A' : 'R'; ?>
                                 </td>
                                 <td>
-                                    <?= $r->getReglementFactureNum() ? 'FA ' . $r->getReglementFactureNum() : ''; ?>
+                                    <?= $r->getReglementFactureId() ? 'FA ' . $r->getReglementFactureId() : ''; ?>
                                 </td>
                                 <td><?= $r->getReglementModeText(); ?></td>
                                 <td style="text-align: right;"><?= number_format($r->getReglementMontant(), 2, ',', ' ') . '€'; ?></td>

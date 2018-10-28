@@ -83,10 +83,11 @@ class Model_affaireArticles extends MY_model {
      * @param type $affaireId ID de l'affaire
      * @return \AffaireArticle|boolean
      */
-    public function getAffaireArticlesByAffaireId($affaireId, $type = 'object') {
+    public function getAffaireArticlesByAffaireId($affaireId, $tri = 'affaireArticleId ASC', $type = 'object') {
         $query = $this->db->select('*')
                 ->from($this->table)
                 ->where('affaireArticleAffaireId', $affaireId)
+                ->order_by($tri)
                 ->get();
         return $this->retourne($query, $type, self::classe);
     }

@@ -86,7 +86,7 @@
                 <tr style="background-color: #f5f5f5;">
                     <td style="width : 30px; vertical-align: middle;">
                         <button type="button" class="btn btn-link btn-xs" id="btnEraseFormOption">
-                            <i class="fa fa-times-rectangle-o"></i>
+                            <i class="fas fa-times"></i>
                         </button>
                     </td>
                     <td style="width: 80px;">

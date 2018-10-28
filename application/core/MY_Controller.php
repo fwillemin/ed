@@ -235,6 +235,7 @@ class My_Controller extends CI_Controller {
                     'affaireType' => 1,
                     'affaireClients' => array(),
                     'affaireObjet' => '',
+                    'affaireST' => 0,
                     'affairePAO' => 0,
                     'affaireFabrication' => 0,
                     'affairePose' => 0
