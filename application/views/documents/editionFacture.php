@@ -65,6 +65,12 @@
             if (in_array($facture->getFactureEcheanceId(), [2, 3])) :
                 echo '<br>Soit le ' . date('d/m/y', $facture->getFactureEcheanceDate());
             endif;
+            if (!empty($facture->getFactureReglements())):
+                echo '<br><br>Réglements reçus :';
+                foreach ($facture->getFactureReglements() as $reglement):
+                    echo '<br>Le ' . date('d/m/Y', $reglement->getReglementDate()) . ', ' . number_format($reglement->getReglementMontant(), 2, ',', ' ') . '€ par ' . $reglement->getReglementModeText();
+                endforeach;
+            endif;
             ?>
         </td>
         <td style="width:80px; text-align:right; background-color: lightgrey; font-weight: bold; border: 1px solid black; border: 1px solid black;">Total HT</td>

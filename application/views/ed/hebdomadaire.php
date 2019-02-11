@@ -11,10 +11,16 @@
                 $prevSemaine = $semaine - 1;
                 $prevAnnee = $annee;
             else:
-                $prevSemaine = date('W', mktime(0, 0, 0, 12, 30, $annee - 1));
+                $prevSemaine = date('W', mktime(0, 0, 0, 12, 28, $annee - 1));
                 $prevAnnee = $annee - 1;
             endif;
-            if ($semaine < date('W', mktime(0, 0, 0, 12, 30, $annee))):
+
+            if (date('W', mktime(0, 0, 0, 12, 31, $annee - 1)) == 52):
+                $derniereSemaineAnnee = 52;
+            else:
+                $derniereSemaineAnnee = 53;
+            endif;
+            if ($semaine < $derniereSemaineAnnee):
                 $nextSemaine = $semaine + 1;
                 $nextAnnee = $annee;
             else:

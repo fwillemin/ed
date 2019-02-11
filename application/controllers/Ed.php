@@ -84,7 +84,7 @@ class Ed extends My_Controller {
 
         if ($semaine && intval($semaine) > 0 && intval($semaine) < 54) :
             /* On vérifie que la semaine existe bien dans l'année (cas de l'année avec 53 semaines) */
-            $nbSemaineAnnee = date("W", mktime(12, 0, 0, 12, 30, $annee));
+            $nbSemaineAnnee = date("W", mktime(12, 0, 0, 12, 29, $annee));
             if (intval($semaine) > $nbSemaineAnnee) :
                 log_message('error', __CLASS__ . '/' . __FUNCTION__ . ' => La semaine est supérieure au nombre possible dans l\'année (' . $semaine . '/' . $nbSemaineAnnee . ')');
                 $this->session->set_userdata('semaine', 52);

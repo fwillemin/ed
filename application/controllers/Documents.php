@@ -128,6 +128,88 @@ class Documents extends My_Controller {
         $pdf->Output('Devis' . $affaire->getAffaireDevisId() . '.pdf', 'FI');
     }
 
+    public function editionBonDeLivraison($affaireId = null) {
+
+        if (!$affaireId):
+            redirect('ventes/noway');
+            exit;
+        endif;
+
+        $affaire = $this->managerAffaires->getAffaireById($affaireId);
+        $affaire->hydrateClients();
+        foreach ($affaire->getAffaireClients() as $c):
+            if ($c->getClientPrincipal() == 1):
+                $client = $c;
+                continue;
+            endif;
+        endforeach;
+        $articles = $this->managerAffaireArticles->liste(array('affaireArticleAffaireId' => $affaire->getAffaireId()));
+
+        /* --- Génération du HEADER ---- */
+        $header = '<table>
+    <tr style="font-size:12px;">
+        <td style="text-align: center; width:283px; "><img src="assets/img/logoNB.png" style="width: 150px; height: 50px;">
+        </td>
+        <td style="text-align: right; width:300px; ">
+
+            <table style="width:270px;" cellspacing="0" cellpadding="2">
+                <tr>
+                    <td colspan="3" style="text-align: center; font-weight: bold; height: 20px; font-size:15px; border: 1px solid black;">
+                        BON DE LIVRAISON
+                    </td>
+                </tr>
+                <tr style="background-color: lightgrey; text-align: center; font-weight: bold;">
+                    <td style="width: 90px; border: 1px solid black;">N° BL</td>
+                    <td style="width: 90px; border: 1px solid black;">Date</td>
+                    <td style="width: 90px; border: 1px solid black;">Code Affaire</td>
+                </tr>
+                <tr style="text-align: center;">
+                    <td style=" height: 20px; border: 1px solid black;">' . $affaire->getAffaireId() . '</td>
+                    <td style=" height: 20px; border: 1px solid black;">' . date('d/m/Y') . '</td>
+                    <td style=" height: 20px; border: 1px solid black;">' . $affaire->getAffaireId() . '</td>
+                </tr>
+                <tr>
+                    <td colspan="3" style="text-align: right; font-size:12px;">'
+                . $this->editionAdresseClient($client)
+                . '</td>
+                </tr>
+            </table>
+
+        </td>
+    </tr>
+</table>';
+
+        $data = array(
+            'affaire' => $affaire,
+            'client' => $client,
+            'articles' => $articles,
+            'title' => 'Devis',
+            'description' => '',
+            'keywords' => '',
+            'content' => $this->viewFolder . __FUNCTION__
+        );
+        $this->load->view('template/contentDocuments', $data);
+
+// Extend the TCPDF class to create custom Header and Footer
+        $html = $this->output->get_output();
+
+// create new PDF document
+        $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false, false, $this->piedPage1, $this->piedPage2);
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetAuthor($this->parametres[0]->valeur);
+        $pdf->SetTitle('Bon de livraison ');
+        $pdf->SetSubject('Bon de livraison ');
+
+        $pdf->SetMargins(13, 79, 5);
+// set auto page breaks
+        $pdf->SetAutoPageBreak(true, self::hauteurPiedPage); /* Anciennement 15 */
+        $pdf->AddPage('', '', FALSE, FALSE, $header);
+
+        $pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
+
+        $pdf->Output('Bon de livraison' . $affaire->getAffaireId() . '.pdf', 'FI');
+    }
+
     public function editionFicheAtelier($affaireId = null) {
 
         if (!$affaireId):
@@ -224,6 +306,7 @@ class Documents extends My_Controller {
         $facture = $this->managerFactures->getFactureById($factureId);
         $facture->hydrateClient();
         $facture->hydrateLignes();
+        $facture->hydrateReglements();
 
         $client = $facture->getFactureClient();
         $header = '<table>

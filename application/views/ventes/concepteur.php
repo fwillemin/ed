@@ -67,7 +67,7 @@
                     <?= round($this->session->userdata('margeAffaire')); ?>
                 </div>
 
-                <div class="col-sm-6 avancement <?= $devisEtat; ?>" style="padding:8px 5px 0px 5px; border-top:1px solid lightgrey; margin-top:4px;">
+                <div class="col-sm-4 avancement <?= $devisEtat; ?>" style="padding:8px 5px 0px 5px; border-top:1px solid lightgrey; margin-top:4px;">
                     <?php if ($affaire && $affaire->getAffaireDevisId()): ?>
                         <a href="<?= site_url('documents/editionDevis/' . $affaire->getAffaireId()); ?>" target="_blank" style="color: inherit; cursor: pointer">
                             <i class="fas fa-file-pdf"></i> Devis N°<?= $affaire->getAffaireDevisId(); ?>
@@ -81,7 +81,7 @@
 
                     if ($affaire && $affaire->getAffaireDevisDate()):
                         ?>
-                        <button class="btnInvisible" style="position: absolute; top:8px; left: 115px; color: #FFF;"
+                        <button class="btnInvisible" style="position: absolute; top:8px; left: 55px; color: #FFF;"
                                 data-toggle="popover" data-trigger="click"
                                 title="<span style='color: black; font-weight: bold;'>Modifier les infos du devis</span>" data-html="true" data-placement="bottom"
                                 data-content='<form id="formModDevis" method="POST" action="<?= site_url('affaires/modifierDevis'); ?>">
@@ -94,7 +94,7 @@
 
                     <?php endif; ?>
                 </div>
-                <div class="col-sm-6 avancement <?= $commandeEtat; ?>" style="padding:8px 5px 0px 5px; border-top:1px solid lightgrey; margin-top:4px;">
+                <div class="col-sm-4 avancement <?= $commandeEtat; ?>" style="padding:8px 5px 0px 5px; border-top:1px solid lightgrey; margin-top:4px;">
                     <?php if ($affaire && $affaire->getAffaireCommandeId()): ?>
 
                         <a href="<?= site_url('documents/editionFicheAtelier/' . $affaire->getAffaireId()); ?>" target="_blank" style="color: inherit; cursor: pointer">
@@ -110,7 +110,7 @@
 
                     if ($affaire && $affaire->getAffaireCommandeDate()):
                         ?>
-                        <button class="btnInvisible" style="position: absolute; top:8px; left: 115px; color: #FFF;"
+                        <button class="btnInvisible" style="position: absolute; top:8px; left: 55px; color: #FFF;"
                                 data-toggle="popover" data-trigger="click"
                                 title="<span style='color: black; font-weight: bold;'>Modifier date commande</span>" data-html="true" data-placement="bottom"
                                 data-content='<form id="formModCommande" method="POST" action="<?= site_url('affaires/modifierCommande'); ?>">
@@ -120,6 +120,13 @@
                                 <button class="btn btn-sm btn-primary" style="width: 100%;">Modifier</button>
                                 </form>' ><i class="fas fa-cog"></i></button>
                             <?php endif; ?>
+                </div>
+                <div class="col-sm-3 avancement <?= $commandeEtat; ?>" style="padding:8px 5px 0px 5px; border-top:1px solid lightgrey; margin-top:4px;">
+                    <?php if ($affaire && $affaire->getAffaireCommandeId()): ?>
+                        <a href="<?= site_url('documents/editionBonDeLivraison/' . $affaire->getAffaireId()); ?>" target="_blank" style="color: inherit; cursor: pointer">
+                            <i class="fas fa-file-pdf"></i> Bon de livraison
+                        </a>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
