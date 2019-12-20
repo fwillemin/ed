@@ -42,23 +42,32 @@ class Clients extends My_Controller {
         endif;
 
         $client = $this->managerClients->getClientById($clientId);
-        $client->hydrateMaquettes();
+        //$client->hydrateMaquettes();
         $client->hydrateAffaires();
+        if (!empty($client->getClientAffaires())):
+            foreach ($client->getClientAffaires() as $affaire):
+                $affaire->hydrateFactures();
+                if (!empty($affaire->getAffaireFactures())):
+                    foreach ($affaire->getAffaireFactures() as $facture):
+                        $facture->hydrateAvoirs();
+                    endforeach;
+                endif;
+            endforeach;
+        endif;
         $client->hydrateContacts();
-        $client->hydrateFactures();
-        $client->hydrateAvoirs();
+//        $client->hydrateFactures();
+//        $client->hydrateAvoirs();
         $client->hydrateRemises();
         if ($client->getClientRemises()):
             foreach ($client->getClientRemises() as $remise):
                 $remise->hydrateFamille();
             endforeach;
         endif;
-        //log_message('error', __CLASS__ . '/' . __FUNCTION__ . ' => ' . print_r($client, true));
 
         $data = array(
             'client' => $client,
             'familles' => $this->managerFamilles->liste(),
-            'title' => 'Fiche client',
+            'title' => $client->getClientRaisonSociale(),
             'description' => 'Fiche du client ' . $client->getClientRaisonSociale(),
             'keywords' => '',
             'content' => $this->view_folder . __FUNCTION__

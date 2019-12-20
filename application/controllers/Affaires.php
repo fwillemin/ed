@@ -144,7 +144,8 @@ class Affaires extends My_Controller {
             if ($this->session->userdata('affaireId')):
 
                 $affaire = $this->managerAffaires->getAffaireById($this->session->userdata('affaireId'));
-                $affaire->setAffaireType($this->session->userdata('affaireType'));
+//                $affaire->setAffaireType($this->session->userdata('affaireType'));
+                $affaire->setAffaireType(1);
                 $affaire->setAffaireObjet($this->session->userdata('affaireObjet'));
                 $affaire->setAffaireTotalHT($totauxAffaire['ht']);
                 $affaire->setAffaireTotalTVA($totauxAffaire['tva']);
@@ -159,7 +160,7 @@ class Affaires extends My_Controller {
             else:
 
                 $dataAffaire = array(
-                    'affaireType' => $this->session->userdata('affaireType'),
+                    'affaireType' => 1,
                     'affaireObjet' => $this->session->userdata('affaireObjet'),
                     'affaireDate' => time(),
                     'affaireTauxTVA' => self::tauxTVA,

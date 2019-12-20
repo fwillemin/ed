@@ -53,7 +53,7 @@
                                                 <div class="progHebdo" data-affectid="<?= $a->getAffectationId(); ?>" style="background-color: <?= $a->getAffectationCouleur(); ?>; position:relative;">
                                                     <div class="btnModAffect" style="width:100%; padding: 7px; color: <?= $a->getAffectationFontColor(); ?>">
                                                         <?php
-                                                        echo date('d/m/y', $a->getAffectationDate()) . ' - <strong>' . $a->getAffectationEquipe() . '</strong>';
+                                                        echo date('d/m/y', $a->getAffectationDate());
                                                         ?>
                                                     </div>
                                                     <div class="intervenant">
@@ -76,7 +76,7 @@
                                                 ?>
                                                 <div class="progHebdo" data-affectid="<?= $a->getAffectationId(); ?>" style="background-color: <?= $a->getAffectationCouleur(); ?>; position:relative;">
                                                     <div class="btnModAffect" style="width:100%; padding: 7px; color: <?= $a->getAffectationFontColor(); ?>">
-                                                        <?= date('d/m/y', $a->getAffectationDate()) . ' - <strong>' . $a->getAffectationEquipe() . '</strong>'; ?>
+                                                        <?= date('d/m/y', $a->getAffectationDate()); ?>
                                                     </div>
                                                     <div class="intervenant">
                                                         <?= $a->getAffectationIntervenant() ?: '-'; ?>
@@ -99,7 +99,7 @@
                                                 <div class="progHebdo" data-affectid="<?= $a->getAffectationId(); ?>" style="background-color: <?= $a->getAffectationCouleur(); ?>">
                                                     <div class="btnModAffect" style="width:100%; padding: 7px; color: <?= $a->getAffectationFontColor(); ?>">
                                                         <?php
-                                                        echo date('d/m/y', $a->getAffectationDate()) . ' - <strong>' . $a->getAffectationEquipe() . '</strong>';
+                                                        echo date('d/m/y', $a->getAffectationDate());
                                                         ?>
                                                     </div>
                                                     <div class="intervenant">

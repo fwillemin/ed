@@ -95,6 +95,7 @@
                                             <option value="33.33">33.33%</option>
                                             <option value="40">40%</option>
                                             <option value="50">50%</option>
+                                            <option value="60">60%</option>
                                             <option value="66.66">66.66%</option>
                                             <option value="75">75%</option>
                                             <option value="80">80%</option>

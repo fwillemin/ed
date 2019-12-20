@@ -397,11 +397,11 @@ class Facturation extends My_Controller {
 
     public function listeReglements() {
 
-        if ($this->session->userdata('rechReglementStart')):
-            $whereReglements = array('reglementUtile' => 1, 'reglementDate >=' => $this->session->userdata('rechReglementStart'), 'reglementDate <=' => $this->session->userdata('rechReglementEnd'));
-        else:
-            $whereReglements = array('reglementUtile' => 1);
+        if (!$this->session->userdata('rechReglementStart')):
+            $this->criteresListeReglements();
         endif;
+
+        $whereReglements = array('reglementUtile' => 1, 'reglementDate >=' => $this->session->userdata('rechReglementStart'), 'reglementDate <=' => $this->session->userdata('rechReglementEnd'));
 
         $reglements = $this->managerReglements->liste($whereReglements);
         if ($reglements):

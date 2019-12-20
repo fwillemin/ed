@@ -95,24 +95,29 @@ class Dossiers extends My_Controller {
     public function dossiersClos() {
         if (!$this->ion_auth->is_admin()) :
             redirect('ed/journalier');
-            exit;
-        endif;
+        else:
 
-        $dossiers = $this->managerDossiers->liste(array('dossierClos' => 1), 'dossierId DESC');
-        if (!empty($dossiers)):
-            foreach ($dossiers as $d):
-                $d->hydrateAffectations();
-            endforeach;
-        endif;
+            $dossiers = $this->managerDossiers->liste(array('dossierClos' => 1), 'dossierId DESC');
+            if (!empty($dossiers)):
+                foreach ($dossiers as $dossier):
+                    $dossier->hydrateAffectations();
+                    if (!empty($dossier->getDossierAffectations())):
+//                        foreach ($dossier->getDossierAffectations() as $affect):
+//                            $affect->hydrateEquipe();
+//                        endforeach;
+                    endif;
+                endforeach;
+            endif;
 
-        $data = array(
-            'equipes' => $this->managerEquipes->liste(),
-            'dossiers' => $dossiers,
-            'title' => 'Dossiers clos',
-            'description' => 'Liste des dossiers clos',
-            'content' => $this->viewFolder . '/' . __FUNCTION__
-        );
-        $this->load->view('template/content', $data);
+            $data = array(
+                'equipes' => $this->managerEquipes->liste(),
+                'dossiers' => $dossiers,
+                'title' => 'Dossiers clos',
+                'description' => 'Liste des dossiers clos',
+                'content' => $this->viewFolder . '/' . __FUNCTION__
+            );
+            $this->load->view('template/content', $data);
+        endif;
     }
 
     public function getDossier() {

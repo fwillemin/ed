@@ -140,22 +140,22 @@
             <i class="fas fa-times"></i>
         </button>
 
-        <div class="col-sm-8" style="border-bottom: 1px dashed darkblue; padding: 1px 10px 1px 1px;">
+        <div class="col-sm-12" style="border-bottom: 1px dashed darkblue; padding: 1px 30px 1px 1px;">
             <input type="text" id="affaireObjet" placeholder="Description de l'affaire" class="form-control" value="<?= $this->session->userdata('affaireObjet'); ?>" >
         </div>
-        <div class="col-sm-4" style="border-bottom: 1px dashed darkblue; padding: 1px 30px 1px 1px;">
-            <div class="form-group" style="margin: 0px;">
-                <div class="col-sm-12 input-group">
-                    <span class="input-group-addon">
-                        Type d'affaire
-                    </span>
-                    <select id="affaireType" class="form-control">
-                        <option value="1" <?php if ($this->session->userdata('affaireType') == 1) echo 'selected'; ?> >Prestation de service</option>
-                        <option value="2" <?php if ($this->session->userdata('affaireType') == 2) echo 'selected'; ?> >Vente de marchandises</option>
-                    </select>
-                </div>
-            </div>
-        </div>
+        <!--        <div class="col-sm-4" style="border-bottom: 1px dashed darkblue; padding: 1px 30px 1px 1px;">
+                    <div class="form-group" style="margin: 0px;">
+                        <div class="col-sm-12 input-group">
+                            <span class="input-group-addon">
+                                Type d'affaire
+                            </span>
+                            <select id="affaireType" class="form-control">
+                                <option value="1" <?php if ($this->session->userdata('affaireType') == 1) echo 'selected'; ?> >Prestation de service</option>
+                                <option value="2" <?php if ($this->session->userdata('affaireType') == 2) echo 'selected'; ?> >Vente de marchandises</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>-->
 
         <div class="col-sm-3" style="border-right: 1px solid black;  padding: 0px 8px 0px 8px;">
 

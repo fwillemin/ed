@@ -24,8 +24,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   | a PHP script and you can easily do that on your own.
   |
  */
-//$config['base_url'] = 'http://192.168.0.1/ENSEIGNE/planning/';
-$config['base_url'] = 'https://planning.enseignediffusion.fr/';
+$config['base_url'] = 'http://192.168.1.2/ENSEIGNE/planning/';
+//$config['base_url'] = 'https://planning.enseignediffusion.fr/';
 
 /*
   |--------------------------------------------------------------------------

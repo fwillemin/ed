@@ -132,17 +132,18 @@
             </div>
             <hr>
             <div class="row" style="margin-top:10px;">
-                <div class="col-xs-12 col-sm-7">
+                <div class="col-xs-12">
                     <h3>Historique des affaires</h3>
                     <table class="table table-condensed table-bordered" style="font-size: 13px; background-color: #FFF;">
                         <thead>
                             <tr style="background-color: #04335a; color: #FFF;">
                                 <th>ID</th>
-                                <th>Date</th>
+                                <th style="width: 90px;">Date</th>
                                 <th>Affaire</th>
                                 <th style="text-align: right;">Total HT</th>
-                                <th>Avancement</th>
+                                <th style="width: 170px;">Avancement</th>
                                 <th></th>
+                                <th>Factures et Avoirs (ID, Date, HT, TTC, Solde)</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -158,7 +159,11 @@
                                         <td>
                                             <?php
                                             if ($affaire->getAffaireCloture()):
-                                                echo 'Clôturée';
+                                                if (empty($affaire->getAffaireFactures())):
+                                                    echo '<span style="color: red;">Perdue</span>';
+                                                else:
+                                                    echo 'Clôturée';
+                                                endif;
                                             elseif ($affaire->getAffaireCommandeId()):
                                                 echo '<span style="color: green;">En cours</span>';
                                             elseif ($affaire->getAffaireDevisId()):
@@ -173,6 +178,34 @@
                                                 <i class="fas fa-link"></i>
                                             </a>
                                         </td>
+                                        <td>
+                                            <?php
+                                            if (!empty($affaire->getAffaireFactures())):
+                                                echo '<table class="table table-condensed table-bordered" style="margin-bottom:0px;">';
+                                                foreach ($affaire->getAffaireFactures() as $facture):
+                                                    if ($facture->getFactureClientId() == $client->getClientId()):
+                                                        echo '<tr><td style="width:45px;"><a href = "' . site_url('facturation/ficheFacture/' . $facture->getFactureId()) . '">' . $facture->getFactureId() . '</a></td>'
+                                                        . '<td style="width:60px;">' . date('d/m/y', $facture->getFactureDate()) . '</td>'
+                                                        . '<td style="text-align: right; width:75px;">' . number_format($facture->getFactureTotalHT(), 2, ',', ' ') . '</td>'
+                                                        . '<td style="text-align: right; width:75px;">' . number_format($facture->getFactureTotalTTC(), 2, ',', ' ') . '</td>'
+                                                        . '<td style="text-align: right; width:75px;">' . number_format($facture->getFactureSolde(), 2, ',', ' ') . '</td>'
+                                                        . '<td style="text-align: center; width:25px;"><a href="' . site_url('documents/editionFacture/' . $facture->getFactureId()) . '" target="_blank"><i class="fas fa-file-pdf"></i></a></td></tr>';
+                                                        if (!empty($facture->getFactureAvoirs())):
+                                                            foreach ($facture->getFactureAvoirs() as $avoir):
+                                                                echo '<tr style="background-color: lightgrey;"><td style="width:45px;"><a href = "' . site_url('facturation/ficheAvoir/' . $avoir->getAvoirId()) . '">' . $avoir->getAvoirId() . '</a></td>'
+                                                                . '<td style="width:60px;">' . date('d/m/y', $avoir->getAvoirDate()) . '</td>'
+                                                                . '<td style="text-align: right; width:75px;">' . number_format($avoir->getAvoirTotalHT(), 2, ',', ' ') . '</td>'
+                                                                . '<td style="text-align: right; width:75px;">' . number_format($avoir->getAvoirTotalTTC(), 2, ',', ' ') . '</td>'
+                                                                . '<td style="text-align: right; width:75px;">-</td>'
+                                                                . '<td style="text-align: center; width:25px;"><a href="' . site_url('documents/editionAvoir/' . $avoir->getAvoirId()) . '" target="_blank"><i class="fas fa-file-pdf"></i></a></td></tr>';
+                                                            endforeach;
+                                                        endif;
+                                                    endif;
+                                                endforeach;
+                                                echo '</table>';
+                                            endif;
+                                            ?>
+                                        </td>
                                     </tr>
 
                                     <?php
@@ -182,61 +215,61 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="col-xs-12 col-sm-5">
-                    <h3>Liste des factures et avoirs</h3>
-                    <table class="table table-condensed table-bordered"style="font-size: 13px; background-color: #FFF;">
-                        <thead>
-                            <tr style="background-color: #04335a; color: #FFF;">
-                                <th>ID</th>
-                                <th>Date</th>
-                                <th style="text-align: right;">Total HT</th>
-                                <th style="text-align: right;">Total TTC</th>
-                                <th style="text-align: right;">Solde</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            if ($client->getClientFactures()):
-                                foreach ($client->getClientFactures() as $facture):
-                                    ?>
-                                    <tr>
-                                        <td>
-                                            <a href="<?= site_url('facturation/ficheFacture/' . $facture->getFactureId()); ?>"><?= $facture->getFactureId(); ?></a>
-                                        </td>
-                                        <td><?= date('d/m/y', $facture->getFactureDate()); ?></td>
-                                        <td style="text-align: right;"><?= number_format($facture->getFactureTotalHT(), 2, ',', ' '); ?></td>
-                                        <td style="text-align: right;"><?= number_format($facture->getFactureTotalTTC(), 2, ',', ' '); ?></td>
-                                        <td style="text-align: right;"><?= number_format($facture->getFactureSolde(), 2, ',', ' '); ?></td>
-                                        <td style="text-align: center;">
-                                            <a href="<?= site_url('documents/editionFacture/' . $facture->getFactureId()); ?>" target="_blank"><i class="fas fa-file-pdf"></i></a>
-                                        </td>
-                                    </tr>
-                                    <?php
-                                endforeach;
-                            endif;
-                            if ($client->getClientAvoirs()):
-                                foreach ($client->getClientAvoirs() as $avoir):
-                                    ?>
-                                    <tr>
-                                        <td>
-                                            <a href="<?= site_url('facturation/ficheFacture/' . $avoir->getAvoirFactureId()); ?>"><?= 'AV ' . $avoir->getAvoirId(); ?></a>
-                                        </td>
-                                        <td><?= date('d/m/y', $avoir->getAvoirDate()); ?></td>
-                                        <td style="text-align: right;"><?= number_format($avoir->getAvoirTotalHT(), 2, ',', ' '); ?></td>
-                                        <td style="text-align: right;"><?= number_format($avoir->getAvoirTotalTTC(), 2, ',', ' '); ?></td>
-                                        <td style="text-align: right;">sur la facture N°<?= $avoir->getAvoirFactureId(); ?></td>
-                                        <td style="text-align: center;">
-                                            <a href="<?= site_url('documents/editionAvoir/' . $avoir->getAvoirId()); ?>" target="_blank"><i class="fas fa-file-pdf"></i></a>
-                                        </td>
-                                    </tr>
-                                    <?php
-                                endforeach;
-                            endif;
-                            ?>
-                        </tbody>
-                    </table>
-                </div>
+                <!--                <div class="col-xs-12 col-sm-5">
+                                    <h3>Liste des factures et avoirs</h3>
+                                    <table class="table table-condensed table-bordered"style="font-size: 13px; background-color: #FFF;">
+                                        <thead>
+                                            <tr style="background-color: #04335a; color: #FFF;">
+                                                <th>ID</th>
+                                                <th>Date</th>
+                                                <th style="text-align: right;">Total HT</th>
+                                                <th style="text-align: right;">Total TTC</th>
+                                                <th style="text-align: right;">Solde</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                <?php
+                if ($client->getClientFactures()):
+                    foreach ($client->getClientFactures() as $facture):
+                        ?>
+                                                                                                                                                                                                                                                                                            <tr>
+                                                                                                                                                                                                                                                                                                <td>
+                                                                                                                                                                                                                                                                                                    <a href="<?= site_url('facturation/ficheFacture/' . $facture->getFactureId()); ?>"><?= $facture->getFactureId(); ?></a>
+                                                                                                                                                                                                                                                                                                </td>
+                                                                                                                                                                                                                                                                                                <td><?= date('d/m/y', $facture->getFactureDate()); ?></td>
+                                                                                                                                                                                                                                                                                                <td style="text-align: right;"><?= number_format($facture->getFactureTotalHT(), 2, ',', ' '); ?></td>
+                                                                                                                                                                                                                                                                                                <td style="text-align: right;"><?= number_format($facture->getFactureTotalTTC(), 2, ',', ' '); ?></td>
+                                                                                                                                                                                                                                                                                                <td style="text-align: right;"><?= number_format($facture->getFactureSolde(), 2, ',', ' '); ?></td>
+                                                                                                                                                                                                                                                                                                <td style="text-align: center;">
+                                                                                                                                                                                                                                                                                                    <a href="<?= site_url('documents/editionFacture/' . $facture->getFactureId()); ?>" target="_blank"><i class="fas fa-file-pdf"></i></a>
+                                                                                                                                                                                                                                                                                                </td>
+                                                                                                                                                                                                                                                                                            </tr>
+                        <?php
+                    endforeach;
+                endif;
+                if ($client->getClientAvoirs()):
+                    foreach ($client->getClientAvoirs() as $avoir):
+                        ?>
+                                                                                                                                                                                                                                                                                            <tr>
+                                                                                                                                                                                                                                                                                                <td>
+                                                                                                                                                                                                                                                                                                    <a href="<?= site_url('facturation/ficheFacture/' . $avoir->getAvoirFactureId()); ?>"><?= 'AV ' . $avoir->getAvoirId(); ?></a>
+                                                                                                                                                                                                                                                                                                </td>
+                                                                                                                                                                                                                                                                                                <td><?= date('d/m/y', $avoir->getAvoirDate()); ?></td>
+                                                                                                                                                                                                                                                                                                <td style="text-align: right;"><?= number_format($avoir->getAvoirTotalHT(), 2, ',', ' '); ?></td>
+                                                                                                                                                                                                                                                                                                <td style="text-align: right;"><?= number_format($avoir->getAvoirTotalTTC(), 2, ',', ' '); ?></td>
+                                                                                                                                                                                                                                                                                                <td style="text-align: right;">sur la facture N°<?= $avoir->getAvoirFactureId(); ?></td>
+                                                                                                                                                                                                                                                                                                <td style="text-align: center;">
+                                                                                                                                                                                                                                                                                                    <a href="<?= site_url('documents/editionAvoir/' . $avoir->getAvoirId()); ?>" target="_blank"><i class="fas fa-file-pdf"></i></a>
+                                                                                                                                                                                                                                                                                                </td>
+                                                                                                                                                                                                                                                                                            </tr>
+                        <?php
+                    endforeach;
+                endif;
+                ?>
+                                        </tbody>
+                                    </table>
+                                </div>-->
             </div>
 
         </div>

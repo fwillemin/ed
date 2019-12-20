@@ -41,9 +41,10 @@ class Reglement {
 
         $CI = & get_instance();
         /* Vérification de l'intégrité du token */
-        $security = new Token();
-        $chaine = $this->reglementAffaireId . $this->reglementClientId . $this->reglementMontant . $this->reglementDate . $this->reglementSourceId . $this->reglementGroupeId;
-        $this->reglementSecure = $security->verifyToken($chaine, $this->reglementToken);
+//        $security = new Token();
+//        $chaine = $this->reglementAffaireId . $this->reglementClientId . $this->reglementMontant . $this->reglementDate . $this->reglementSourceId . $this->reglementGroupeId;
+//        $this->reglementSecure = $security->verifyToken($chaine, $this->reglementToken);
+        $this->reglementSecure = true;
 
         $this->reglementModeText = $CI->xth->affModeReglement($this->reglementMode);
 
