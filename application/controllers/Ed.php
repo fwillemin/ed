@@ -72,10 +72,10 @@ class Ed extends My_Controller {
     }
 
     public function hebdomadaire($semaine = null, $annee = null) {
-        if (!$this->ion_auth->is_admin()) :
-            redirect('ed/journalier');
-            exit;
-        endif;
+//        if (!$this->ion_auth->is_admin()) :
+//            redirect('ed/journalier');
+//            exit;
+//        endif;
 
         if ($annee && intval($annee) > 2014 && intval($annee) < 2050) :
             $this->session->set_userdata('annee', intval($annee));

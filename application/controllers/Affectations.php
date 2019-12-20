@@ -26,99 +26,101 @@ class Affectations extends My_Controller {
     public function addAffectation() {
         if (!$this->ion_auth->is_admin()) :
             echo json_encode(array('type' => 'error', 'message' => 'Vous devez être administrateur pour ajouter une affectation'));
-            exit;
-        endif;
-
-        if (!$this->form_validation->run('addAffectation') || (!$this->input->post('addAffectDossierId') && !$this->input->post('addAffectAffaireId'))) :
-            echo json_encode(array('type' => 'error', 'message' => validation_errors()));
-            exit;
-        endif;
-
-        $dossier = $this->managerDossiers->getDossierById($this->input->post('addAffectDossierId'));
-        $affaire = $this->managerAffaires->getAffaireById($this->input->post('addAffectAffaireId'));
-
-        if ($this->input->post('addAffectId')) :
-            $affect = $this->managerAffectations->getAffectationById($this->input->post('addAffectId'));
-
-            /* Si on change la date ou le type, on intervient sur les positions de l'affectation */
-            if ($affect->getAffectationDate() != $this->xth->mktimeFromInputDate($this->input->post('addAffectDate')) || $affect->getAffectationType() != $this->input->post('addAffectType')) :
-                $dateOrigine = $affect->getAffectationDate();
-                $typeOrigine = $affect->getAffectationType();
-
-                /* Position dans les nouvelles conditions */
-                $position = $this->managerAffectations->getNewPosition(intval($this->input->post('addAffectType')), $this->xth->mktimeFromInputDate($this->input->post('addAffectDate')));
-                $affect->setAffectationPosition($position);
-
-                $affect->setAffectationType(intval($this->input->post('addAffectType')));
-                $affect->setAffectationDate($this->xth->mktimeFromInputDate($this->input->post('addAffectDate')));
-
-                /* On renumérote le jour/Type d'origine */
-                $this->renumerotation($typeOrigine, $dateOrigine);
+        else:
+            if (!$this->form_validation->run('addAffectation') || (!$this->input->post('addAffectDossierId') && !$this->input->post('addAffectAffaireId'))) :
+                echo json_encode(array('type' => 'error', 'message' => validation_errors()));
+                exit;
             endif;
 
-            $affect->setAffectationIntervenant($this->input->post('addAffectIntervenant'));
-            $affect->setAffectationCommentaire($this->input->post('addAffectCommentaire'));
-            $this->managerAffectations->editer($affect);
+            $dossier = $this->managerDossiers->getDossierById($this->input->post('addAffectDossierId'));
+            $affaire = $this->managerAffaires->getAffaireById($this->input->post('addAffectAffaireId'));
 
-            echo json_encode(array('type' => 'success'));
-            exit;
+            if ($this->input->post('addAffectId')) :
+                $affect = $this->managerAffectations->getAffectationById($this->input->post('addAffectId'));
 
-        else :
-            /* On ajoute une affectation par nombre de jours demandés */
-            $jourAffect = $this->xth->mktimeFromInputDate($this->input->post('addAffectDate'));
-            for ($i = 0; $i < $this->input->post('addAffectNbJour'); $i++) :
-                if (date('N', $jourAffect) == 6) :
-                    $jourAffect += 172800;
+                /* Si on change la date ou le type, on intervient sur les positions de l'affectation */
+                if ($affect->getAffectationDate() != $this->xth->mktimeFromInputDate($this->input->post('addAffectDate')) || $affect->getAffectationType() != $this->input->post('addAffectType')) :
+                    $dateOrigine = $affect->getAffectationDate();
+                    $typeOrigine = $affect->getAffectationType();
+
+                    /* Position dans les nouvelles conditions */
+                    $position = $this->managerAffectations->getNewPosition(intval($this->input->post('addAffectType')), $this->xth->mktimeFromInputDate($this->input->post('addAffectDate')));
+                    $affect->setAffectationPosition($position);
+
+                    $affect->setAffectationType(intval($this->input->post('addAffectType')));
+                    $affect->setAffectationDate($this->xth->mktimeFromInputDate($this->input->post('addAffectDate')));
+
+                    /* On renumérote le jour/Type d'origine */
+                    $this->renumerotation($typeOrigine, $dateOrigine);
                 endif;
 
-                /* Recherche du nombre d'affectation ce jour pour ce type d'affectation pour connaitre la position par défaut de l'affectation */
-                $position = $this->managerAffectations->getNewPosition(intval($this->input->post('addAffectType')), $jourAffect);
+                $affect->setAffectationIntervenant($this->input->post('addAffectIntervenant'));
+                $affect->setAffectationCommentaire($this->input->post('addAffectCommentaire'));
+                $this->managerAffectations->editer($affect);
 
-                $dataAffect = array(
-                    'affectationDossierId' => $this->input->post('addAffectDossierId') ?: null,
-                    'affectationAffaireId' => $this->input->post('addAffectAffaireId') ?: null,
-                    'affectationType' => $this->input->post('addAffectType'),
-                    'affectationDate' => $jourAffect,
-                    'affectationEtat' => 1,
-                    'affectationPosition' => $position,
-                    'affectationCommentaire' => $this->input->post('addAffectCommentaire'),
-                    'affectationIntervenant' => $this->input->post('addAffectIntervenant')
-                );
+                echo json_encode(array('type' => 'success'));
 
-                $affect = new Affectation($dataAffect);
-                $this->managerAffectations->ajouter($affect);
+            else :
+                /* On ajoute une affectation par nombre de jours demandés */
+                $jourAffect = $this->xth->mktimeFromInputDate($this->input->post('addAffectDate'));
+                for ($i = 0; $i < $this->input->post('addAffectNbJour'); $i++) :
+                    if (date('N', $jourAffect) == 6) :
+                        $jourAffect += 172800;
+                    endif;
 
-                $jourAffect += 86400;
-            endfor;
+                    /* Recherche du nombre d'affectation ce jour pour ce type d'affectation pour connaitre la position par défaut de l'affectation */
+                    $position = $this->managerAffectations->getNewPosition(intval($this->input->post('addAffectType')), $jourAffect);
 
-            echo json_encode(array('type' => 'success'));
-            exit;
+                    $dataAffect = array(
+                        'affectationDossierId' => $this->input->post('addAffectDossierId') ?: null,
+                        'affectationAffaireId' => $this->input->post('addAffectAffaireId') ?: null,
+                        'affectationType' => $this->input->post('addAffectType'),
+                        'affectationDate' => $jourAffect,
+                        'affectationEtat' => 1,
+                        'affectationPosition' => $position,
+                        'affectationCommentaire' => $this->input->post('addAffectCommentaire'),
+                        'affectationIntervenant' => $this->input->post('addAffectIntervenant')
+                    );
+
+                    $affect = new Affectation($dataAffect);
+                    $this->managerAffectations->ajouter($affect);
+
+                    $jourAffect += 86400;
+                endfor;
+
+                echo json_encode(array('type' => 'success'));
+
+            endif;
         endif;
     }
 
     public function getAffectation() {
         if (!$this->form_validation->run('getAffectation')) :
             echo json_encode(array('type' => 'error', 'message' => validation_errors()));
-            exit;
+        else:
+            $affectation = $this->managerAffectations->getAffectationById($this->input->post('affectationId'), 'array');
+            echo json_encode(array('type' => 'success', 'affectation' => $affectation));
         endif;
-        $affectation = $this->managerAffectations->getAffectationById($this->input->post('affectationId'), 'array');
-        echo json_encode(array('type' => 'success', 'affectation' => $affectation));
-        exit;
     }
 
     public function delAffectation() {
+        if (!$this->ion_auth->is_admin()) :
+            echo json_encode(array('type' => 'error', 'message' => 'Fonction réservée aux administrateurs'));
+        else:
 
-        if (!$this->form_validation->run('getAffectation')) :
-            echo json_encode(array('type' => 'error', 'message' => validation_errors()));
-            exit;
+
+            if (!$this->form_validation->run('getAffectation')) :
+                echo json_encode(array('type' => 'error', 'message' => validation_errors()));
+            else:
+
+                $affectation = $this->managerAffectations->getAffectationById(intval($this->input->post('affectationId')));
+                /* on renumérote les autres affectations de ce jour */
+                $this->renumerotation($affectation->getAffectationType(), $affectation->getAffectationDate());
+
+                $this->managerAffectations->delete($affectation);
+                echo json_encode(array('type' => 'success'));
+            endif;
         endif;
-        $affectation = $this->managerAffectations->getAffectationById(intval($this->input->post('affectationId')));
-        /* on renumérote les autres affectations de ce jour */
-        $this->renumerotation($affectation->getAffectationType(), $affectation->getAffectationDate());
-
-        $this->managerAffectations->delete($affectation);
-        echo json_encode(array('type' => 'success'));
-        exit;
     }
 
     private function _monter(Affectation $affectation) {

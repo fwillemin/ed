@@ -43,58 +43,58 @@
 
                     </div>
                     <div class="collapse navbar-collapse" id="navbar_id">
-                        <ul class="nav navbar-nav navbar-left">
-                            <li class="dropdown-short" style="padding:0px; margin: 0px;">
-                                <a href="<?= site_url(); ?>" class=""><img src="<?= base_url('assets/img/logo.png'); ?>" style="max-height: 40px;" ></a>
-                            </li>
-                            <li class="dropdown-grid">
-                                <a href="<?= site_url('clients'); ?>" class=""><i class="fa fa-user-circle"></i> Clients</a>
-                            </li>
-                            <li class="dropdown-short">
-                                <a href="javascript:;" data-toggle="dropdown" href="javascript:;" class="dropdown-toggle">Composants & Articles <span class="fa fa-caret-down" style="margin-left: 5px;"></span></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="<?= site_url('articles/composantsListe'); ?>"><i class="fas fa-compress"></i> Composants</a></li>
-                                    <li><a href="<?= site_url('articles/articlesListe'); ?>"><i class="fa fa-square"></i> Articles</a></li>
-                                    <li class="divider"></li>
-                                    <li><a href="<?= site_url('articles/famillesListe'); ?>"><i class="fa fa-cog"></i> Familles</a></li>
-                                    <li class="divider"></li>
-                                    <li><a href="<?= site_url('articles/inventaire'); ?>"><i class="fas fa-th-list"></i> Inventaire</a></li>
-                                </ul>
-                            </li>
-                            <li class="dropdown-short">
-                                <a href="javascript:;" data-toggle="dropdown" href="javascript:;" class="dropdown-toggle"><i class="fas fa-paint-brush"></i> Maquettes <span class="fa fa-caret-down" style="margin-left: 5px;"></span></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="<?= site_url('maquettes/listeMaquettes/ajouter'); ?>"><i class="fa fa-asterisk"></i> Nouvelle</a></li>
-                                    <li><a href="<?= site_url('maquettes/listeMaquettes'); ?>"><i class="fa fa-list-ul"></i> Liste des Maquettes</a></li>
-                                </ul>
-                            </li>
-                            <li class="dropdown-short">
-                                <a href="javascript:;" data-toggle="dropdown" href="javascript:;" class="dropdown-toggle"><i class="fas fa-handshake"></i> Affaires <span class="fa fa-caret-down" style="margin-left: 5px;"></span></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="<?= site_url('ventes/resetConcepteur'); ?>"><i class="fa fa-asterisk"></i> Nouvelle</a></li>
-                                    <li><a href="<?= site_url('ventes/listeAffaires'); ?>"><i class="fa fa-list-ul"></i> Liste des Affaires</a></li>
-                                </ul>
-                            </li>
-                            <li class="dropdown-short">
-                                <a href="javascript:;" data-toggle="dropdown" href="javascript:;" class="dropdown-toggle"><i class="fas fa-building"></i> Gestion <span class="fa fa-caret-down" style="margin-left: 5px;"></span></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="<?= site_url('facturation/listeFactures'); ?>"><i class="far fa-file"></i> Liste factures</a></li>
-                                    <li><a href="<?= site_url('facturation/listeReglements'); ?>"><i class="far fa-credit-card"></i> Réglements</a></li>
-                                    <li class="divider"></li>
-                                    <li><a href="<?= site_url('facturation/listeFacturesNonEnvoyees'); ?>"><i class="far fa-file"></i> Factures à envoyer</a></li>
-                                    <li><a href="<?= site_url('facturation/listeFacturesRelances'); ?>"><i class="fas fa-file-excel"></i> Relances</a></li>
-                                </ul>
-                            </li>
-                        </ul>
+                        <?php if ($this->ion_auth->is_admin()): ?>
+                            <ul class="nav navbar-nav navbar-left">
+                                <li class="dropdown-short" style="padding:0px; margin: 0px;">
+                                    <a href="<?= site_url(); ?>" class=""><img src="<?= base_url('assets/img/logo.png'); ?>" style="max-height: 40px;" ></a>
+                                </li>
+                                <li class="dropdown-grid">
+                                    <a href="<?= site_url('clients'); ?>" class=""><i class="fa fa-user-circle"></i> Clients</a>
+                                </li>
+                                <li class="dropdown-short">
+                                    <a href="javascript:;" data-toggle="dropdown" href="javascript:;" class="dropdown-toggle">Composants & Articles <span class="fa fa-caret-down" style="margin-left: 5px;"></span></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="<?= site_url('articles/composantsListe'); ?>"><i class="fas fa-compress"></i> Composants</a></li>
+                                        <li><a href="<?= site_url('articles/articlesListe'); ?>"><i class="fa fa-square"></i> Articles</a></li>
+                                        <li class="divider"></li>
+                                        <li><a href="<?= site_url('articles/famillesListe'); ?>"><i class="fa fa-cog"></i> Familles</a></li>
+                                        <li class="divider"></li>
+                                        <li><a href="<?= site_url('articles/inventaire'); ?>"><i class="fas fa-th-list"></i> Inventaire</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown-short">
+                                    <a href="javascript:;" data-toggle="dropdown" href="javascript:;" class="dropdown-toggle"><i class="fas fa-paint-brush"></i> Maquettes <span class="fa fa-caret-down" style="margin-left: 5px;"></span></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="<?= site_url('maquettes/listeMaquettes/ajouter'); ?>"><i class="fa fa-asterisk"></i> Nouvelle</a></li>
+                                        <li><a href="<?= site_url('maquettes/listeMaquettes'); ?>"><i class="fa fa-list-ul"></i> Liste des Maquettes</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown-short">
+                                    <a href="javascript:;" data-toggle="dropdown" href="javascript:;" class="dropdown-toggle"><i class="fas fa-handshake"></i> Affaires <span class="fa fa-caret-down" style="margin-left: 5px;"></span></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="<?= site_url('ventes/resetConcepteur'); ?>"><i class="fa fa-asterisk"></i> Nouvelle</a></li>
+                                        <li><a href="<?= site_url('ventes/listeAffaires'); ?>"><i class="fa fa-list-ul"></i> Liste des Affaires</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown-short">
+                                    <a href="javascript:;" data-toggle="dropdown" href="javascript:;" class="dropdown-toggle"><i class="fas fa-building"></i> Gestion <span class="fa fa-caret-down" style="margin-left: 5px;"></span></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="<?= site_url('facturation/listeFactures'); ?>"><i class="far fa-file"></i> Liste factures</a></li>
+                                        <li><a href="<?= site_url('facturation/listeReglements'); ?>"><i class="far fa-credit-card"></i> Réglements</a></li>
+                                        <li class="divider"></li>
+                                        <li><a href="<?= site_url('facturation/listeFacturesNonEnvoyees'); ?>"><i class="far fa-file"></i> Factures à envoyer</a></li>
+                                        <li><a href="<?= site_url('facturation/listeFacturesRelances'); ?>"><i class="fas fa-file-excel"></i> Relances</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        <?php endif; ?>
 
                         <ul class="nav navbar-nav navbar-right">
                             <li class="dropdown-grid">
-                                <?php if ($this->ion_auth->is_admin()): ?>
-                                    <a href="<?= site_url('ed/planification'); ?>">Planification</a>
-                                <?php endif; ?>
+                                <a href="<?= site_url('ed/planification'); ?>">Planification</a>
                                 <a href="<?= site_url('ed/journalier'); ?>"><i class="glyphicon glyphicon-calendar"></i> Journalier</a>
+                                <a href="<?= site_url('ed/hebdomadaire'); ?>"><i class="glyphicon glyphicon-calendar"></i> Hebdomadaire</a>
                                 <?php if ($this->ion_auth->is_admin()): ?>
-                                    <a href="<?= site_url('ed/hebdomadaire'); ?>"><i class="glyphicon glyphicon-calendar"></i> Hebdomadaire</a>
                                     <a href="<?= site_url('affectations/recurrent'); ?>"><i class="glyphicon glyphicon-repeat"></i> Recurrent</a>
                                 <?php endif; ?>
 

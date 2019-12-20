@@ -477,7 +477,7 @@ $(document).ready(function () {
         }
     });
 
-    $('.editionFicheAtelier').on('change', function () {
+    $('#tableDossiers').on('click', '.editionFicheAtelier', function () {
         $.post(chemin + 'affaires/toggleEditionFicheAtelier', {affaireId: $(this).closest('tr').attr('data-affaireid')}, function (retour) {
             switch (retour.type) {
                 case 'error':

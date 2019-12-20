@@ -5,8 +5,10 @@
             <h2>Planification des affaires et dossiers</h2>
         </div>
         <div class="col-xs-12 col-sm-3">
-            <button class="btn btn-primary btnAddDossier" type="button" style="width:100%;"><i class="fas fa-plus"></i> Ajouter un dossier</button>
-            <a href="<?= site_url('dossiers/dossiersClos'); ?>" class="btn btn-link pull-right">Dossiers clos</a>
+            <?php if ($this->ion_auth->is_admin()): ?>
+                <button class="btn btn-primary btnAddDossier" type="button" style="width:100%;"><i class="fas fa-plus"></i> Ajouter un dossier</button>
+                <a href="<?= site_url('dossiers/dossiersClos'); ?>" class="btn btn-link pull-right">Dossiers clos</a>
+            <?php endif; ?>
         </div>
     </div>
 
@@ -37,15 +39,15 @@
                             <tr style="position:relative;" data-dossierid="<?= $d->getDossierId(); ?>" data-source="planif" data-client="<?= $d->getDossierClient(); ?>" data-objet="<?= $d->getDossierDescriptif(); ?>">
 
                                 <td style="text-align: center; font-size:13px; color:grey;">
+                                    <?php if ($this->ion_auth->is_admin()): ?>
+                                        <button class="btnInvisible btnModDossier" style="margin-right: 2px; cursor: pointer">
+                                            <i class="fas fa-pencil-alt"></i>
+                                        </button>
 
-                                    <button class="btnInvisible btnModDossier" style="margin-right: 2px; cursor: pointer">
-                                        <i class="fas fa-pencil-alt"></i>
-                                    </button>
-
-                                    <button class="btnInvisible btnCloseDossier" style="cursor: pointer">
-                                        <i class="fas fa-unlock" style="color:green;"></i>
-                                    </button>
-
+                                        <button class="btnInvisible btnCloseDossier" style="cursor: pointer">
+                                            <i class="fas fa-unlock" style="color:green;"></i>
+                                        </button>
+                                    <?php endif; ?>
                                 </td>
                                 <td>
                                     <span style="font-size:15px; font-weight: bold;"><?= $d->getDossierClient(); ?></span>
@@ -78,9 +80,12 @@
                                         if ($nbPao == 0):
                                             $aJourDePlanification = false;
                                         endif;
-                                        ?>
-                                        <button class="btn btn-sm btn-link btnAddAffectation" data-type="3" style="font-size:15px; color: #9999ff; padding:2px; text-align: center; width:100%;"><i class="fas fa-plus-circle"></i></button>
-                                    <?php endif;
+                                        if ($this->ion_auth->is_admin()):
+                                            ?>
+                                            <button class="btn btn-sm btn-link btnAddAffectation" data-type="3" style="font-size:15px; color: #9999ff; padding:2px; text-align: center; width:100%;"><i class="fas fa-plus-circle"></i></button>
+                                            <?php
+                                        endif;
+                                    endif;
                                     ?>
                                 </td>
                                 <td>
@@ -109,9 +114,12 @@
                                         if ($nbFab == 0):
                                             $aJourDePlanification = false;
                                         endif;
-                                        ?>
-                                        <button class="btn btn-sm btn-link btnAddAffectation" data-type="1" style="font-size:15px; color: #9999ff; padding:2px; text-align: center; width:100%;"><i class="fas fa-plus-circle"></i></button>
-                                    <?php endif;
+                                        if ($this->ion_auth->is_admin()):
+                                            ?>
+                                            <button class="btn btn-sm btn-link btnAddAffectation" data-type="1" style="font-size:15px; color: #9999ff; padding:2px; text-align: center; width:100%;"><i class="fas fa-plus-circle"></i></button>
+                                            <?php
+                                        endif;
+                                    endif;
                                     ?>
                                 </td>
                                 <td>
@@ -140,9 +148,12 @@
                                         if ($nbPose == 0):
                                             $aJourDePlanification = false;
                                         endif;
-                                        ?>
-                                        <button class="btn btn-sm btn-link btnAddAffectation" data-type="2" style="font-size:15px; color: #9999ff; padding:2px; text-align: center; width:100%;"><i class="fas fa-plus-circle"></i></button>
-                                    <?php endif;
+                                        if ($this->ion_auth->is_admin()):
+                                            ?>
+                                            <button class="btn btn-sm btn-link btnAddAffectation" data-type="2" style="font-size:15px; color: #9999ff; padding:2px; text-align: center; width:100%;"><i class="fas fa-plus-circle"></i></button>
+                                            <?php
+                                        endif;
+                                    endif;
                                     ?>
                                 </td>
                                 <td>
@@ -167,12 +178,17 @@
                             <tr style="position:relative;" data-source="planif" data-affaireid="<?= $affaire->getAffaireId(); ?>" data-client="<?= $affaire->getAffaireClients()[0]->getClientRaisonSociale(); ?>" data-objet="<?= $affaire->getAffaireObjet(); ?>">
 
                                 <td style="text-align: center; font-size:13px; color:grey;">
-                                    <a href="<?= site_url('ventes/reloadAffaire/' . $affaire->getAffaireId()); ?>">
-                                        <i class="fas fa-file"></i>
-                                    </a>
+                                    <?php if ($this->ion_auth->is_admin()):
+                                        ?>
+                                        <a href="<?= site_url('ventes/reloadAffaire/' . $affaire->getAffaireId()); ?>">
+                                            <i class="fas fa-file"></i>
+                                        </a>
+                                    <?php endif; ?>
                                 </td>
                                 <td>
-                                    <input type="checkbox" class="editionFicheAtelier" value="1" <?php if ($affaire->getAffaireFicheAtelierEditee()) echo 'checked'; ?> >
+                                    <?php if ($this->ion_auth->is_admin()): ?>
+                                        <input type="checkbox" class="editionFicheAtelier" value="1" <?php if ($affaire->getAffaireFicheAtelierEditee()) echo 'checked'; ?> >
+                                    <?php endif; ?>
                                     <span style="font-weight: bold; font-size:15px;"><?= $affaire->getAffaireClients()[0]->getClientRaisonSociale(); ?></span>
                                     <br><?=
                                     $affaire->getAffaireObjet();
@@ -210,9 +226,12 @@
                                         if ($nbPao == 0):
                                             $aJourDePlanification = false;
                                         endif;
-                                        ?>
-                                        <button class="btn btn-sm btn-link btnAddAffectation" data-type="3" style="font-size:15px; color:#9999ff; padding:2px; text-align: center; width:100%;"><i class="fas fa-plus-circle"></i></button>
-                                    <?php endif;
+                                        if ($this->ion_auth->is_admin()):
+                                            ?>
+                                            <button class="btn btn-sm btn-link btnAddAffectation" data-type="3" style="font-size:15px; color:#9999ff; padding:2px; text-align: center; width:100%;"><i class="fas fa-plus-circle"></i></button>
+                                            <?php
+                                        endif;
+                                    endif;
                                     ?>
                                 </td>
                                 <td <?php if ($affaire->getAffaireFabrication() == 0) echo 'class="hachures"'; ?> >
@@ -241,9 +260,12 @@
                                         if ($nbFab == 0):
                                             $aJourDePlanification = false;
                                         endif;
-                                        ?>
-                                        <button class="btn btn-sm btn-link btnAddAffectation" data-type="1" style="font-size:15px; color:#9999ff; padding:2px; text-align: center; width:100%;"><i class="fas fa-plus-circle"></i></button>
-                                    <?php endif;
+                                        if ($this->ion_auth->is_admin()):
+                                            ?>
+                                            <button class="btn btn-sm btn-link btnAddAffectation" data-type="1" style="font-size:15px; color:#9999ff; padding:2px; text-align: center; width:100%;"><i class="fas fa-plus-circle"></i></button>
+                                            <?php
+                                        endif;
+                                    endif;
                                     ?>
                                 </td>
                                 <td <?php if ($affaire->getAffairePose() == 0) echo 'class="hachures"'; ?> >
@@ -272,9 +294,12 @@
                                         if ($nbPose == 0):
                                             $aJourDePlanification = false;
                                         endif;
-                                        ?>
-                                        <button class="btn btn-sm btn-link btnAddAffectation" data-type="2" style="font-size:15px; color:#9999ff; padding:2px; text-align: center; width:100%;"><i class="fas fa-plus-circle"></i></button>
-                                        <?php endif;
+                                        if ($this->ion_auth->is_admin()):
+                                            ?>
+                                            <button class="btn btn-sm btn-link btnAddAffectation" data-type="2" style="font-size:15px; color:#9999ff; padding:2px; text-align: center; width:100%;"><i class="fas fa-plus-circle"></i></button>
+                                            <?php
+                                            endif;
+                                        endif;
                                         ?>
                                 </td>
                                 <td>
