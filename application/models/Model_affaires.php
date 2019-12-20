@@ -90,6 +90,21 @@ class Model_affaires extends MY_model {
         return $this->retourne($query, $type, self::classe);
     }
 
+    /* Liste des affaires avec de la MO dans une période donnée
+     * Retourne les heures de MO
+     */
+
+    public function listeAffairesMO($where = array(), $tri = 'affaireCommandeDate ASC', $type = 'object') {
+        $query = $this->db->select('a.*')
+                ->from('affaires a')
+                ->join('affaireOptions ao', 'ao.affaireOptionAffaireId = a.affaireId', 'left')
+                ->where($where)
+                ->group_by('a.affaireId')
+                ->order_by($tri)
+                ->get();
+        return $this->retourne($query, $type, self::classe);
+    }
+
     public function listeAll($where = array(), $tri = 'affaireDate DESC', $type = 'array') {
         $query = $this->db->select('a.*, c.clientRaisonSociale AS client')
                 ->from('affaires a')

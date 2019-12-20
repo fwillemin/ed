@@ -393,6 +393,11 @@ $(document).ready(function () {
             }
         }, 'json');
     });
+    
+    $('#formRechMO').on('submit', function(e){
+        e.preventDefault();
+        window.location.assign(chemin + 'articles/criteresListeMO/' + $('#rechDateDebutMO').val() + '/' + $('#rechDateFinMO').val());
+    });
 
 });
 

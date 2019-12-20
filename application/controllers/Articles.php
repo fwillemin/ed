@@ -614,8 +614,6 @@ class Articles extends My_Controller {
 
     public function manageCompositions() {
 
-        log_message('error', __CLASS__ . '/' . __FUNCTION__ . print_r($this->input->post('addCompositionOptionId'), 1));
-
         if ($this->input->post('modCompositionId')) :
             if (!$this->form_validation->run('modComposition')) :
                 echo json_encode(array('type' => 'error', 'message' => validation_errors()));
@@ -633,7 +631,55 @@ class Articles extends My_Controller {
         endif;
 
         echo json_encode(array('type' => 'success'));
-        exit;
+    }
+
+    private function resetCriteresMO() {
+        $criteres = array(
+            'rechMOStart' => mktime(0, 0, 0, date('m'), 1, date('Y')),
+            'rechMOEnd' => mktime(23, 59, 59, date('m'), date('t', mktime(0, 0, 0, date('m'), 1, date('Y'))), date('Y')),
+        );
+        $this->session->set_userdata($criteres);
+    }
+
+    public function criteresListeMO($start = null, $end = null) {
+        $this->resetCriteresMO();
+        if ($start):
+            $this->session->set_userdata('rechMOStart', $this->xth->mktimeFromInputDate($start));
+        endif;
+        if ($end):
+            $this->session->set_userdata('rechMOEnd', $this->xth->mktimeFromInputDate($end) + 86300);
+        endif;
+        redirect('articles/listeMO');
+    }
+
+    public function listeMO() {
+
+        if (!$this->session->userdata('rechMOStart')):
+            $this->criteresListeMO();
+        endif;
+        $whereMO = array(
+            'a.affaireCommandeDate >=' => $this->session->userdata('rechMOStart'),
+            'a.affaireCommandeDate <=' => $this->session->userdata('rechMOEnd'),
+            'ao.affaireOptionComposantId' => 64,
+            'ao.affaireOptionQte >' => 0,
+        );
+
+        $affaires = $this->managerAffaires->listeAffairesMO($whereMO);
+        if (!empty($affaires)):
+            foreach ($affaires as $affaire):
+                $affaire->hydrateClients();
+                $affaire->hydrateMOs();
+            endforeach;
+        endif;
+
+        $data = array(
+            'affaires' => $affaires,
+            'title' => 'MO',
+            'description' => 'MO commandées',
+            'keywords' => '',
+            'content' => $this->view_folder . __FUNCTION__
+        );
+        $this->load->view('template/content', $data);
     }
 
     public function inventaire() {

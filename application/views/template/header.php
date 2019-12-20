@@ -84,6 +84,8 @@
                                         <li class="divider"></li>
                                         <li><a href="<?= site_url('facturation/listeFacturesNonEnvoyees'); ?>"><i class="far fa-file"></i> Factures à envoyer</a></li>
                                         <li><a href="<?= site_url('facturation/listeFacturesRelances'); ?>"><i class="fas fa-file-excel"></i> Relances</a></li>
+                                        <li class="divider"></li>
+                                        <li><a href="<?= site_url('articles/listeMO'); ?>"><i class="far fa-file"></i> Heures MO commandées</a></li>
                                     </ul>
                                 </li>
                             </ul>

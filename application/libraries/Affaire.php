@@ -37,6 +37,8 @@ class Affaire {
     protected $affairePose;
     protected $affaireCloture;
     protected $affaireAffectations;
+    /* Pour le listing des MO par période */
+    protected $affaireMOs;
 
     public function __construct(array $valeurs = []) {
         /* Si on passe des valeurs, on hydrate l'objet */
@@ -80,6 +82,11 @@ class Affaire {
     public function hydrateFactures() {
         $CI = & get_instance();
         $this->affaireFactures = $CI->managerFactures->liste(array('factureAffaireId' => $this->affaireId));
+    }
+
+    public function hydrateMOs() {
+        $CI = & get_instance();
+        $this->affaireMOs = $CI->managerAffaireOptions->liste(array('affaireOptionAffaireId' => $this->affaireId, 'affaireOptionComposantId' => 64, 'affaireOptionQte >' => 0));
     }
 
     function getAffaireAffectations() {
@@ -288,6 +295,14 @@ class Affaire {
 
     function setAffaireST($affaireST) {
         $this->affaireST = $affaireST;
+    }
+
+    function getAffaireMOs() {
+        return $this->affaireMOs;
+    }
+
+    function setAffaireMOs($affaireMOs) {
+        $this->affaireMOs = $affaireMOs;
     }
 
 }
